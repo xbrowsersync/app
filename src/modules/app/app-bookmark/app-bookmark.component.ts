@@ -54,6 +54,7 @@ export class AppBookmarkComponent implements OnInit {
   descriptionFieldOriginalHeight: string;
   displayUpdatePropertiesButton = false;
   editMode = false;
+  globals = Globals;
   originalUrl: string;
   tagLookahead: string;
   tagText: string;
@@ -389,7 +390,7 @@ export class AppBookmarkComponent implements OnInit {
       case KeyCode.Enter:
         // Add new tags
         event.preventDefault();
-        this.createTags();
+        this.$timeout(this.createTags, Globals.Debounce);
         break;
       case KeyCode.Tab:
       case KeyCode.ArrowRight:
@@ -403,6 +404,8 @@ export class AppBookmarkComponent implements OnInit {
         this.appHelperSvc.focusOnElement('input[name="bookmarkTags"]');
         break;
       default:
+        // Clear lookahead if any other key was pressed
+        this.tagLookahead = null;
     }
   }
 

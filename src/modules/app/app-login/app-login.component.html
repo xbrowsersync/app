@@ -1,16 +1,9 @@
 <div class="view-content">
   <div class="header-panel">
-    <button class="btn btn-icon btn-help animate-fade-in"
-            title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Help) }}"
-            ng-click="vm.utilitySvc.handleEvent(vm.switchToHelpView)">
-      <i class="fas fa-question-circle" aria-hidden="true"></i>
-      <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.Help) }}</span>
-    </button>
-    <button class="btn btn-icon btn-settings" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Settings) }}"
-            ng-click="vm.utilitySvc.handleEvent(vm.switchToSettingsView)">
-      <i class="fas fa-cog" aria-hidden="true"></i>
-      <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.Settings) }}</span>
-    </button>
+    <icon-button type="'help-circle'" size="1.2em" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Help) }}"
+                 on-click="vm.utilitySvc.handleEvent(vm.switchToHelpView)"></icon-button>
+    <icon-button type="'settings'" size="1.2em" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Settings) }}"
+                 on-click="vm.utilitySvc.handleEvent(vm.switchToSettingsView)"></icon-button>
   </div>
   <div class="logo"></div>
   <form name="vm.syncForm" class="animate-fade-in"
@@ -30,30 +23,24 @@
         <div class="loading animate-fade-in"
              ng-show="vm.serviceInfo.url !== undefined && vm.serviceInfo.status === undefined"
              title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Loading) }}">
-          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Loading) }}</span>
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         </div>
-        <div class="animate-fade-in" ng-show="vm.serviceInfo.status === vm.ApiServiceStatus.Error"
-             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Error) }}">
-          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Error) }}</span>
-          <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
-        </div>
-        <div class="animate-fade-in" ng-show="vm.serviceInfo.status === vm.ApiServiceStatus.Online"
+        <div class="success animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Online"
              title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Online) }}">
-          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Online) }}</span>
-          <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
+          <icon type="'check'" bold="true"></icon>
         </div>
-        <div class="animate-fade-in" ng-show="vm.serviceInfo.status === vm.ApiServiceStatus.Offline"
-             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Offline) }}">
-          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Offline) }}</span>
-          <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
-        </div>
-        <div class="animate-fade-in" ng-show="vm.serviceInfo.status === vm.ApiServiceStatus.NoNewSyncs"
+        <div class="warning animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.NoNewSyncs"
              title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.NoNewSyncs) }}">
-          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.NoNewSyncs) }}</span>
-          <i class="fas fa-exclamation-circle text-warning" aria-hidden="true"></i>
+          <icon type="'minus'" bold="true"></icon>
         </div>
-        <div class="status-icon-bg animate-fade-in" ng-show="vm.serviceInfo.status !== undefined"></div>
+        <div class="danger animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Error"
+             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Error) }}">
+          <icon type="'x'" bold="true"></icon>
+        </div>
+        <div class="danger animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Offline"
+             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Offline) }}">
+          <icon type="'x'" bold="true"></icon>
+        </div>
       </div>
     </div>
     <div class="form-content">
@@ -61,7 +48,7 @@
            ng-show="vm.newSync && !vm.displayUpdateServicePanel">
         <div ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
           <div class="animate-fade-in" ng-hide="vm.displayPasswordConfirmation">
-            <div class="form-group secret-form-group btn-icon-container"
+            <div class="form-group secret-form-group icon-button-container"
                  ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
               <label class="sr-only" for="txtPassword">{{
           vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Label) }}</label>
@@ -70,12 +57,10 @@
                      maxlength="150" autocapitalize="off" autocomplete="new-password" autocorrect="off"
                      spellcheck="false"
                      placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.New) }}" />
-              <button class="btn btn-icon btn-show-password" ng-class="{ 'active': vm.showPassword }"
-                      ng-show="vm.password"
-                      title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Show) }}"
-                      ng-click="vm.utilitySvc.handleEvent(vm.toggleShowPassword)">
-                <i class="fas fa-eye" aria-hidden="true"></i>
-              </button>
+              <icon-button type="vm.showPassword ? 'eye-off' : 'eye'"
+                           title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Show) }}"
+                           on-click="vm.utilitySvc.handleEvent(vm.toggleShowPassword)" ng-show="vm.password">
+              </icon-button>
               <div class="validation" ng-if="vm.enablePasswordValidation && vm.password && ((vm.passwordComplexity.feedback.suggestions && vm.passwordComplexity.feedback.suggestions.length > 0) || 
           vm.passwordComplexity.feedback.warning)">
                 {{ vm.passwordComplexity.feedback.warning ? vm.passwordComplexity.feedback.warning :
@@ -106,19 +91,17 @@
             </div>
           </div>
           <div class="animate-fade-in" ng-show="vm.displayPasswordConfirmation">
-            <div class="form-group secret-form-group btn-icon-container">
+            <div class="form-group secret-form-group icon-button-container">
               <label class="sr-only" for="txtPasswordConfirmation">{{
           vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Confirm) }}</label>
               <input type="{{ vm.showPassword ? 'text' : 'password' }}" name="txtPasswordConfirmation"
                      ng-model="vm.passwordConfirmation" class="form-control" maxlength="150" autocapitalize="off"
                      autocorrect="off" spellcheck="false"
                      placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Confirm) }}" />
-              <button class="btn btn-icon btn-show-password" ng-class="{ 'active': vm.showPassword }"
-                      ng-show="vm.password"
-                      title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Show) }}"
-                      ng-click="vm.utilitySvc.handleEvent(vm.toggleShowPassword)">
-                <i class="fas fa-eye" aria-hidden="true"></i>
-              </button>
+              <icon-button type="vm.showPassword ? 'eye-off' : 'eye'"
+                           title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Show) }}"
+                           on-click="vm.utilitySvc.handleEvent(vm.toggleShowPassword)" ng-show="vm.password">
+              </icon-button>
             </div>
             <div class="form-group buttons">
               <button type="button" class="btn btn-default btn-new-sync"
@@ -166,7 +149,7 @@
               {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.SyncId.Invalid) }}
             </div>
           </div>
-          <div class="form-group secret-form-group btn-icon-container"
+          <div class="form-group secret-form-group icon-button-container"
                ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
             <label class="sr-only" for="txtPassword">{{
         vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Label) }}</label>
@@ -174,12 +157,10 @@
                    class="form-control" ng-disabled="vm.syncEnabled" maxlength="150" autocapitalize="off"
                    autocorrect="off" spellcheck="false"
                    placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Existing) }}" />
-            <button class="btn btn-icon btn-show-password" ng-class="{ 'active': vm.showPassword }"
-                    ng-show="vm.password"
-                    title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Show) }}"
-                    ng-click="vm.utilitySvc.handleEvent(vm.toggleShowPassword)">
-              <i class="fas fa-eye" aria-hidden="true"></i>
-            </button>
+            <icon-button type="vm.showPassword ? 'eye-off' : 'eye'"
+                         title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Show) }}"
+                         on-click="vm.utilitySvc.handleEvent(vm.toggleShowPassword)" ng-show="vm.password">
+            </icon-button>
           </div>
           <div class="buttons">
             <button type="button" class="btn btn-default btn-existing-sync"
@@ -330,7 +311,7 @@
     </p>
     <ul>
       <li
-          ng-class="{ 'text-danger': vm.newServiceInfo.status === vm.ApiServiceStatus.Offline || vm.newServiceInfo.status === vm.ApiServiceStatus.Error }">
+          ng-class="{ 'text-danger': vm.newServiceInfo.status === vm.apiServiceStatus.Offline || vm.newServiceInfo.status === vm.apiServiceStatus.Error }">
         <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Status) }}</label>
         <span>{{ vm.getServiceStatusTextFromStatusCode(vm.newServiceInfo.status) }}</span>
       </li>

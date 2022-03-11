@@ -12,6 +12,9 @@
     "no-descending-specificity": null,
     "no-invalid-position-at-import-rule": null,
     "no-irregular-whitespace": null,
+    "prettier/prettier": [true, {
+      "severity": "warning"
+    }],
     "scss/at-extend-no-missing-placeholder": null,
     "scss/selector-no-redundant-nesting-selector": null,
     "selector-id-pattern": null,

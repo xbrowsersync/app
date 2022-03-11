@@ -23,26 +23,12 @@
 }
 
 .header-panel {
+  align-items: center;
   display: flex;
   font-size: 1.3rem;
   justify-content: space-between;
   margin-bottom: 0.75rem;
   position: relative;
-
-  .btn-icon {
-    font-size: 1.3em;
-    height: 1em;
-    line-height: 1.2em;
-
-    &.btn-close,
-    &.btn-settings {
-      float: right;
-    }
-
-    i {
-      vertical-align: middle;
-    }
-  }
 }
 
 .overlay {

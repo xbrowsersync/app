@@ -5,19 +5,13 @@
       <div class="form-group setting-group">
         <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Permissions.Read.Title) }}</label>
         <div class="setting-value status-icon">
-          <div class="animate-fade-in" ng-show="vm.readWebsiteDataPermissionsGranted"
+          <div class="success animate-fade-in" ng-show="vm.readWebsiteDataPermissionsGranted"
                title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Permissions.Granted) }}">
-            <span
-                  class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Permissions.Granted) }}</span>
-            <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
-            <div class="status-icon-bg animate-fade-in"></div>
+            <icon type="'check'" bold="true"></icon>
           </div>
-          <div class="animate-fade-in" ng-show="!vm.readWebsiteDataPermissionsGranted"
+          <div class="danger animate-fade-in" ng-show="!vm.readWebsiteDataPermissionsGranted"
                title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Permissions.NotGranted) }}">
-            <span
-                  class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Permissions.NotGranted) }}</span>
-            <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
-            <div class="status-icon-bg animate-fade-in"></div>
+            <icon type="'x'" bold="true"></icon>
           </div>
         </div>
         <p class="description"

@@ -31,6 +31,12 @@ app {
       z-index: 60;
     }
 
+    .lookahead icon {
+      @include valign;
+
+      margin-left: 0.1em;
+    }
+
     .measure {
       visibility: hidden;
     }
@@ -72,26 +78,58 @@ app {
     animation-duration: 1s;
 
     &-sm {
-      border-width: 0.15em;
+      border-width: 0.2em;
       height: 1rem;
       vertical-align: baseline;
       width: 1rem;
     }
   }
 
+  .sr-only {
+    height: 1px;
+    left: -10000px;
+    overflow: hidden;
+    position: absolute;
+    top: auto;
+    width: 1px;
+  }
+
   .status-icon {
+    height: 1rem !important;
     position: relative;
+    width: 1rem !important;
     z-index: 5;
 
-    .status-icon-bg {
-      background-color: var(--color-status-bg);
+    & > div {
+      align-items: center;
       border-radius: 100%;
-      height: 0.8rem;
-      left: 0.1rem;
-      position: absolute;
-      top: 0.2rem;
-      width: 0.8rem;
-      z-index: -1;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      width: 100%;
+
+      &.danger {
+        background-color: var(--color-danger);
+      }
+
+      &.success {
+        background-color: var(--color-success);
+      }
+
+      &.warning {
+        background-color: var(--color-warning);
+      }
+
+      icon {
+        display: block;
+        height: 80%;
+        width: 80%;
+      }
+    }
+
+    svg {
+      color: #fff;
+      opacity: 0.8;
     }
   }
 
@@ -127,9 +165,6 @@ app {
     --color-input-border: #{$color-bg3-default};
     --color-input-text: #{$color-text2-default};
     --color-input-placeholder: #{$color-text3-default};
-    --color-input-button-bg: #{$color-text2-default};
-    --color-input-button-icon: #{$color-bg3-default};
-    --color-input-button-icon-hover: #{color.adjust($color-text3-default, $lightness: -15%)};
     --color-checkbox-bg: #{$color-text2-default};
     --color-checkbox-toggle: #{$color-bg2-default};
     --color-validation-text: #{$color-text1-default};
@@ -191,9 +226,6 @@ app {
       --color-input-border: #{$color-bg2-dark};
       --color-input-text: #{$color-text2-dark};
       --color-input-placeholder: #{$color-text3-dark};
-      --color-input-button-bg: #{$color-text2-dark};
-      --color-input-button-icon: #{$color-bg2-dark};
-      --color-input-button-icon-hover: #{color.adjust($color-text3-dark, $lightness: -15%)};
       --color-checkbox-bg: #{$color-bg1-dark};
       --color-checkbox-toggle: #{$color-text3-dark};
       --color-validation-text: #{$color-text1-dark};

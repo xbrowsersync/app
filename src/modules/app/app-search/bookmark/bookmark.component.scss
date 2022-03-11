@@ -58,12 +58,11 @@ bookmark {
     }
   }
 
-  button.btn.btn-edit-bookmark {
-    font-size: 1.1rem;
+  .btn-edit-bookmark {
     opacity: 0;
     position: absolute;
     right: 1rem;
-    top: 0.5rem;
+    top: 0.75rem;
 
     @media (hover: hover) {
       &:hover {
@@ -73,27 +72,39 @@ bookmark {
   }
 
   .menu {
-    align-items: center;
     background-color: var(--color-bookmark-menu-bg);
     border-radius: $border-radius-well;
     display: flex;
     height: 100%;
-    justify-content: space-evenly;
+    justify-content: center;
     position: absolute;
     text-align: center;
     user-select: none;
     width: 100%;
     z-index: 60;
 
-    .btn-fab {
-      background-color: var(--color-bookmark-menu-button-bg);
-      color: var(--color-bookmark-menu-button-icon);
-      position: static;
-
+    icon-button {
       &.btn-delete-bookmark {
-        background-color: var(--color-danger);
-        color: var(--color-bookmark-menu-button-delete-icon);
+        button {
+          background-color: var(--color-danger) !important;
+          color: var(--color-bookmark-menu-button-delete-icon) !important;
+        }
       }
+
+      button {
+        background-color: var(--color-bookmark-menu-button-bg) !important;
+        color: var(--color-bookmark-menu-button-icon) !important;
+        position: static !important;
+      }
+    }
+
+    .buttons {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: space-around;
+      max-width: 25rem;
+      width: 100%;
     }
   }
 
@@ -120,8 +131,8 @@ bookmark {
     &:hover {
       cursor: pointer;
 
-      & > button.btn.btn-edit-bookmark {
-        opacity: 0.4;
+      & > .btn-edit-bookmark {
+        opacity: 0.8;
       }
     }
   }

@@ -94,61 +94,6 @@ button {
         }
       }
     }
-
-    &.btn-fab {
-      align-items: center;
-      background-color: var(--color-button-fab-bg);
-      border-radius: 100%;
-      border-width: 0;
-      box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12) !important;
-      box-sizing: border-box;
-      color: var(--color-button-fab-text);
-      cursor: pointer;
-      display: inline-flex;
-      font-size: 1.5rem;
-      height: 4rem;
-      justify-content: center;
-      overflow: hidden;
-      padding: 0;
-      position: relative;
-      transition: color ease-in-out 0.2s;
-      width: 4rem;
-      z-index: 10;
-
-      &.fixed {
-        bottom: 1rem;
-        position: fixed;
-        right: 1rem;
-      }
-
-      @media (hover: hover) {
-        &:active,
-        &:hover {
-          background-color: var(--color-button-fab-bg-hover) !important;
-          color: var(--color-button-fab-text-hover) !important;
-        }
-      }
-    }
-
-    &.btn-icon {
-      background: none;
-      border-radius: 0;
-      color: var(--color-button-icon-text);
-      opacity: 0.5;
-      padding: 0;
-      transition: opacity ease-in-out 0.2s;
-
-      @media (hover: hover) {
-        &:active {
-          opacity: 1 !important;
-        }
-
-        &:hover,
-        &:focus {
-          opacity: 1;
-        }
-      }
-    }
   }
 
   &:active,

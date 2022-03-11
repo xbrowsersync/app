@@ -36,7 +36,12 @@ module.exports = (env, argv) => {
           ]
         },
         {
-          test: /\.(eot|gif|jpg|otf|png|svg|ttf|woff|woff2)$/,
+          test: /\.svg$/,
+          loader: 'svg-inline-loader',
+          issuer: /\.ts$/
+        },
+        {
+          test: /\.(eot|gif|jpg|otf|png|ttf|woff|woff2)$/,
           type: 'asset/resource'
         },
         {

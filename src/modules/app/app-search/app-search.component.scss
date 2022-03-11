@@ -16,74 +16,6 @@ app-search {
     }
   }
 
-  .header-panel {
-    flex: none;
-    margin-bottom: 0;
-    padding: 0.75rem;
-
-    .btn-icon {
-      margin-left: 0.5rem;
-    }
-
-    .btn-toggle-bookmark {
-      &.active {
-        i {
-          font-weight: 900;
-        }
-      }
-    }
-
-    .search-form {
-      background-color: var(--color-input-bg);
-      border-radius: $border-radius-input;
-      flex: 0 1 100%;
-      margin-bottom: 0;
-      position: relative;
-
-      label {
-        color: var(--color-input-placeholder);
-        font-size: 0.85em;
-        left: 0.75rem;
-        margin-bottom: 0;
-        margin-top: -0.5em;
-        position: absolute;
-        top: 50%;
-        z-index: 60;
-      }
-
-      input {
-        background: transparent;
-        border-width: 0;
-        font-size: 1.1em;
-        line-height: 1.5em;
-        padding: 0 1.5em;
-        position: relative;
-        width: 100%;
-        z-index: 50;
-
-        &::placeholder {
-          color: var(--color-input-placeholder);
-        }
-      }
-
-      .btn-clear {
-        font-size: 0.7em;
-        height: 1.7em;
-        line-height: 1.5em;
-        margin-top: -0.85em;
-        width: 1.7em;
-      }
-
-      .lookahead-container {
-        border: 0;
-        font-size: 1.1em;
-        left: 1.5em;
-        line-height: 1.5em;
-        width: calc(100% - 3em);
-      }
-    }
-  }
-
   .search-results-container {
     &.ng-hide {
       margin-top: 0;
@@ -92,5 +24,63 @@ app-search {
 
   .view-content {
     padding: 0;
+
+    .header-panel {
+      height: auto;
+      margin-bottom: 0;
+      padding: 0.75rem;
+
+      & > icon-button {
+        margin-left: 0.2em;
+
+        &.active svg {
+          fill: var(--color-button-icon-text);
+        }
+      }
+
+      .search-form {
+        background-color: var(--color-input-bg);
+        border-radius: $border-radius-input;
+        flex: 0 1 100%;
+        margin-bottom: 0;
+        position: relative;
+
+        input {
+          background: transparent;
+          border-width: 0;
+          font-size: 1.1em;
+          line-height: 1.5em;
+          padding: 0 1.5em;
+          position: relative;
+          width: 100%;
+          z-index: 50;
+
+          &::placeholder {
+            color: var(--color-input-placeholder);
+          }
+        }
+
+        .btn-clear {
+          font-size: 1rem;
+        }
+
+        .lookahead-container {
+          border: 0;
+          font-size: 1.1em;
+          left: 1.5em;
+          line-height: 1.5em;
+          width: calc(100% - 3em);
+        }
+
+        .search-icon {
+          @include valign;
+
+          color: var(--color-input-placeholder);
+          font-size: 0.9em;
+          left: 0.5em;
+          z-index: 60;
+        }
+      }
+    }
   }
 }

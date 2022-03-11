@@ -26,7 +26,7 @@ export class BookmarkComponent {
   utilitySvc: UtilityService;
 
   @Input('<ngModel') bookmark: Bookmark;
-  @Input() enableEditButton: boolean = true;
+  @Input('<?') enableEditButton = true;
   @Input() enableSelect: boolean;
   @Input() isSelected: boolean;
 

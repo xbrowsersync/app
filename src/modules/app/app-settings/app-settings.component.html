@@ -1,11 +1,8 @@
 <div class="view-content">
   <div class="header-panel">
     <h2>{{ vm.platformSvc.getI18nString(vm.Strings.Button.Settings) }}</h2>
-    <button class="btn btn-icon btn-close" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}"
-            ng-click="vm.utilitySvc.handleEvent(vm.close)">
-      <i class="fas fa-times-circle" aria-hidden="true"></i>
-      <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}</span>
-    </button>
+    <icon-button type="'x-circle'" size="1.2em" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}"
+                 on-click="vm.utilitySvc.handleEvent(vm.close)" tab-index="1000"></icon-button>
   </div>
   <div class="panel-container">
     <sync-settings></sync-settings>

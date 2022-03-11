@@ -47,7 +47,7 @@ export class AppLoginComponent implements OnInit {
   utilitySvc: UtilityService;
   workingSvc: WorkingService;
 
-  ApiServiceStatus = ApiServiceStatus;
+  apiServiceStatus = ApiServiceStatus;
   displayGetSyncIdPanel: boolean;
   displayOtherSyncsWarning = false;
   displayPasswordConfirmation = false;

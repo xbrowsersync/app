@@ -42,22 +42,6 @@ app-login {
     }
   }
 
-  .btn-show-password {
-    &::before {
-      @include icon('\f715');
-
-      margin: auto;
-      position: absolute;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      transition: opacity ease-in-out 0.2s;
-    }
-
-    &.active::before {
-      opacity: 0;
-    }
-  }
-
   .form-group {
     input {
       font-family: $font-stack-code;
@@ -167,7 +151,7 @@ app-login {
 
     .status-icon {
       margin-left: 0.25rem;
-      top: 0.1rem;
+      top: 0.2rem;
 
       .loading .spinner-border {
         border-color: var(--color-text);

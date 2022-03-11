@@ -2,11 +2,8 @@
   'alert-info': vm.alert.type === vm.alertType.Information,
   'alert-warning': vm.alert.type === vm.alertType.Warning,
   'alert-danger': vm.alert.type === vm.alertType.Error }" ng-if="vm.showAlert">
-  <button class="btn btn-icon btn-close" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}"
-          ng-click="vm.utilitySvc.handleEvent(vm.close)" tabindex="1000">
-    <i class="fas fa-times-circle" aria-hidden="true"></i>
-    <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}</span>
-  </button>
+  <icon-button type="'x'" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}"
+               on-click="vm.utilitySvc.handleEvent(vm.close)" tab-index="1000"></icon-button>
   <h4 ng-bind-html="vm.alert.title"></h4>
   <p ng-bind-html="vm.alert.message"></p>
 </div>

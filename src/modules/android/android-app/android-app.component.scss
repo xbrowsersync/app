@@ -69,11 +69,6 @@ app {
     }
   }
 
-  h2 {
-    font-size: 1.6em;
-    line-height: 3.1rem;
-  }
-
   input,
   textarea {
     user-select: text;
@@ -104,20 +99,27 @@ app {
     }
   }
 
-  .header-panel {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+  .form-group {
+    &.icon-button-container {
+      icon-button {
+        margin-top: -0.85em;
 
-    .btn-icon {
-      line-height: 1.6em;
+        & > div {
+          height: 1.75em !important;
+          width: 1.75em !important;
+        }
+      }
+
+      input {
+        padding-right: 2.5rem !important;
+      }
     }
   }
 
-  .lookahead-container .lookahead::after {
-    @include icon('\f0d0');
-
-    margin-left: 0.25em;
-    position: absolute;
+  .header-panel {
+    font-size: 1.5rem;
+    height: 4rem;
+    margin-bottom: 0;
   }
 
   .view-content {
@@ -195,8 +197,9 @@ app-login {
 
     .header-panel {
       position: absolute;
-      top: 1.75rem;
-      width: calc(100% - 1.5rem);
+      flex-direction: column-reverse;
+      height: calc(100% - 4.5rem);
+      top: 3rem;
     }
 
     .logo {

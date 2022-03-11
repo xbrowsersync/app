@@ -40,6 +40,7 @@ export abstract class AppSearchComponent implements OnInit {
   currentUrlBookmarked: boolean;
   disableQueryWatch: () => void;
   displayFolderView: boolean;
+  globals = Globals;
   lastWord: string;
   lookahead: string;
   query: string;
@@ -267,7 +268,7 @@ export abstract class AppSearchComponent implements OnInit {
 
         // Get search results
         this.displayFolderView = false;
-        this.searchBookmarks();
+        this.$timeout(this.searchBookmarks, Globals.Debounce);
 
         // Return focus to search box
         this.appHelperSvc.focusOnElement('input[name=txtSearch]');
@@ -298,6 +299,8 @@ export abstract class AppSearchComponent implements OnInit {
         this.selectLookahead();
         break;
       default:
+        // Clear lookahead if any other key was pressed
+        this.lookahead = null;
     }
   }
 
@@ -439,6 +442,7 @@ export abstract class AppSearchComponent implements OnInit {
 
   selectLookahead(): void {
     this.query = `${this.query}${this.lookahead}`;
+    this.lookahead = null;
     this.searchTextChanged();
     this.appHelperSvc.focusOnElement('input[name=txtSearch]');
   }

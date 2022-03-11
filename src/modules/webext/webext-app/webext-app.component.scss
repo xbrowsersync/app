@@ -5,6 +5,17 @@ body {
 }
 
 app {
+  .icon-button-container {
+    icon-button {
+      margin-top: -0.65em !important;
+
+      & > div {
+        height: 1.3em !important;
+        width: 1.3em !important;
+      }
+    }
+  }
+
   .container {
     &.search {
       .view,
@@ -17,16 +28,7 @@ app {
         width: 38rem;
 
         .header-panel {
-          display: flex;
           flex-direction: row-reverse;
-
-          button {
-            flex: none;
-
-            &.btn-settings {
-              float: none;
-            }
-          }
         }
       }
     }
@@ -48,5 +50,16 @@ app {
       height: 37rem;
       width: 23rem;
     }
+  }
+
+  .header-panel {
+    height: 1.7rem;
+  }
+}
+
+app-search {
+  .btn-clear {
+    margin-top: -0.6em;
+    right: 0.5em;
   }
 }

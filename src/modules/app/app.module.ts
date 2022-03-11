@@ -17,6 +17,8 @@ import { AppSettingsModule } from './app-settings/app-settings.module';
 import { AppSupportComponent } from './app-support/app-support.component';
 import { AppSyncRemovedComponent } from './app-sync-removed/app-sync-removed.component';
 import { AppUpdatedComponent } from './app-updated/app-updated.component';
+import { IconComponent } from './shared/icon/icon.component';
+import { IconButtonComponent } from './shared/icon-button/icon-button.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { AppUpdatedComponent } from './app-updated/app-updated.component';
     AppSyncRemovedComponent,
     AppUpdatedComponent,
     BookmarkComponent,
-    BookmarkTreeComponent
+    BookmarkTreeComponent,
+    IconComponent,
+    IconButtonComponent
   ],
   id: 'AppModule',
   imports: [

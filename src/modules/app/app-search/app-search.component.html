@@ -1,61 +1,36 @@
 <div class="view-content" ng-class="{ 'search-bar-bottom': vm.alternateSearchBarPosition }">
   <div class="header-panel" hm-tap="vm.selectedBookmarkId = null">
-    <button class="btn btn-icon btn-settings" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Settings) }}"
-            ng-click="vm.utilitySvc.handleEvent(vm.switchToSettingsView)"
-            tabindex="5">
-      <i class="fas fa-cog" aria-hidden="true"></i>
-      <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.Settings) }}</span>
-    </button>
-    <button class="btn btn-icon btn-toggle-bookmark"
-            ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"
-            ng-class="{ 'active': vm.currentUrlBookmarked }"
-            title="{{ vm.currentUrlBookmarked ? vm.platformSvc.getI18nString(vm.Strings.Button.EditBookmark) : vm.platformSvc.getI18nString(vm.Strings.Button.AddBookmark) }}"
-            ng-click="vm.utilitySvc.handleEvent(vm.switchToBookmarkView)" tabindex="4">
-      <i class="far fa-bookmark" aria-hidden="true"></i>
-      <span class="sr-only" ng-if="vm.currentUrlBookmarked">{{
-      vm.platformSvc.getI18nString(vm.Strings.Button.EditBookmark) }}</span>
-      <span class="sr-only" ng-if="!vm.currentUrlBookmarked">{{
-      vm.platformSvc.getI18nString(vm.Strings.Button.AddBookmark) }}</span>
-    </button>
-    <button class="btn btn-icon" title="{{ vm.displayFolderView ? vm.platformSvc.getI18nString(vm.Strings.View.Search.SearchResults) : 
-      vm.platformSvc.getI18nString(vm.Strings.View.Search.BookmarkTree) }}"
-            ng-click="vm.utilitySvc.handleEvent(vm.toggleBookmarkTreeView)" tabindex="3">
-      <i class="fas fa-list animate-fade-in" ng-if="vm.displayFolderView" aria-hidden="true"></i>
-      <i class="fas fa-stream animate-fade-in" ng-if="!vm.displayFolderView" aria-hidden="true"></i>
-      <span class="sr-only" ng-if="vm.displayFolderView">
-        {{ vm.platformSvc.getI18nString(vm.Strings.View.Search.SearchResults) }}
-      </span>
-      <span class="sr-only" ng-if="!vm.displayFolderView">
-        {{ vm.platformSvc.getI18nString(vm.Strings.View.Search.BookmarkTree) }}
-      </span>
-    </button>
-    <div class="search-form form-group btn-icon-container">
-      <input type="text" name="txtSearch" ng-model="vm.query" ng-model-options="{ debounce: 300 }" class="form-control"
-             maxlength="200"
+    <icon-button type="'settings'" size="1.3em" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Settings) }}"
+                 on-click="vm.utilitySvc.handleEvent(vm.switchToSettingsView)" tab-index="5"></icon-button>
+    <icon-button type="'bookmark'" size="1.4em"
+                 title="{{ vm.currentUrlBookmarked ? vm.platformSvc.getI18nString(vm.Strings.Button.EditBookmark) : vm.platformSvc.getI18nString(vm.Strings.Button.AddBookmark) }}"
+                 ng-class="{ 'active': vm.currentUrlBookmarked }"
+                 on-click="vm.utilitySvc.handleEvent(vm.switchToBookmarkView)"
+                 ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)" tab-index="4"></icon-button>
+    <icon-button type="vm.displayFolderView ? 'align-justify' : 'align-left'" size="1.5em"
+                 title="{{ vm.displayFolderView ? vm.platformSvc.getI18nString(vm.Strings.View.Search.SearchResults) : vm.platformSvc.getI18nString(vm.Strings.View.Search.BookmarkTree) }}"
+                 on-click="vm.utilitySvc.handleEvent(vm.toggleBookmarkTreeView)" tab-index="3"></icon-button>
+    <div class="search-form form-group icon-button-container">
+      <input type="text" name="txtSearch" ng-model="vm.query" ng-model-options="{ debounce: globals.Debounce }"
+             class="form-control" maxlength="200"
              placeholder="{{ vm.platformSvc.getI18nString(vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) ? vm.Strings.View.Search.Placeholder : vm.Strings.View.Search.Placeholder) }}"
              ng-keydown="vm.utilitySvc.handleEvent(vm.searchBoxKeyDown, $event)" ng-trim="false" autocapitalize="off"
              autocomplete="off" autocorrect="off" spellcheck="false" tabindex="1" />
-      <label for="txtSearch">
-        <i class="fas fa-search"></i>
-      </label>
+      <icon type="'search'" bold="true" class="search-icon"></icon>
       <div class="lookahead-container">
         <span class="measure" ng-bind-html="vm.queryMeasure"></span>
         <span class="lookahead" ng-show="vm.lookahead" ng-click="vm.utilitySvc.handleEvent(vm.selectLookahead)">{{
-        vm.lookahead }}</span>
+        vm.lookahead }} <icon type="'edit-3'"></icon></span>
       </div>
-      <button class="btn btn-icon btn-clear" ng-show="vm.query"
-              title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Search.Clear) }}"
-              ng-click="vm.utilitySvc.handleEvent(vm.clearSearch)" tabindex="2">
-        <i class="fas fa-times" aria-hidden="true"></i>
-      </button>
+      <icon-button type="'x'" bold="true" class="btn-clear" ng-show="vm.query"
+                   title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Search.Clear) }}"
+                   on-click="vm.utilitySvc.handleEvent(vm.clearSearch)" tab-index="2"></icon-button>
     </div>
   </div>
-  <button class="btn btn-fab fixed" ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"
-          title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.AddBookmark) }}"
-          ng-click="vm.utilitySvc.handleEvent(vm.addBookmark)" tabindex="-1">
-    <i class="far fa-bookmark" aria-hidden="true"></i>
-    <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.AddBookmark) }}</span>
-  </button>
+  <icon-button type="'bookmark'" fab="true" fixed="true" class="btn-add-bookmark"
+               title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.AddBookmark) }}"
+               on-click="vm.utilitySvc.handleEvent(vm.addBookmark)" tab-index="-1"
+               ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"></icon-button>
   <div class="search-results-container pull-to-refresh" ng-if="!vm.displayFolderView" ng-show="vm.results">
     <h4 ng-show="!vm.query && vm.results.length === 0">
       {{ vm.platformSvc.getI18nString(vm.Strings.View.Search.NoBookmarks) }}

@@ -49,15 +49,11 @@ app-alert {
       }
     }
 
-    button.btn-close {
+    icon-button {
       color: var(--color-alert-text);
-      float: right;
-      font-size: 1.2rem;
-      line-height: 1.7rem;
-
-      @media (min-width: $width-mobile-small + 1) {
-        font-size: 1.5rem;
-      }
+      position: absolute;
+      right: 0.5rem;
+      top: 0.5rem;
     }
 
     h4,

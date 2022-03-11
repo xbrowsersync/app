@@ -19,16 +19,13 @@ app-scan {
 
   .buttons {
     flex: 0 8rem;
+    width: 100%;
 
-    button.btn.btn-fab {
-      margin-right: 1.75rem;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
+    icon-button {
       &.enabled {
-        background-color: var(--color-warning);
+        button {
+          background-color: var(--color-warning);
+        }
       }
     }
   }

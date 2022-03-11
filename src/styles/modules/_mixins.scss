@@ -17,12 +17,6 @@
   }
 }
 
-@mixin icon($unicode) {
-  content: $unicode;
-  font-family: $font-stack-icons;
-  font-weight: 900;
-}
-
 @mixin spinner-colour($colour) {
   border-color: $colour;
   border-right-color: transparent;

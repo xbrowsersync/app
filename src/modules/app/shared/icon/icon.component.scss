@@ -1,0 +1,27 @@
+@import '../../../../styles/modules/all';
+
+icon {
+  border-radius: 100%;
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+
+  i {
+    display: block;
+    height: 100%;
+    position: relative;
+    width: 100%;
+
+    &.bold svg {
+      stroke-width: 4;
+    }
+
+    svg {
+      @include valign;
+
+      height: 100%;
+      left: 0;
+      width: 100%;
+    }
+  }
+}

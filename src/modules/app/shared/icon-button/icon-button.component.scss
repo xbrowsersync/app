@@ -1,0 +1,67 @@
+icon-button {
+  color: var(--color-button-icon-text);
+  display: inline-block;
+
+  & > div {
+    &.fab {
+      height: 4rem !important;
+      width: 4rem !important;
+
+      button {
+        background-color: var(--color-button-fab-bg);
+        border-radius: 100%;
+        box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+          0 1px 18px 0 rgba(0, 0, 0, 0.12) !important;
+        color: var(--color-button-fab-text);
+        opacity: 1;
+        z-index: 10;
+
+        icon {
+          height: 50%;
+          width: 50%;
+        }
+
+        @media (hover: hover) {
+          &:active,
+          &:hover {
+            background-color: var(--color-button-fab-bg-hover) !important;
+            color: var(--color-button-fab-text-hover) !important;
+          }
+        }
+      }
+    }
+
+    button {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      background-color: transparent;
+      border: none;
+      border-radius: 0.25rem;
+      color: inherit;
+      cursor: pointer;
+      height: 100%;
+      opacity: 0.5;
+      padding: 0;
+      transition: opacity ease-in-out 0.2s;
+      user-select: none;
+      width: 100%;
+
+      icon {
+        height: 100%;
+        width: 100%;
+      }
+
+      @media (hover: hover) {
+        &:active {
+          opacity: 1 !important;
+        }
+
+        &:hover,
+        &:focus {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

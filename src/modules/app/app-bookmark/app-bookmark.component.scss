@@ -64,7 +64,7 @@ app-bookmark {
       margin: 0 0.5rem 0.5rem 0;
       max-width: 99%;
 
-      i {
+      icon {
         color: var(--color-badge-text);
         opacity: 0.5;
         transition: opacity ease-in-out 0.2s;
@@ -84,13 +84,14 @@ app-bookmark {
 
       @media (hover: hover) {
         &:active,
-        &:hover {
-          i {
+        &:hover,
+        &:focus {
+          icon {
             opacity: 1;
           }
         }
 
-        &:focus span {
+        &:not(:active):focus span {
           text-decoration: underline;
         }
       }

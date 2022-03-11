@@ -15,6 +15,7 @@ export default {
     SeparatorUrl: 'xbs:separator',
     VerticalSeparatorTitle: '|'
   },
+  Debounce: 300,
   I18n: {
     DefaultLocale: 'en'
   },
