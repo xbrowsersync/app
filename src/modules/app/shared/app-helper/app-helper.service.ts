@@ -1,10 +1,5 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
-import DOMPurify from 'dompurify';
-import { marked } from 'marked';
-import { ApiServiceStatus } from '../../../shared/api/api.enum';
-import { ApiService, ApiServiceInfo, ApiServiceInfoResponse } from '../../../shared/api/api.interface';
-import { ServiceOfflineError } from '../../../shared/errors/errors';
 import { ExceptionHandler } from '../../../shared/errors/errors.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
@@ -25,7 +20,6 @@ export abstract class AppHelperService {
   $location: ng.ILocationService;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
-  apiSvc: ApiService;
   logSvc: LogService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
@@ -38,7 +32,6 @@ export abstract class AppHelperService {
     $location: ng.ILocationService,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
-    ApiSvc: ApiService,
     LogSvc: LogService,
     PlatformSvc: PlatformService,
     StoreSvc: StoreService,
@@ -50,7 +43,6 @@ export abstract class AppHelperService {
     this.$location = $location;
     this.$q = $q;
     this.$timeout = $timeout;
-    this.apiSvc = ApiSvc;
     this.logSvc = LogSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
@@ -89,40 +81,6 @@ export abstract class AppHelperService {
         element.focus();
       }
     }, Globals.InterfaceReadyTimeout);
-  }
-
-  formatServiceInfo(serviceInfoResponse?: ApiServiceInfoResponse): ng.IPromise<ApiServiceInfo> {
-    // If no service info response provide, get response from stored service
-    return (serviceInfoResponse ? this.$q.resolve(serviceInfoResponse) : this.apiSvc.checkServiceStatus())
-      .then((response) => {
-        if (angular.isUndefined(response ?? undefined)) {
-          return;
-        }
-
-        // Render markdown and add link classes to service message
-        let message = response.message ? marked(response.message) : '';
-        if (message) {
-          const messageDom = new DOMParser().parseFromString(message, 'text/html');
-          messageDom.querySelectorAll('a').forEach((hyperlink) => {
-            hyperlink.className = 'new-tab';
-          });
-          message = DOMPurify.sanitize(messageDom.body.firstElementChild.innerHTML);
-        }
-
-        return {
-          location: response.location,
-          maxSyncSize: response.maxSyncSize / 1024,
-          message,
-          status: response.status,
-          version: response.version
-        };
-      })
-      .catch((err) => {
-        const status = err instanceof ServiceOfflineError ? ApiServiceStatus.Offline : ApiServiceStatus.Error;
-        return {
-          status
-        };
-      });
   }
 
   abstract getHelpPages(): string[];
@@ -195,10 +153,5 @@ export abstract class AppHelperService {
   syncBookmarksSuccess(): ng.IPromise<void> {
     // Switch to default view
     return this.switchView();
-  }
-
-  updateServiceUrl(newServiceUrl: string): ng.IPromise<ApiServiceInfo> {
-    // Update service url in store and refresh service info
-    return this.utilitySvc.updateServiceUrl(newServiceUrl).then(() => this.formatServiceInfo());
   }
 }

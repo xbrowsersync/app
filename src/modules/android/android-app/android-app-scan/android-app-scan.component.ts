@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
+import { ApiXbrowsersyncService } from '../../../shared/api/api-xbrowsersync/api-xbrowsersync.service';
 import { BackupSync } from '../../../shared/backup-restore/backup-restore.interface';
 import { AndroidError, FailedScanError } from '../../../shared/errors/errors';
 import Globals from '../../../shared/global-shared.constants';
@@ -22,6 +23,7 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
 
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
+  apiSvc: ApiXbrowsersyncService;
   appHelperSvc: AndroidAppHelperService;
   logSvc: LogService;
   platformSvc: PlatformService;
@@ -35,6 +37,7 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
   static $inject = [
     '$q',
     '$timeout',
+    'ApiService',
     'AppHelperService',
     'LogService',
     'PlatformService',
@@ -44,6 +47,7 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
   constructor(
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
+    ApiSvc: ApiXbrowsersyncService,
     AppHelperSvc: AndroidAppHelperService,
     LogSvc: LogService,
     PlatformSvc: PlatformService,
@@ -52,6 +56,7 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
   ) {
     this.$q = $q;
     this.$timeout = $timeout;
+    this.apiSvc = ApiSvc;
     this.appHelperSvc = AppHelperSvc;
     this.logSvc = LogSvc;
     this.platformSvc = PlatformSvc;
@@ -126,10 +131,7 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
   scanCompleted(scannedSyncInfo: BackupSync): ng.IPromise<void> {
     // Update stored sync id and service values
     return this.$q
-      .all([
-        this.appHelperSvc.updateServiceUrl(scannedSyncInfo.url),
-        this.storeSvc.set(StoreKey.SyncId, scannedSyncInfo.id)
-      ])
+      .all([this.apiSvc.updateServiceUrl(scannedSyncInfo.url), this.storeSvc.set(StoreKey.SyncId, scannedSyncInfo.id)])
       .then(() => this.appHelperSvc.switchView())
       .then(() => this.appHelperSvc.focusOnElement('.active-login-form  input[name="txtPassword"]'));
   }

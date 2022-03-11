@@ -1,7 +1,8 @@
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { ApiServiceStatus } from '../../../shared/api/api.enum';
-import { ApiServiceInfo } from '../../../shared/api/api.interface';
+import { ApiXbrowsersyncServiceInfo } from '../../../shared/api/api-xbrowsersync/api-xbrowsersync.interface';
+import { ApiXbrowsersyncService } from '../../../shared/api/api-xbrowsersync/api-xbrowsersync.service';
 import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { NetworkService } from '../../../shared/network/network.service';
@@ -25,6 +26,7 @@ export class SyncSettingsComponent implements OnInit {
 
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
+  apiSvc: ApiXbrowsersyncService;
   appHelperSvc: AppHelperService;
   bookmarkHelperSvc: BookmarkHelperService;
   networkSvc: NetworkService;
@@ -39,7 +41,7 @@ export class SyncSettingsComponent implements OnInit {
   displayQr = false;
   lastUpdated: string;
   nextUpdate: string;
-  serviceInfo: ApiServiceInfo;
+  serviceInfo: ApiXbrowsersyncServiceInfo;
   syncDataSize: number;
   syncDataUsed: number;
   syncEnabled: boolean;
@@ -51,6 +53,7 @@ export class SyncSettingsComponent implements OnInit {
     '$q',
     '$timeout',
     '$scope',
+    'ApiService',
     'AppHelperService',
     'BookmarkHelperService',
     'NetworkService',
@@ -64,6 +67,7 @@ export class SyncSettingsComponent implements OnInit {
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     $scope: ng.IScope,
+    ApiSvc: ApiXbrowsersyncService,
     AppHelperSvc: AppHelperService,
     BookmarkHelperSvc: BookmarkHelperService,
     NetworkSvc: NetworkService,
@@ -75,6 +79,7 @@ export class SyncSettingsComponent implements OnInit {
   ) {
     this.$q = $q;
     this.$timeout = $timeout;
+    this.apiSvc = ApiSvc;
     this.appHelperSvc = AppHelperSvc;
     this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.networkSvc = NetworkSvc;
@@ -158,7 +163,7 @@ export class SyncSettingsComponent implements OnInit {
   }
 
   refreshServiceStatus(): ng.IPromise<void> {
-    return this.appHelperSvc.formatServiceInfo().then((formattedServiceInfo) => {
+    return this.apiSvc.formatServiceInfo().then((formattedServiceInfo) => {
       Object.assign(this.serviceInfo, formattedServiceInfo);
     });
   }

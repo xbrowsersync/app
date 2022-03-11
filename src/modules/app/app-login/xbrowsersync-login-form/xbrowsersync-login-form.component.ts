@@ -1,9 +1,13 @@
 import { Component, OnInit, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import * as countriesList from 'countries-list';
-import { ApiServiceStatus, ApiServiceType } from '../../../shared/api/api.enum';
-import { ApiService, ApiServiceInfo, ApiServiceSyncInfo } from '../../../shared/api/api.interface';
-import { ApiXbrowsersyncServiceSyncInfo } from '../../../shared/api/api-xbrowsersync/api-xbrowsersync.interface';
+import { ApiServiceStatus } from '../../../shared/api/api.enum';
+import { ApiSyncInfo } from '../../../shared/api/api.interface';
+import {
+  ApiXbrowsersyncServiceInfo,
+  ApiXbrowsersyncSyncInfo
+} from '../../../shared/api/api-xbrowsersync/api-xbrowsersync.interface';
+import { ApiXbrowsersyncService } from '../../../shared/api/api-xbrowsersync/api-xbrowsersync.service';
 import { CryptoService } from '../../../shared/crypto/crypto.service';
 import { InvalidServiceError, UnsupportedApiVersionError } from '../../../shared/errors/errors';
 import { ExceptionHandler } from '../../../shared/errors/errors.interface';
@@ -30,7 +34,7 @@ export class XbrowsersyncLoginComponent implements OnInit {
   $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
-  apiSvc: ApiService;
+  apiSvc: ApiXbrowsersyncService;
   appHelperSvc: AppHelperService;
   cryptoSvc: CryptoService;
   logSvc: LogService;
@@ -41,18 +45,18 @@ export class XbrowsersyncLoginComponent implements OnInit {
 
   @Output() displaySyncConfirmation: () => void;
   @Output() executeSync: () => void;
-  @Output() setSyncInfo: () => (syncInfo: ApiServiceSyncInfo) => void;
+  @Output() setSyncInfo: () => (syncInfo: ApiSyncInfo) => void;
 
   apiServiceStatus = ApiServiceStatus;
   enablePasswordValidation = false;
   getSyncIdPanelVisible: boolean;
-  newServiceInfo: ApiServiceInfo;
+  newServiceInfo: ApiXbrowsersyncServiceInfo;
   newSync = false;
   password: string;
   passwordComplexity: any;
   passwordConfirmation = null;
   passwordConfirmationVisible = false;
-  serviceInfo: ApiServiceInfo;
+  serviceInfo: ApiXbrowsersyncServiceInfo;
   showPassword = false;
   syncEnabled = false;
   syncForm: ng.IFormController;
@@ -78,7 +82,7 @@ export class XbrowsersyncLoginComponent implements OnInit {
     $exceptionHandler: ExceptionHandler,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
-    ApiSvc: ApiService,
+    ApiSvc: ApiXbrowsersyncService,
     AppHelperSvc: AppHelperService,
     CryptoSvc: CryptoService,
     LogSvc: LogService,
@@ -118,12 +122,14 @@ export class XbrowsersyncLoginComponent implements OnInit {
   confirmUpdateService(): void {
     // Update stored service info
     const url = this.newServiceInfo.url.replace(/\/$/, '');
-    this.appHelperSvc
+    this.apiSvc
       .updateServiceUrl(url)
       .then((serviceInfo) => {
         // Update view model and remove stored creds
-        this.serviceInfo = serviceInfo;
-        this.serviceInfo.url = url;
+        this.serviceInfo = {
+          ...serviceInfo,
+          url
+        };
         return this.$q.all([this.storeSvc.remove(StoreKey.SyncId), this.storeSvc.remove(StoreKey.Password)]);
       })
       .then(() => {
@@ -258,7 +264,7 @@ export class XbrowsersyncLoginComponent implements OnInit {
   }
 
   refreshServiceStatus(): ng.IPromise<void> {
-    return this.appHelperSvc.formatServiceInfo().then((formattedServiceInfo) => {
+    return this.apiSvc.formatServiceInfo().then((formattedServiceInfo) => {
       Object.assign(this.serviceInfo, formattedServiceInfo);
     });
   }
@@ -324,23 +330,25 @@ export class XbrowsersyncLoginComponent implements OnInit {
   }
 
   sync(): void {
-    // Set sync info
-    const syncInfo: ApiXbrowsersyncServiceSyncInfo = {
-      syncPassword: this.password,
-      serviceType: ApiServiceType.xBrowserSync,
-      serviceUrl: this.serviceInfo.url,
-      syncId: this.syncId
-    };
-    this.setSyncInfo()(syncInfo);
+    this.utilitySvc.getServiceType().then((selectedServiceType) => {
+      // Set sync info
+      const syncInfo: ApiXbrowsersyncSyncInfo = {
+        syncPassword: this.password,
+        serviceType: selectedServiceType,
+        serviceUrl: this.serviceInfo.url,
+        syncId: this.syncId
+      };
+      this.setSyncInfo()(syncInfo);
 
-    if (this.syncId && this.appHelperSvc.confirmBeforeSyncing()) {
-      // Display overwrite data confirmation panel
-      this.displaySyncConfirmation();
-      this.appHelperSvc.focusOnElement('.btn-confirm-enable-sync');
-    } else {
-      // If no ID provided start syncing
-      this.executeSync();
-    }
+      if (this.syncId && this.appHelperSvc.confirmBeforeSyncing()) {
+        // Display overwrite data confirmation panel
+        this.displaySyncConfirmation();
+        this.appHelperSvc.focusOnElement('.btn-confirm-enable-sync');
+      } else {
+        // If no ID provided start syncing
+        this.executeSync();
+      }
+    });
   }
 
   syncIdChanged(): void {
@@ -367,7 +375,7 @@ export class XbrowsersyncLoginComponent implements OnInit {
       }
 
       // Retrieve new service status and update view model
-      return this.appHelperSvc.formatServiceInfo(newServiceInfo).then((serviceInfo) => {
+      return this.apiSvc.formatServiceInfo(newServiceInfo).then((serviceInfo) => {
         Object.assign(this.newServiceInfo, serviceInfo);
         this.updateServiceConfirmationVisible = true;
         this.appHelperSvc.attachClickEventsToNewTabLinks(document.querySelector('.service-message'));

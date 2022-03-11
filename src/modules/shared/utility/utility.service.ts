@@ -7,6 +7,7 @@ import { compare } from 'compare-versions';
 import * as detectBrowser from 'detect-browser';
 import XRegExp from 'xregexp';
 import { AppEventType, RoutePath } from '../../app/app.enum';
+import { ApiServiceType } from '../api/api.enum';
 import { ClientDataNotFoundError } from '../errors/errors';
 import { ExceptionHandler } from '../errors/errors.interface';
 import Globals from '../global-shared.constants';
@@ -139,6 +140,10 @@ export class UtilityService {
 
   getSemVerAlignedVersion(version: string): string {
     return version.replace(/^[vV]?(\d+\.\d+\.\d+)(\.\d+|-\w+\.\d+)?$/, '$1');
+  }
+
+  getServiceType(): ng.IPromise<ApiServiceType> {
+    return this.$q.resolve(ApiServiceType.xBrowserSync);
   }
 
   getServiceUrl(): ng.IPromise<string> {

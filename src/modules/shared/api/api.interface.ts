@@ -38,26 +38,15 @@ export interface ApiService {
 }
 
 export interface ApiServiceInfo {
-  location?: string;
-  maxSyncSize?: number;
-  message?: string;
   status?: ApiServiceStatus;
-  url?: string;
-  version?: string;
 }
 
-export interface ApiServiceInfoResponse {
-  location?: string;
-  maxSyncSize?: number;
-  message?: string;
-  status: ApiServiceStatus;
-  version?: string;
-}
+export interface ApiServiceInfoResponse {}
 
-export interface ApiServiceSyncInfo {
+export interface ApiSyncInfo {
   serviceType: ApiServiceType;
   syncId?: string;
-  syncPassword: string;
+  syncPassword?: string;
 }
 
 export interface ApiUpdateBookmarksRequest {

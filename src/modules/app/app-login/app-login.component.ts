@@ -1,7 +1,7 @@
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { ApiServiceType } from '../../shared/api/api.enum';
-import { ApiService, ApiServiceSyncInfo } from '../../shared/api/api.interface';
+import { ApiService, ApiSyncInfo } from '../../shared/api/api.interface';
 import { CryptoService } from '../../shared/crypto/crypto.service';
 import {
   BaseError,
@@ -50,7 +50,7 @@ export class AppLoginComponent implements OnInit {
   platformType = PlatformType;
   selectedServiceType: ApiServiceType;
   syncConfirmationVisible = false;
-  syncInfo: ApiServiceSyncInfo;
+  syncInfo: ApiSyncInfo;
   upgradeConfirmationVisible = false;
   upgradeConfirmed = false;
 
@@ -207,22 +207,24 @@ export class AppLoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.selectedServiceType = ApiServiceType.xBrowserSync;
-
-    this.storeSvc.get<boolean>(StoreKey.DisplayOtherSyncsWarning).then((displayOtherSyncsWarning) => {
-      this.otherSyncsWarningVisible = displayOtherSyncsWarning;
-      if (this.otherSyncsWarningVisible) {
-        // Focus on first button
-        this.appHelperSvc.focusOnElement('.otherSyncsWarning .buttons > button');
-      }
-    });
+    this.$q
+      .all([this.utilitySvc.getServiceType(), this.storeSvc.get<boolean>(StoreKey.DisplayOtherSyncsWarning)])
+      .then((data) => {
+        const [selectedServiceType, displayOtherSyncsWarning] = data;
+        this.selectedServiceType = selectedServiceType;
+        this.otherSyncsWarningVisible = displayOtherSyncsWarning;
+        if (this.otherSyncsWarningVisible) {
+          // Focus on first button
+          this.appHelperSvc.focusOnElement('.otherSyncsWarning .buttons > button');
+        }
+      });
   }
 
   setSyncConfirmationVisible(isVisible = true): void {
     this.syncConfirmationVisible = isVisible;
   }
 
-  setSyncInfo(syncInfo: ApiServiceSyncInfo): void {
+  setSyncInfo(syncInfo: ApiSyncInfo): void {
     this.syncInfo = syncInfo;
   }
 

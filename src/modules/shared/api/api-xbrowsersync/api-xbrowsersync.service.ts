@@ -1,6 +1,8 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
 import {
   BaseError,
   ClientDataNotFoundError,
@@ -25,6 +27,7 @@ import { NetworkService } from '../../network/network.service';
 import { StoreKey } from '../../store/store.enum';
 import { StoreService } from '../../store/store.service';
 import { UtilityService } from '../../utility/utility.service';
+import { ApiServiceStatus } from '../api.enum';
 import {
   ApiCreateBookmarksRequest,
   ApiCreateBookmarksResponse,
@@ -32,12 +35,15 @@ import {
   ApiGetLastUpdatedResponse,
   ApiGetSyncVersionResponse,
   ApiService,
-  ApiServiceInfoResponse,
   ApiUpdateBookmarksRequest,
   ApiUpdateBookmarksResponse
 } from '../api.interface';
 import { ApiXbrowsersyncResource } from './api-xbrowsersync.enum';
-import { ApiXbrowsersyncErrorResponse, ApiXbrowsersyncServiceInfoResponse } from './api-xbrowsersync.interface';
+import {
+  ApiXbrowsersyncErrorResponse,
+  ApiXbrowsersyncServiceInfo,
+  ApiXbrowsersyncServiceInfoResponse
+} from './api-xbrowsersync.interface';
 
 @autobind
 @Injectable('ApiService')
@@ -87,7 +93,7 @@ export class ApiXbrowsersyncService implements ApiService {
     });
   }
 
-  checkServiceStatus(url?: string): ng.IPromise<ApiServiceInfoResponse> {
+  checkServiceStatus(url?: string): ng.IPromise<ApiXbrowsersyncServiceInfoResponse> {
     return this.checkNetworkConnection().then(() => {
       // Get current service url if not provided
       return (!url ? this.utilitySvc.getServiceUrl() : this.$q.resolve(url))
@@ -306,6 +312,40 @@ export class ApiXbrowsersyncService implements ApiService {
     throw this.getErrorFromHttpResponse(response);
   }
 
+  formatServiceInfo(serviceInfoResponse?: ApiXbrowsersyncServiceInfoResponse): ng.IPromise<ApiXbrowsersyncServiceInfo> {
+    // If no service info response provide, get response from stored service
+    return (serviceInfoResponse ? this.$q.resolve(serviceInfoResponse) : this.checkServiceStatus())
+      .then((response) => {
+        if (angular.isUndefined(response ?? undefined)) {
+          return;
+        }
+
+        // Render markdown and add link classes to service message
+        let message = response.message ? marked(response.message) : '';
+        if (message) {
+          const messageDom = new DOMParser().parseFromString(message, 'text/html');
+          messageDom.querySelectorAll('a').forEach((hyperlink) => {
+            hyperlink.className = 'new-tab';
+          });
+          message = DOMPurify.sanitize(messageDom.body.firstElementChild.innerHTML);
+        }
+
+        return {
+          location: response.location,
+          maxSyncSize: response.maxSyncSize / 1024,
+          message,
+          status: response.status,
+          version: response.version
+        };
+      })
+      .catch((err) => {
+        const status = err instanceof ServiceOfflineError ? ApiServiceStatus.Offline : ApiServiceStatus.Error;
+        return {
+          status
+        };
+      });
+  }
+
   updateBookmarks(
     encryptedBookmarks: string,
     updateSyncVersion = false,
@@ -356,5 +396,10 @@ export class ApiXbrowsersyncService implements ApiService {
         }
         throw err;
       });
+  }
+
+  updateServiceUrl(newServiceUrl: string): ng.IPromise<ApiXbrowsersyncServiceInfo> {
+    // Update service url in store and refresh service info
+    return this.utilitySvc.updateServiceUrl(newServiceUrl).then(() => this.formatServiceInfo());
   }
 }
