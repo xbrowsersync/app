@@ -1,0 +1,16 @@
+<div class="form-group setting-group"
+     ng-if="vm.serviceInfo.status !== undefined && vm.serviceInfo.status !== vm.apiServiceStatus.Error">
+  <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Data.Label) }}</label>
+  <div class="setting-value" ng-class="{ 'text-danger': vm.syncDataUsed >= 90 }" ng-show="vm.syncDataUsed != null">{{
+vm.syncDataUsed | number : 0 }}%</div>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" ng-style=" { 'width': vm.dataUsageProgressWidth + '%' }">
+    </div>
+  </div>
+  <span class="used" ng-show="vm.syncDataSize != null">{{ vm.syncDataSize | kbFmt : 0
+}}</span>
+  <span class="max" ng-show="vm.serviceInfo.maxSyncSize != null">{{ vm.serviceInfo.maxSyncSize
+| kbFmt : 0 }}</span>
+  <p class="description">{{
+  vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Data.Description) }}</p>
+</div>

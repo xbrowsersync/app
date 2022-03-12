@@ -8,9 +8,10 @@
   <div class="logo"></div>
   <div class="login-form-container animate-fade-in"
        ng-hide="vm.otherSyncsWarningVisible || vm.syncConfirmationVisible || vm.upgradeConfirmationVisible">
-    <xbs-login-form display-sync-confirmation="vm.setSyncConfirmationVisible(true)" execute-sync="vm.executeSync()"
-                    set-sync-info="vm.setSyncInfo" ng-if="vm.selectedServiceType === vm.apiServiceType.xBrowserSync">
-    </xbs-login-form>
+    <api-xbrowsersync-login-form display-sync-confirmation="vm.setSyncConfirmationVisible(true)"
+                                 execute-sync="vm.executeSync()" set-sync-info="vm.setSyncInfo"
+                                 ng-if="vm.selectedServiceType === vm.apiServiceType.xBrowserSync">
+    </api-xbrowsersync-login-form>
   </div>
   <div class="confirm well well-sm animate-fade-in" ng-show="vm.syncConfirmationVisible">
     <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.Confirm.Title) }}</h4>

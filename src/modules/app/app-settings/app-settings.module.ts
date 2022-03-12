@@ -5,11 +5,13 @@ import { IssuesSettingsComponent } from './issues-settings/issues-settings.compo
 import { PermissionsSettingsComponent } from './permissions-settings/permissions-settings.component';
 import { PreferencesSettingsComponent } from './preferences-settings/preferences-settings.component';
 import { AppQrComponent } from './qr-panel/qr-panel.component';
+import { ApiXbrowsersyncServiceInfoComponent } from './sync-settings/api-xbrowsersync-service-info/api-xbrowsersync-service-info.component';
 import { SyncSettingsComponent } from './sync-settings/sync-settings.component';
 
 @NgModule({
   declarations: [
     AboutSettingsComponent,
+    ApiXbrowsersyncServiceInfoComponent,
     AppQrComponent,
     AppSettingsComponent,
     IssuesSettingsComponent,

@@ -1,0 +1,52 @@
+@import '../../../../../styles/modules/all';
+
+api-xbrowsersync-service-info {
+  --color-sync-settings-data-bg: #{$color-text2-default};
+  --color-sync-settings-data-progress: #{$color-bg2-default};
+  --color-sync-settings-data-max: #{$color-text2-default};
+  --color-sync-settings-data-used: #{$color-bg2-default};
+
+  @include theme-dark {
+    --color-sync-settings-data-bg: #{$color-bg1-dark};
+    --color-sync-settings-data-progress: #{$color-text2-dark};
+    --color-sync-settings-data-max: #{$color-text3-dark};
+    --color-sync-settings-data-used: #{$color-text2-dark};
+  }
+
+  .setting-group {
+    .max,
+    .used {
+      font-size: 0.8rem;
+      margin-top: -1.5rem;
+      position: absolute;
+    }
+
+    .max {
+      color: var(--color-sync-settings-data-max);
+      right: 0;
+    }
+
+    .progress {
+      background-color: var(--color-sync-settings-data-bg);
+      border-radius: 1rem;
+      height: 0.45rem;
+      margin: 0.25rem 0 1.5rem;
+      overflow: visible;
+
+      .progress-bar {
+        background-color: var(--color-sync-settings-data-progress);
+        border-bottom-left-radius: 1rem;
+        border-top-left-radius: 1rem;
+      }
+    }
+
+    .service-message {
+      max-height: 7rem;
+    }
+
+    .used {
+      color: var(--color-sync-settings-data-used);
+      left: 0;
+    }
+  }
+}

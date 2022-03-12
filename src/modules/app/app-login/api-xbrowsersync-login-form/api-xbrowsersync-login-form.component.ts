@@ -24,9 +24,9 @@ import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 @autobind
 @Component({
   controllerAs: 'vm',
-  selector: 'xbsLoginForm',
-  styles: [require('./xbrowsersync-login-form.component.scss')],
-  template: require('./xbrowsersync-login-form.component.html')
+  selector: 'apiXbrowsersyncLoginForm',
+  styles: [require('./api-xbrowsersync-login-form.component.scss')],
+  template: require('./api-xbrowsersync-login-form.component.html')
 })
 export class XbrowsersyncLoginComponent implements OnInit {
   Strings = require('../../../../../res/strings/en.json');
