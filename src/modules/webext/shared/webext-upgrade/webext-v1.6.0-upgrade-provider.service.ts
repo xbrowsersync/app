@@ -52,6 +52,7 @@ export class WebExtV160UpgradeProviderService extends V160UpgradeProviderService
           );
         })
         .then(() => browser.storage.local.clear())
+        .then(() => super.upgradeApp())
     );
   }
 }

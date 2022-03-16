@@ -1,15 +1,14 @@
 import { Component, OnInit, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import * as countriesList from 'countries-list';
-import { ApiServiceStatus } from '../../../shared/api/api.enum';
-import { ApiSyncInfo } from '../../../shared/api/api.interface';
+import { ApiServiceStatus, ApiServiceType } from '../../../shared/api/api.enum';
 import {
   ApiXbrowsersyncServiceInfo,
   ApiXbrowsersyncSyncInfo
 } from '../../../shared/api/api-xbrowsersync/api-xbrowsersync.interface';
 import { ApiXbrowsersyncService } from '../../../shared/api/api-xbrowsersync/api-xbrowsersync.service';
 import { CryptoService } from '../../../shared/crypto/crypto.service';
-import { InvalidServiceError, UnsupportedApiVersionError } from '../../../shared/errors/errors';
+import { InvalidServiceError, ServiceOfflineError, UnsupportedApiVersionError } from '../../../shared/errors/errors';
 import { ExceptionHandler } from '../../../shared/errors/errors.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
@@ -43,24 +42,22 @@ export class XbrowsersyncLoginComponent implements OnInit {
   utilitySvc: UtilityService;
   workingSvc: WorkingService;
 
-  @Output() displaySyncConfirmation: () => void;
-  @Output() executeSync: () => void;
-  @Output() setSyncInfo: () => (syncInfo: ApiSyncInfo) => void;
+  @Output() executeSync: () => (syncPassword: string) => void;
 
   apiServiceStatus = ApiServiceStatus;
   enablePasswordValidation = false;
   getSyncIdPanelVisible: boolean;
   newServiceInfo: ApiXbrowsersyncServiceInfo;
   newSync = false;
-  password: string;
-  passwordComplexity: any;
-  passwordConfirmation = null;
-  passwordConfirmationVisible = false;
   serviceInfo: ApiXbrowsersyncServiceInfo;
   showPassword = false;
   syncEnabled = false;
   syncForm: ng.IFormController;
   syncId: string;
+  syncPassword: string;
+  syncPasswordComplexity: any;
+  syncPasswordConfirmation = null;
+  syncPasswordConfirmationVisible = false;
   updateServiceConfirmationVisible = false;
   updateServicePanelVisible = false;
   validatingServiceUrl = false;
@@ -69,7 +66,7 @@ export class XbrowsersyncLoginComponent implements OnInit {
     '$exceptionHandler',
     '$q',
     '$timeout',
-    'ApiService',
+    'ApiXbrowsersyncService',
     'AppHelperService',
     'CryptoService',
     'LogService',
@@ -105,8 +102,8 @@ export class XbrowsersyncLoginComponent implements OnInit {
   }
 
   cancelConfirmPassword(): void {
-    this.passwordConfirmationVisible = false;
-    this.passwordConfirmation = null;
+    this.syncPasswordConfirmationVisible = false;
+    this.syncPasswordConfirmation = null;
   }
 
   cancelUpdateService(): void {
@@ -115,30 +112,26 @@ export class XbrowsersyncLoginComponent implements OnInit {
   }
 
   confirmPassword(): void {
-    this.passwordConfirmationVisible = true;
+    this.syncPasswordConfirmationVisible = true;
     this.appHelperSvc.focusOnElement('input[name="txtPasswordConfirmation"]');
   }
 
   confirmUpdateService(): void {
-    // Update stored service info
+    // Update view model and remove stored creds
     const url = this.newServiceInfo.url.replace(/\/$/, '');
-    this.apiSvc
-      .updateServiceUrl(url)
-      .then((serviceInfo) => {
-        // Update view model and remove stored creds
-        this.serviceInfo = {
-          ...serviceInfo,
-          url
-        };
-        return this.$q.all([this.storeSvc.remove(StoreKey.SyncId), this.storeSvc.remove(StoreKey.Password)]);
-      })
+    this.serviceInfo = {
+      ...this.newServiceInfo,
+      url
+    };
+    this.storeSvc
+      .remove(StoreKey.SyncInfo)
       .then(() => {
         // Update view model
         this.updateServiceConfirmationVisible = false;
         this.updateServicePanelVisible = false;
-        this.password = undefined;
-        this.passwordComplexity = undefined;
-        this.passwordConfirmation = undefined;
+        this.syncPassword = undefined;
+        this.syncPasswordComplexity = undefined;
+        this.syncPasswordConfirmation = undefined;
         this.syncId = undefined;
         this.syncForm.txtId.$setValidity('InvalidSyncId', true);
         this.syncForm.$setPristine();
@@ -164,27 +157,25 @@ export class XbrowsersyncLoginComponent implements OnInit {
   disableSync(): ng.IPromise<void> {
     return this.platformSvc.disableSync().then(() => {
       this.syncEnabled = false;
-      this.password = undefined;
-      this.passwordComplexity = undefined;
+      this.syncPassword = undefined;
+      this.syncPasswordComplexity = undefined;
     });
   }
 
   displayExistingSyncPanel(event?: Event): void {
     event?.preventDefault();
     this.newSync = false;
-    this.password = undefined;
+    this.syncPassword = undefined;
     this.appHelperSvc.focusOnElement('input[name="txtId"]');
   }
 
   displayNewSyncPanel(event?: Event): void {
     event?.preventDefault();
     this.newSync = true;
-    this.passwordConfirmationVisible = false;
-    this.password = undefined;
-    this.passwordComplexity = undefined;
-    this.passwordConfirmation = undefined;
-    this.storeSvc.remove(StoreKey.SyncId);
-    this.storeSvc.remove(StoreKey.Password);
+    this.syncPasswordConfirmationVisible = false;
+    this.syncPassword = undefined;
+    this.syncPasswordComplexity = undefined;
+    this.syncPasswordConfirmation = undefined;
     this.syncId = undefined;
     this.syncForm.txtId.$setValidity('InvalidSyncId', true);
     this.appHelperSvc.focusOnElement('.login-form-new input[name="txtPassword"]');
@@ -224,19 +215,19 @@ export class XbrowsersyncLoginComponent implements OnInit {
   ngOnInit(): void {
     this.$q
       .all([
-        this.storeSvc.get<string>(StoreKey.SyncId),
+        this.storeSvc.get<ApiXbrowsersyncSyncInfo>(StoreKey.SyncInfo),
         this.utilitySvc.isSyncEnabled(),
-        this.utilitySvc.getServiceUrl(),
         this.currentLocaleSupportsPasswordValidation()
       ])
       .then((data) => {
-        const [syncId, syncEnabled, serviceUrl, currentLocaleIsEnglish] = data;
-        this.syncId = syncId;
+        const [syncInfo, syncEnabled, currentLocaleIsEnglish] = data;
+        this.syncId = syncInfo?.id;
         this.syncEnabled = syncEnabled;
         this.enablePasswordValidation = currentLocaleIsEnglish;
 
+        // Use default service url if not set
         this.serviceInfo = {
-          url: serviceUrl
+          url: syncInfo?.serviceUrl ?? Globals.URL.DefaultServiceUrl
         };
 
         // Validate sync id if present
@@ -264,9 +255,21 @@ export class XbrowsersyncLoginComponent implements OnInit {
   }
 
   refreshServiceStatus(): ng.IPromise<void> {
-    return this.apiSvc.formatServiceInfo().then((formattedServiceInfo) => {
-      Object.assign(this.serviceInfo, formattedServiceInfo);
-    });
+    return this.apiSvc
+      .checkServiceStatus(this.serviceInfo.url)
+      .then((serviceInfoResponse) => {
+        this.serviceInfo = {
+          ...this.serviceInfo,
+          ...this.apiSvc.formatServiceInfo(serviceInfoResponse)
+        };
+      })
+      .catch((err) => {
+        const status = err instanceof ServiceOfflineError ? ApiServiceStatus.Offline : ApiServiceStatus.Error;
+        this.serviceInfo = {
+          ...this.serviceInfo,
+          status
+        };
+      });
   }
 
   scanId(event?: Event) {
@@ -305,7 +308,7 @@ export class XbrowsersyncLoginComponent implements OnInit {
       if (this.updateServicePanelVisible) {
         (document.querySelector('.update-service-panel .btn-update-service-url') as HTMLButtonElement).click();
       } else if (this.newSync) {
-        if (this.passwordConfirmationVisible) {
+        if (this.syncPasswordConfirmationVisible) {
           (document.querySelector('.login-form-new .btn-new-sync') as HTMLButtonElement).click();
         } else {
           (document.querySelector('.login-form-new .btn-confirm-password') as HTMLButtonElement).click();
@@ -329,32 +332,14 @@ export class XbrowsersyncLoginComponent implements OnInit {
     this.validateServiceUrl().finally(() => this.appHelperSvc.focusOnElement('.update-service-panel input'));
   }
 
-  sync(): void {
-    this.utilitySvc.getServiceType().then((selectedServiceType) => {
-      // Set sync info
-      const syncInfo: ApiXbrowsersyncSyncInfo = {
-        syncPassword: this.password,
-        serviceType: selectedServiceType,
-        serviceUrl: this.serviceInfo.url,
-        syncId: this.syncId
-      };
-      this.setSyncInfo()(syncInfo);
-
-      if (this.syncId && this.appHelperSvc.confirmBeforeSyncing()) {
-        // Display overwrite data confirmation panel
-        this.displaySyncConfirmation();
-        this.appHelperSvc.focusOnElement('.btn-confirm-enable-sync');
-      } else {
-        // If no ID provided start syncing
-        this.executeSync();
-      }
-    });
-  }
-
-  syncIdChanged(): void {
-    if (this.validateSyncId()) {
-      this.storeSvc.set(StoreKey.SyncId, this.syncId);
-    }
+  sync(): ng.IPromise<void> {
+    // Add sync info to store and execute sync
+    const syncInfo: ApiXbrowsersyncSyncInfo = {
+      serviceType: ApiServiceType.xBrowserSync,
+      serviceUrl: this.serviceInfo.url,
+      id: this.syncId
+    };
+    return this.storeSvc.set(StoreKey.SyncInfo, syncInfo).then(() => this.executeSync()(this.syncPassword));
   }
 
   toggleShowPassword(): void {
@@ -375,12 +360,13 @@ export class XbrowsersyncLoginComponent implements OnInit {
       }
 
       // Retrieve new service status and update view model
-      return this.apiSvc.formatServiceInfo(newServiceInfo).then((serviceInfo) => {
-        Object.assign(this.newServiceInfo, serviceInfo);
-        this.updateServiceConfirmationVisible = true;
-        this.appHelperSvc.attachClickEventsToNewTabLinks(document.querySelector('.service-message'));
-        this.appHelperSvc.focusOnElement('.focused');
-      });
+      this.newServiceInfo = {
+        ...this.newServiceInfo,
+        ...this.apiSvc.formatServiceInfo(newServiceInfo)
+      };
+      this.updateServiceConfirmationVisible = true;
+      this.appHelperSvc.attachClickEventsToNewTabLinks(document.querySelector('.service-message'));
+      this.appHelperSvc.focusOnElement('.focused');
     });
   }
 

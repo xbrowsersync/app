@@ -251,6 +251,16 @@
         "default": "Synchronisatie mislukt"
       }
     },
+    "IncompleteSyncInfo": {
+      "Message": {
+        "key": "Error_IncompleteSyncInfo_Message",
+        "default": "Kan opgeslagen inloggegevens niet vinden. Schakel synchronisatie opnieuw in en probeer het opnieuw."
+      },
+      "Title": {
+        "key": "Error_IncompleteSyncInfo_Title",
+        "default": "Inloggegevens ontbreken"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
@@ -289,16 +299,6 @@
       "Title": {
         "key": "Error_LocalSyncError_Title",
         "default": "Synchronisatiefout"
-      }
-    },
-    "MissingClientData": {
-      "Message": {
-        "key": "Error_MissingClientData_Message",
-        "default": "Kan opgeslagen inloggegevens niet vinden. Schakel synchronisatie opnieuw in en probeer het opnieuw."
-      },
-      "Title": {
-        "key": "Error_MissingClientData_Title",
-        "default": "Inloggegevens ontbreken"
       }
     },
     "NetworkConnection": {

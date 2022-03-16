@@ -1,8 +1,7 @@
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { ApiServiceStatus, ApiServiceType } from '../../../shared/api/api.enum';
-import { ApiXbrowsersyncServiceInfo } from '../../../shared/api/api-xbrowsersync/api-xbrowsersync.interface';
-import { ApiXbrowsersyncService } from '../../../shared/api/api-xbrowsersync/api-xbrowsersync.service';
+import { ApiServiceType } from '../../../shared/api/api.enum';
+import { ApiSyncInfo } from '../../../shared/api/api.interface';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { StoreKey } from '../../../shared/store/store.enum';
 import { StoreService } from '../../../shared/store/store.service';
@@ -24,7 +23,6 @@ export class SyncSettingsComponent implements OnInit {
 
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
-  apiSvc: ApiXbrowsersyncService;
   appHelperSvc: AppHelperService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
@@ -32,13 +30,11 @@ export class SyncSettingsComponent implements OnInit {
   utilitySvc: UtilityService;
   workingSvc: WorkingService;
 
-  apiServiceStatus = ApiServiceStatus;
   apiServiceType = ApiServiceType;
   displayQr = false;
   lastUpdated: string;
   nextUpdate: string;
   selectedServiceType: ApiServiceType;
-  serviceInfo: ApiXbrowsersyncServiceInfo;
   syncEnabled: boolean;
   syncId: string;
   syncIdCopied = false;
@@ -48,7 +44,6 @@ export class SyncSettingsComponent implements OnInit {
     '$q',
     '$timeout',
     '$scope',
-    'ApiService',
     'AppHelperService',
     'PlatformService',
     'StoreService',
@@ -60,7 +55,6 @@ export class SyncSettingsComponent implements OnInit {
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     $scope: ng.IScope,
-    ApiSvc: ApiXbrowsersyncService,
     AppHelperSvc: AppHelperService,
     PlatformSvc: PlatformService,
     StoreSvc: StoreService,
@@ -70,7 +64,6 @@ export class SyncSettingsComponent implements OnInit {
   ) {
     this.$q = $q;
     this.$timeout = $timeout;
-    this.apiSvc = ApiSvc;
     this.appHelperSvc = AppHelperSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
@@ -121,40 +114,23 @@ export class SyncSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Get required view model data from store
     this.$q
       .all([
-        this.storeSvc.get<string>(StoreKey.SyncId),
-        this.utilitySvc.getServiceType(),
-        this.utilitySvc.getServiceUrl(),
+        this.storeSvc.get<ApiSyncInfo>(StoreKey.SyncInfo),
+        this.utilitySvc.getCurrentApiServiceType(),
         this.utilitySvc.isSyncEnabled()
       ])
       .then((data) => {
-        const [syncId, selectedServiceType, serviceUrl, syncEnabled] = data;
+        const [syncInfo, selectedServiceType, syncEnabled] = data;
         this.selectedServiceType = selectedServiceType;
-        this.syncId = syncId;
+        this.syncId = syncInfo?.id;
         this.syncEnabled = syncEnabled;
-        this.serviceInfo = {
-          url: serviceUrl
-        };
 
         // Check for available sync updates on non-mobile platforms
         if (this.syncEnabled && !this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
           this.checkForSyncUpdates();
         }
-
-        // Update service status and display info
-        this.refreshServiceStatus();
       });
-  }
-
-  refreshServiceStatus(): ng.IPromise<void> {
-    return this.apiSvc.formatServiceInfo().then((formattedServiceInfo) => {
-      this.serviceInfo = {
-        ...this.serviceInfo,
-        ...formattedServiceInfo
-      };
-    });
   }
 
   syncUpdates() {

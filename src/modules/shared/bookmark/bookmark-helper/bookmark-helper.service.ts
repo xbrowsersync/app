@@ -3,7 +3,6 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { Bookmarks as NativeBookmarks } from 'webextension-polyfill';
 import { BookmarkSearchResult } from '../../../app/app-search/app-search.interface';
-import { ApiService } from '../../api/api.interface';
 import { CryptoService } from '../../crypto/crypto.service';
 import { BookmarkNotFoundError, HttpRequestAbortedError } from '../../errors/errors';
 import Globals from '../../global-shared.constants';
@@ -21,7 +20,6 @@ export class BookmarkHelperService {
 
   $injector: ng.auto.IInjectorService;
   $q: ng.IQService;
-  apiSvc: ApiService;
   cryptoSvc: CryptoService;
   _platformSvc: PlatformService | undefined;
   storeSvc: StoreService;
@@ -30,18 +28,16 @@ export class BookmarkHelperService {
   cachedBookmarks_encrypted: string | undefined;
   cachedBookmarks_plain: Bookmark[] | undefined;
 
-  static $inject = ['$injector', '$q', 'ApiService', 'CryptoService', 'StoreService', 'UtilityService'];
+  static $inject = ['$injector', '$q', 'CryptoService', 'StoreService', 'UtilityService'];
   constructor(
     $injector: ng.auto.IInjectorService,
     $q: ng.IQService,
-    ApiSvc: ApiService,
     CryptoSvc: CryptoService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
     this.$injector = $injector;
     this.$q = $q;
-    this.apiSvc = ApiSvc;
     this.cryptoSvc = CryptoSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
@@ -289,9 +285,11 @@ export class BookmarkHelperService {
           // If encrypted bookmarks not cached in storage, retrieve synced data
           (!angular.isUndefined(encryptedBookmarksFromStore ?? undefined)
             ? this.$q.resolve(encryptedBookmarksFromStore)
-            : this.apiSvc.getBookmarks().then((response) => {
-                return response.bookmarks;
-              })
+            : this.utilitySvc.getApiService().then((apiSvc) =>
+                apiSvc.getBookmarks().then((response) => {
+                  return response.bookmarks;
+                })
+              )
           )
             .then((encryptedBookmarks) => {
               // Decrypt bookmarks

@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { ApiService } from '../api/api.interface';
+import { ApiSyncInfo } from '../api/api.interface';
 import { Bookmark } from '../bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../bookmark/bookmark-helper/bookmark-helper.service';
 import { CryptoService } from '../crypto/crypto.service';
@@ -9,12 +9,12 @@ import {
   BaseError,
   BookmarkMappingNotFoundError,
   BookmarkNotFoundError,
-  ClientDataNotFoundError,
   ContainerChangedError,
   DataOutOfSyncError,
   FailedCreateNativeBookmarksError,
   FailedGetNativeBookmarksError,
   FailedRemoveNativeBookmarksError,
+  IncompleteSyncInfoError,
   NativeBookmarkNotFoundError,
   SyncDisabledError,
   SyncFailedError,
@@ -40,7 +40,6 @@ export class SyncService {
   $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
-  apiSvc: ApiService;
   bookmarkHelperSvc: BookmarkHelperService;
   cryptoSvc: CryptoService;
   logSvc: LogService;
@@ -60,7 +59,6 @@ export class SyncService {
     '$exceptionHandler',
     '$q',
     '$timeout',
-    'ApiService',
     'BookmarkHelperService',
     'BookmarkSyncProviderService',
     'CryptoService',
@@ -74,7 +72,6 @@ export class SyncService {
     $exceptionHandler: ExceptionHandler,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
-    ApiSvc: ApiService,
     BookmarkHelperSvc: BookmarkHelperService,
     BookmarkSyncProviderSvc: BookmarkSyncProviderService,
     CryptoSvc: CryptoService,
@@ -87,7 +84,6 @@ export class SyncService {
     this.$exceptionHandler = $exceptionHandler;
     this.$q = $q;
     this.$timeout = $timeout;
-    this.apiSvc = ApiSvc;
     this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.cryptoSvc = CryptoSvc;
     this.logSvc = LogSvc;
@@ -107,7 +103,7 @@ export class SyncService {
   checkIfDisableSyncOnError(err: Error): boolean {
     return (
       err &&
-      (err instanceof ClientDataNotFoundError ||
+      (err instanceof IncompleteSyncInfoError ||
         err instanceof SyncNotFoundError ||
         err instanceof SyncVersionNotSupportedError ||
         err instanceof TooManyRequestsError)
@@ -134,21 +130,24 @@ export class SyncService {
       const storedLastUpdatedDate = new Date(storedLastUpdated);
 
       // Check if bookmarks have been updated
-      return this.apiSvc.getBookmarksLastUpdated(isBackgroundSync).then((response) => {
-        // If last updated is different to the cached date, refresh bookmarks
-        const remoteLastUpdated = new Date(response.lastUpdated);
-        const updatesAvailable = storedLastUpdatedDate?.getTime() !== remoteLastUpdated.getTime();
+      return this.utilitySvc
+        .getApiService()
+        .then((apiSvc) => apiSvc.getBookmarksLastUpdated(isBackgroundSync))
+        .then((response) => {
+          // If last updated is different to the cached date, refresh bookmarks
+          const remoteLastUpdated = new Date(response.lastUpdated);
+          const updatesAvailable = storedLastUpdatedDate?.getTime() !== remoteLastUpdated.getTime();
 
-        if (updatesAvailable && outputToLog) {
-          this.logSvc.logInfo(
-            `Updates available, local:${
-              storedLastUpdatedDate?.toISOString() ?? 'none'
-            } remote:${remoteLastUpdated.toISOString()}`
-          );
-        }
+          if (updatesAvailable && outputToLog) {
+            this.logSvc.logInfo(
+              `Updates available, local:${
+                storedLastUpdatedDate?.toISOString() ?? 'none'
+              } remote:${remoteLastUpdated.toISOString()}`
+            );
+          }
 
-        return updatesAvailable;
-      });
+          return updatesAvailable;
+        });
     });
   }
 
@@ -157,8 +156,9 @@ export class SyncService {
       if (!syncEnabled) {
         throw new SyncDisabledError();
       }
-      return this.apiSvc
-        .getBookmarksLastUpdated()
+      return this.utilitySvc
+        .getApiService()
+        .then((apiSvc) => apiSvc.getBookmarksLastUpdated())
         .then(() => true)
         .catch((err) => {
           // Handle sync removed from service
@@ -172,17 +172,20 @@ export class SyncService {
   }
 
   checkSyncVersionIsSupported(): ng.IPromise<void> {
-    return this.storeSvc.get<string>(StoreKey.SyncId).then((syncId) => {
-      return this.$q
-        .all([this.apiSvc.getBookmarksVersion(syncId), this.platformSvc.getAppVersion()])
+    return this.utilitySvc.checkSyncCredentialsExist().then((syncInfo) =>
+      this.$q
+        .all([
+          this.utilitySvc.getApiService().then((apiSvc) => apiSvc.getSyncVersion(syncInfo.id)),
+          this.platformSvc.getAppVersion()
+        ])
         .then((results) => {
           const [response, appVersion] = results;
           const { version: bookmarksVersion } = response;
           if (this.utilitySvc.compareVersions(bookmarksVersion ?? '0', appVersion, '>')) {
             throw new SyncVersionNotSupportedError();
           }
-        });
-    });
+        })
+    );
   }
 
   disableSync(): ng.IPromise<void> {
@@ -195,8 +198,11 @@ export class SyncService {
       return this.$q
         .all([
           this.platformSvc.stopSyncUpdateChecks(),
-          this.storeSvc.remove(StoreKey.Password),
-          this.storeSvc.remove(StoreKey.SyncVersion),
+          this.storeSvc.get<ApiSyncInfo>(StoreKey.SyncInfo).then((syncInfo) => {
+            const { password, ...syncInfoNoPassword } = syncInfo;
+            return this.storeSvc.set(StoreKey.SyncInfo, syncInfoNoPassword);
+          }),
+          this.storeSvc.remove(StoreKey.LastUpdated),
           this.storeSvc.set(StoreKey.SyncEnabled, false)
         ])
         .then(() => {
@@ -444,14 +450,23 @@ export class SyncService {
               !updateRemote
                 ? this.$q.resolve().then(() => this.logSvc.logInfo('No changes made, skipping remote update.'))
                 : this.checkSyncVersionIsSupported()
-                    .then(() => this.apiSvc.updateBookmarks(encryptedBookmarks, updateSyncVersion, isBackgroundSync))
+                    .then(() =>
+                      this.utilitySvc
+                        .getApiService()
+                        .then((apiSvc) =>
+                          apiSvc.updateBookmarks(encryptedBookmarks, updateSyncVersion, isBackgroundSync)
+                        )
+                    )
                     .then((response) => {
                       const updateCache = [this.storeSvc.set(StoreKey.LastUpdated, response.lastUpdated)];
                       if (updateSyncVersion) {
                         updateCache.push(
-                          this.platformSvc
-                            .getAppVersion()
-                            .then((appVersion) => this.storeSvc.set(StoreKey.SyncVersion, appVersion))
+                          this.platformSvc.getAppVersion().then((appVersion) =>
+                            this.storeSvc.get<ApiSyncInfo>(StoreKey.SyncInfo).then((syncInfo) => {
+                              syncInfo.version = appVersion;
+                              return this.storeSvc.set(StoreKey.SyncInfo, syncInfo);
+                            })
+                          )
                         );
                       }
                       return this.$q.all(updateCache).then(() => {
@@ -552,30 +567,27 @@ export class SyncService {
 
   setSyncRemoved(): ng.IPromise<void> {
     return this.$q
-      .all([
-        this.bookmarkHelperSvc.getCachedBookmarks(),
-        this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId, StoreKey.SyncVersion]),
-        this.utilitySvc.getServiceUrl()
-      ])
+      .all([this.bookmarkHelperSvc.getCachedBookmarks(), this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncInfo])])
       .then((data) => {
-        const [bookmarks, storeContent, serviceUrl] = data;
+        const [bookmarks, storeContent] = data;
+        const { lastUpdated, syncInfo } = storeContent;
+        const { id, password, version, ...trimmedSyncInfo } = syncInfo;
         const removedSync: RemovedSync = {
           bookmarks,
-          lastUpdated: storeContent.lastUpdated,
-          serviceUrl,
-          syncId: storeContent.syncId,
-          syncVersion: storeContent.syncVersion
+          lastUpdated,
+          syncInfo: trimmedSyncInfo
         };
         return this.storeSvc
           .set(StoreKey.RemovedSync, removedSync)
-          .then(() =>
+          .then(() => {
             this.logSvc.logWarning(
-              `Sync ID ${storeContent.syncId} removed from service ${serviceUrl}; last updated ${storeContent.lastUpdated}`
-            )
-          );
-      })
-      .then(() => this.disableSync())
-      .then(() => this.storeSvc.remove(StoreKey.SyncId));
+              `Sync ID ${syncInfo.id} was not found on remote servuce (last updated ${lastUpdated})`
+            );
+            this.logSvc.logInfo(trimmedSyncInfo);
+          })
+          .then(() => this.disableSync())
+          .then(() => this.storeSvc.set(StoreKey.SyncInfo, trimmedSyncInfo));
+      });
   }
 
   shouldDisplayDefaultPageOnError(err: Error): boolean {

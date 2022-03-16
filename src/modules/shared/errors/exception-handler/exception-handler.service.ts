@@ -65,9 +65,9 @@ export class ExceptionHandlerService {
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Error.DailyNewSyncLimitReached.Title);
         alertMessage.message = this.platformSvc.getI18nString(this.Strings.Error.DailyNewSyncLimitReached.Message);
         break;
-      case Errors.ClientDataNotFoundError:
-        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Error.MissingClientData.Title);
-        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Error.MissingClientData.Message);
+      case Errors.IncompleteSyncInfoError:
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Error.IncompleteSyncInfo.Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Error.IncompleteSyncInfoError.Message);
         break;
       case Errors.SyncNotFoundError:
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Error.SyncRemoved.Title);

@@ -251,6 +251,16 @@
         "default": "同期に失敗しました"
       }
     },
+    "IncompleteSyncInfo": {
+      "Message": {
+        "key": "Error_IncompleteSyncInfo_Message",
+        "default": "保存されたユーザの情報が見つかりません。同期を再度有効にして再度お試し下さい。"
+      },
+      "Title": {
+        "key": "Error_IncompleteSyncInfo_Title",
+        "default": "ユーザの情報が間違っています"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
@@ -289,16 +299,6 @@
       "Title": {
         "key": "Error_LocalSyncError_Title",
         "default": "同期エラー"
-      }
-    },
-    "MissingClientData": {
-      "Message": {
-        "key": "Error_MissingClientData_Message",
-        "default": "保存されたユーザの情報が見つかりません。同期を再度有効にして再度お試し下さい。"
-      },
-      "Title": {
-        "key": "Error_MissingClientData_Title",
-        "default": "ユーザの情報が間違っています"
       }
     },
     "NetworkConnection": {

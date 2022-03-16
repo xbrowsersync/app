@@ -242,24 +242,29 @@ export class WebExtBackgroundService {
             this.platformSvc.getAppVersionName(),
             this.platformSvc.getCurrentLocale(),
             this.settingsSvc.all(),
-            this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId]),
-            this.utilitySvc.getServiceUrl(),
-            this.utilitySvc.getSyncVersion(),
+            this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncInfo]),
             this.utilitySvc.isSyncEnabled()
           ])
           .then((data) => {
             // Add useful debug info to beginning of trace log
-            const [appVersion, currentLocale, settings, storeContent, serviceUrl, syncVersion, syncEnabled] = data;
-            const debugInfo = angular.copy(storeContent) as any;
-            debugInfo.appVersion = appVersion;
-            debugInfo.checkForAppUpdates = settings.checkForAppUpdates;
-            debugInfo.currentLocale = currentLocale;
-            debugInfo.platform = detectBrowser.detect();
-            debugInfo.platform.name = this.utilitySvc.getBrowserName();
-            debugInfo.serviceUrl = serviceUrl;
-            debugInfo.syncBookmarksToolbar = settings.syncBookmarksToolbar;
-            debugInfo.syncEnabled = syncEnabled;
-            debugInfo.syncVersion = syncVersion;
+            const [appVersion, currentLocale, settings, storeContent, syncEnabled] = data;
+            const { lastUpdated, syncInfo } = storeContent;
+            const { password, ...syncInfoNoPassword } = syncInfo ?? {};
+            const debugInfo: any = {
+              appVersion,
+              checkForAppUpdates: settings.checkForAppUpdates,
+              currentLocale,
+              platform: {
+                name: this.utilitySvc.getBrowserName(),
+                ...detectBrowser.detect()
+              },
+              syncBookmarksToolbar: settings.syncBookmarksToolbar,
+              syncEnabled,
+              lastUpdated
+            };
+            if (Object.keys(syncInfoNoPassword).length > 0) {
+              debugInfo.syncInfo = syncInfoNoPassword;
+            }
             this.logSvc.logInfo(
               Object.keys(debugInfo)
                 .filter((key) => {

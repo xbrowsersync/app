@@ -251,6 +251,16 @@
         "default": "Sync failed"
       }
     },
+    "IncompleteSyncInfo": {
+      "Message": {
+        "key": "Error_IncompleteSyncInfo_Message",
+        "default": "Unable to find stored credentials. Re-enable sync and try again."
+      },
+      "Title": {
+        "key": "Error_IncompleteSyncInfo_Title",
+        "default": "Missing credentials"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
@@ -289,16 +299,6 @@
       "Title": {
         "key": "Error_LocalSyncError_Title",
         "default": "Sync error"
-      }
-    },
-    "MissingClientData": {
-      "Message": {
-        "key": "Error_MissingClientData_Message",
-        "default": "Unable to find stored credentials. Re-enable sync and try again."
-      },
-      "Title": {
-        "key": "Error_MissingClientData_Title",
-        "default": "Missing credentials"
       }
     },
     "NetworkConnection": {

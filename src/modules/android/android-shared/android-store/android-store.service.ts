@@ -26,18 +26,10 @@ export class AndroidStoreService extends StoreService {
     StoreKey.DisplayUpdated,
     StoreKey.LastUpgradeVersion,
     StoreKey.SyncBookmarksToolbar,
-    StoreKey.SyncEnabled
+    StoreKey.SyncEnabled,
+    StoreKey.SyncInfo
   ];
-  sqlKeys: string[] = [
-    StoreKey.Bookmarks,
-    StoreKey.LastUpdated,
-    StoreKey.Password,
-    StoreKey.RemovedSync,
-    StoreKey.ServiceUrl,
-    StoreKey.SyncId,
-    StoreKey.SyncVersion,
-    StoreKey.TraceLog
-  ];
+  sqlKeys: string[] = [StoreKey.Bookmarks, StoreKey.LastUpdated, StoreKey.RemovedSync, StoreKey.TraceLog];
 
   static $inject = ['$q'];
 
@@ -84,11 +76,8 @@ export class AndroidStoreService extends StoreService {
             ${this.idCol} INTEGER PRIMARY KEY,
             ${StoreKey.Bookmarks} TEXT,
             ${StoreKey.LastUpdated} TEXT,
-            ${StoreKey.Password} TEXT,
             ${StoreKey.RemovedSync} TEXT,
-            ${StoreKey.ServiceUrl} TEXT,
-            ${StoreKey.SyncId} TEXT,
-            ${StoreKey.SyncVersion} TEXT
+            ${StoreKey.SyncInfo} TEXT
           )`);
           tx.executeSql(`INSERT INTO ${Table.App} (${this.idCol}) VALUES (?)`, [this.appRowId]);
           tx.executeSql(`DROP TABLE IF EXISTS ${Table.TraceLog}`);

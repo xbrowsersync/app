@@ -8,8 +8,7 @@
   <div class="logo"></div>
   <div class="login-form-container animate-fade-in"
        ng-hide="vm.otherSyncsWarningVisible || vm.syncConfirmationVisible || vm.upgradeConfirmationVisible">
-    <api-xbrowsersync-login-form display-sync-confirmation="vm.setSyncConfirmationVisible(true)"
-                                 execute-sync="vm.executeSync()" set-sync-info="vm.setSyncInfo"
+    <api-xbrowsersync-login-form execute-sync="vm.executeSync"
                                  ng-if="vm.selectedServiceType === vm.apiServiceType.xBrowserSync">
     </api-xbrowsersync-login-form>
   </div>
@@ -18,7 +17,7 @@
     <p>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.Confirm.Content) }}</p>
     <div class="buttons">
       <button type="button" class="btn btn-default btn-confirm-enable-sync"
-              ng-click="vm.utilitySvc.handleEvent(vm.executeSync)">
+              ng-click="vm.utilitySvc.handleEvent(vm.confirmSync)">
         {{ vm.platformSvc.getI18nString(vm.Strings.Button.Confirm) }}
       </button>
       <button type="button" class="btn btn-default" ng-click="vm.setSyncConfirmationVisible(false)">

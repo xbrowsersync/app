@@ -32,47 +32,8 @@
           <p ng-if="vm.updatesAvailable">{{ vm.nextUpdate }}.</p>
         </div>
       </div>
-      <div class="form-group setting-group">
-        <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Service) }}</label>
-        <div class="setting-value service-url">
-          <a href="{{ vm.serviceInfo.url }}" class="new-tab" title="{{ vm.serviceInfo.url }}">
-            {{ vm.serviceInfo.url }}
-          </a>
-          <div class="status-icon">
-            <div class="loading animate-fade-in"
-                 ng-show="vm.serviceInfo.url !== undefined && vm.serviceInfo.status == null"
-                 title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Loading) }}">
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            </div>
-            <div class="success animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Online"
-                 title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Online) }}">
-              <icon type="'check'" bold="true"></icon>
-            </div>
-            <div class="warning animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.NoNewSyncs"
-                 title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.NoNewSyncs) }}">
-              <icon type="'minus'" bold="true"></icon>
-            </div>
-            <div class="danger animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Error"
-                 title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Error) }}">
-              <icon type="'x'" bold="true"></icon>
-            </div>
-            <div class="danger animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Offline"
-                 title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Offline) }}">
-              <icon type="'x'" bold="true"></icon>
-            </div>
-          </div>
-        </div>
-        <div
-             ng-if="vm.serviceInfo.message && vm.serviceInfo.status !== undefined && vm.serviceInfo.status !== vm.apiServiceStatus.Error">
-          <p class="description service-message animate-fade-in" ng-if="vm.serviceInfo.message"
-             ng-bind-html="vm.serviceInfo.message"></p>
-        </div>
-      </div>
-      <div ng-if="vm.serviceInfo">
-        <api-xbrowsersync-service-info service-info="vm.serviceInfo"
-                                       ng-if="vm.selectedServiceType === vm.apiServiceType.xBrowserSync">
-        </api-xbrowsersync-service-info>
-      </div>
+      <api-xbrowsersync-service-info ng-if="vm.selectedServiceType === vm.apiServiceType.xBrowserSync">
+      </api-xbrowsersync-service-info>
     </div>
   </div>
 </div>

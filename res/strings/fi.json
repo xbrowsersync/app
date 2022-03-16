@@ -251,6 +251,16 @@
         "default": "Synkronointi epäonnistui"
       }
     },
+    "IncompleteSyncInfo": {
+      "Message": {
+        "key": "Error_IncompleteSyncInfo_Message",
+        "default": "Tallennettuja tunnistetietoja ei löytynyt. Ota synkronointi uudelleen käyttöön ja yritä uudelleen."
+      },
+      "Title": {
+        "key": "Error_IncompleteSyncInfo_Title",
+        "default": "Tunnistetiedot puuttuvat"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
@@ -289,16 +299,6 @@
       "Title": {
         "key": "Error_LocalSyncError_Title",
         "default": "Synkronointivirhe"
-      }
-    },
-    "MissingClientData": {
-      "Message": {
-        "key": "Error_MissingClientData_Message",
-        "default": "Tallennettuja tunnistetietoja ei löytynyt. Ota synkronointi uudelleen käyttöön ja yritä uudelleen."
-      },
-      "Title": {
-        "key": "Error_MissingClientData_Title",
-        "default": "Tunnistetiedot puuttuvat"
       }
     },
     "NetworkConnection": {

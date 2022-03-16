@@ -251,6 +251,16 @@
         "default": "Fallou a sincronización"
       }
     },
+    "IncompleteSyncInfo": {
+      "Message": {
+        "key": "Error_IncompleteSyncInfo_Message",
+        "default": "Non foi posible atopar credencias almacenadas. Volve a habilitar a sincronización e téntao de novo."
+      },
+      "Title": {
+        "key": "Error_IncompleteSyncInfo_Title",
+        "default": "Credenciais perdidas"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
@@ -289,16 +299,6 @@
       "Title": {
         "key": "Error_LocalSyncError_Title",
         "default": "Erro ao sincronizar"
-      }
-    },
-    "MissingClientData": {
-      "Message": {
-        "key": "Error_MissingClientData_Message",
-        "default": "Non foi posible atopar credencias almacenadas. Volve a habilitar a sincronización e téntao de novo."
-      },
-      "Title": {
-        "key": "Error_MissingClientData_Title",
-        "default": "Credenciais perdidas"
       }
     },
     "NetworkConnection": {

@@ -77,7 +77,7 @@ export class AndroidV160UpgradeProviderService extends V160UpgradeProviderServic
             })
           );
         })
-        .then(() => {});
+        .then(() => super.upgradeApp());
     });
   }
 }

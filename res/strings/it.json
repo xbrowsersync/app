@@ -251,6 +251,16 @@
         "default": "Sincronizzazione non riuscita"
       }
     },
+    "IncompleteSyncInfo": {
+      "Message": {
+        "key": "Error_IncompleteSyncInfo_Message",
+        "default": "Impossibile trovare le credenziali memorizzate. Riattiva la sincronizzazione e riprova."
+      },
+      "Title": {
+        "key": "Error_IncompleteSyncInfo_Title",
+        "default": "Credenziali mancanti"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
@@ -289,16 +299,6 @@
       "Title": {
         "key": "Error_LocalSyncError_Title",
         "default": "Errore di sincronizzazione"
-      }
-    },
-    "MissingClientData": {
-      "Message": {
-        "key": "Error_MissingClientData_Message",
-        "default": "Impossibile trovare le credenziali memorizzate. Riattiva la sincronizzazione e riprova."
-      },
-      "Title": {
-        "key": "Error_MissingClientData_Title",
-        "default": "Credenziali mancanti"
       }
     },
     "NetworkConnection": {

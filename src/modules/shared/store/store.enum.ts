@@ -14,13 +14,10 @@ enum StoreKey {
   InstallBackup = 'installBackup',
   LastUpdated = 'lastUpdated',
   LastUpgradeVersion = 'lastUpgradeVersion',
-  Password = 'password',
   RemovedSync = 'removedSync',
-  ServiceUrl = 'serviceUrl',
   SyncBookmarksToolbar = 'syncBookmarksToolbar',
   SyncEnabled = 'syncEnabled',
-  SyncId = 'syncId',
-  SyncVersion = 'syncVersion',
+  SyncInfo = 'syncInfo',
   TraceLog = 'traceLog'
 }
 

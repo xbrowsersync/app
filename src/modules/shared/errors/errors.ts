@@ -34,8 +34,6 @@ export class BookmarkMappingNotFoundError extends BaseError {}
 
 export class BookmarkNotFoundError extends BaseError {}
 
-export class ClientDataNotFoundError extends BaseError {}
-
 export class ContainerChangedError extends BaseError {}
 
 export class ContainerNotFoundError extends BaseError {}
@@ -84,11 +82,15 @@ export class HttpRequestTimedOutError extends BaseError {}
 
 export class I18nError extends BaseError {}
 
+export class IncompleteSyncInfoError extends BaseError {}
+
 export class InvalidBookmarkIdsError extends BaseError {}
 
 export class InvalidCredentialsError extends BaseError {}
 
 export class InvalidServiceError extends BaseError {}
+
+export class InvalidSyncInfoError extends BaseError {}
 
 export class NativeBookmarkNotFoundError extends BaseError {}
 

@@ -251,6 +251,16 @@
         "default": "同步失败"
       }
     },
+    "IncompleteSyncInfo": {
+      "Message": {
+        "key": "Error_IncompleteSyncInfo_Message",
+        "default": "找不到存储的凭据。 重新启用同步，然后重试。"
+      },
+      "Title": {
+        "key": "Error_IncompleteSyncInfo_Title",
+        "default": "缺少凭据"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
@@ -289,16 +299,6 @@
       "Title": {
         "key": "Error_LocalSyncError_Title",
         "default": "同步出错"
-      }
-    },
-    "MissingClientData": {
-      "Message": {
-        "key": "Error_MissingClientData_Message",
-        "default": "找不到存储的凭据。 重新启用同步，然后重试。"
-      },
-      "Title": {
-        "key": "Error_MissingClientData_Title",
-        "default": "缺少凭据"
       }
     },
     "NetworkConnection": {

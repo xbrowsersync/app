@@ -3,7 +3,6 @@ import autobind from 'autobind-decorator';
 import QRCode from 'qrcode-svg';
 import { BackupRestoreService } from '../../../shared/backup-restore/backup-restore.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
-import { StoreKey } from '../../../shared/store/store.enum';
 import { StoreService } from '../../../shared/store/store.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { AppHelperService } from '../../shared/app-helper/app-helper.service';
@@ -62,14 +61,8 @@ export class AppQrComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Retrieve sync data from store
-    this.$q.all([this.storeSvc.get<string>(StoreKey.SyncId), this.utilitySvc.getServiceUrl()]).then((data) => {
-      [this.syncId, this.serviceUrl] = data;
-
-      // QR code should encode sync info
-      const syncInfo = this.backupRestoreSvc.createSyncInfoObject(this.syncId, this.serviceUrl);
-
-      // Generate QR code
+    // Generate QR code from sync info
+    this.backupRestoreSvc.getSyncInfo().then((syncInfo) => {
       const qrcode = new QRCode({
         content: JSON.stringify(syncInfo),
         padding: 4,

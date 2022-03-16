@@ -92,12 +92,7 @@ export class AppSyncRemovedComponent {
    */
   saveRemovedSyncAsBackupFile(): ng.IPromise<string | void> {
     return this.storeSvc.get<RemovedSync>(StoreKey.RemovedSync).then((removedSync) => {
-      const backupData = this.backupRestoreSvc.createBackupData(
-        removedSync.bookmarks,
-        removedSync.syncId,
-        removedSync.serviceUrl,
-        removedSync.syncVersion
-      );
+      const backupData = this.backupRestoreSvc.createBackupData(removedSync.bookmarks, removedSync.syncInfo);
       const beautifiedJson = JSON.stringify(backupData, null, 2);
       const filename = this.backupRestoreSvc.getBackupFilename();
       return this.platformSvc.downloadFile(filename, beautifiedJson);

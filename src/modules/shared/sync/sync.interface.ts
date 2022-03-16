@@ -1,12 +1,11 @@
+import { ApiSyncInfo } from '../api/api.interface';
 import { Bookmark, BookmarkChange } from '../bookmark/bookmark.interface';
 import { SyncType } from './sync.enum';
 
 export interface RemovedSync {
   bookmarks: Bookmark[];
   lastUpdated: string;
-  serviceUrl: string;
-  syncId: string;
-  syncVersion: string;
+  syncInfo: ApiSyncInfo;
 }
 
 export interface Sync {

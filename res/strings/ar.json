@@ -251,6 +251,16 @@
         "default": "فشل المزامنة"
       }
     },
+    "IncompleteSyncInfo": {
+      "Message": {
+        "key": "Error_IncompleteSyncInfo_Message",
+        "default": "لم يتم إيجاد بيانات الاعتماد المخزنة. أعد تفعيل المزامنة وحاول مرة أخرى."
+      },
+      "Title": {
+        "key": "Error_IncompleteSyncInfo_Title",
+        "default": "بيانات الاعتماد مفقودة"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
@@ -289,16 +299,6 @@
       "Title": {
         "key": "Error_LocalSyncError_Title",
         "default": "خطأ بالمزامنة"
-      }
-    },
-    "MissingClientData": {
-      "Message": {
-        "key": "Error_MissingClientData_Message",
-        "default": "لم يتم إيجاد بيانات الاعتماد المخزنة. أعد تفعيل المزامنة وحاول مرة أخرى."
-      },
-      "Title": {
-        "key": "Error_MissingClientData_Title",
-        "default": "بيانات الاعتماد مفقودة"
       }
     },
     "NetworkConnection": {

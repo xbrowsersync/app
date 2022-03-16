@@ -159,6 +159,10 @@ export class AppBookmarkComponent implements OnInit {
   }
 
   createTags(): void {
+    if (!this.tagText) {
+      return;
+    }
+
     this.platformSvc.getCurrentLocale().then((currentLocale) => {
       // Clean and sort tags and add them to tag array
       const newTags = this.utilitySvc.getTagArrayFromText(this.tagText.toLocaleLowerCase(currentLocale));

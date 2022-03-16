@@ -20,7 +20,8 @@
       <div class="lookahead-container">
         <span class="measure" ng-bind-html="vm.queryMeasure"></span>
         <span class="lookahead" ng-show="vm.lookahead" ng-click="vm.utilitySvc.handleEvent(vm.selectLookahead)">{{
-        vm.lookahead }} <icon type="'edit-3'"></icon></span>
+        vm.lookahead }} <icon type="'edit-3'" ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
+          </icon></span>
       </div>
       <icon-button type="'x'" bold="true" class="btn-clear" ng-show="vm.query"
                    title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Search.Clear) }}"

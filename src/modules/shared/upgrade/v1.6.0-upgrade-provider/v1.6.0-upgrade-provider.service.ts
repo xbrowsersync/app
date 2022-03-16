@@ -1,10 +1,13 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
+import { ApiServiceType } from '../../api/api.enum';
+import { ApiXbrowsersyncSyncInfo } from '../../api/api-xbrowsersync/api-xbrowsersync.interface';
 import { BookmarkContainer } from '../../bookmark/bookmark.enum';
 import { Bookmark } from '../../bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../bookmark/bookmark-helper/bookmark-helper.service';
 import Globals from '../../global-shared.constants';
 import { PlatformService } from '../../global-shared.interface';
+import { StoreKey } from '../../store/store.enum';
 import { StoreService } from '../../store/store.service';
 import { UtilityService } from '../../utility/utility.service';
 import { UpgradeProvider } from '../upgrade.interface';
@@ -31,7 +34,30 @@ export abstract class V160UpgradeProviderService implements UpgradeProvider {
     this.utilitySvc = UtilitySvc;
   }
 
-  abstract upgradeApp(upgradingFromVersion?: string): ng.IPromise<void>;
+  upgradeApp(upgradingFromVersion?: string): ng.IPromise<void> {
+    const legacyStorageKeys = ['password', 'serviceUrl', 'syncId', 'syncVersion'];
+    return this.storeSvc
+      .get<any>(legacyStorageKeys)
+      .then((storeContent) => {
+        // Convert to sync info
+        const { serviceUrl, syncId, syncVersion } = storeContent;
+        if (!storeContent || (!serviceUrl && !syncId && !syncVersion)) {
+          return;
+        }
+        const syncInfo: ApiXbrowsersyncSyncInfo = {
+          id: syncId,
+          serviceType: ApiServiceType.xBrowserSync,
+          serviceUrl,
+          version: syncVersion
+        };
+        return this.$q.all([
+          this.storeSvc.set(StoreKey.SyncInfo, syncInfo),
+          this.storeSvc.remove(legacyStorageKeys),
+          this.storeSvc.set(StoreKey.DisplayHelp, false)
+        ]);
+      })
+      .then(() => {});
+  }
 
   upgradeBookmarks(bookmarks: Bookmark[], upgradingFromVersion?: string): ng.IPromise<Bookmark[]> {
     const upgradedBookmarks = angular.copy(bookmarks);

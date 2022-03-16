@@ -1,9 +1,15 @@
-import { Component, Input, OnInit } from 'angular-ts-decorators';
+import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { ApiServiceStatus } from '../../../../shared/api/api.enum';
-import { ApiXbrowsersyncServiceInfo } from '../../../../shared/api/api-xbrowsersync/api-xbrowsersync.interface';
+import { ApiSyncInfo } from '../../../../shared/api/api.interface';
+import {
+  ApiXbrowsersyncServiceInfo,
+  ApiXbrowsersyncSyncInfo
+} from '../../../../shared/api/api-xbrowsersync/api-xbrowsersync.interface';
 import { ApiXbrowsersyncService } from '../../../../shared/api/api-xbrowsersync/api-xbrowsersync.service';
 import { PlatformService } from '../../../../shared/global-shared.interface';
+import { StoreKey } from '../../../../shared/store/store.enum';
+import { StoreService } from '../../../../shared/store/store.service';
 import { SyncService } from '../../../../shared/sync/sync.service';
 import { UtilityService } from '../../../../shared/utility/utility.service';
 import { AppEventType } from '../../../app.enum';
@@ -24,23 +30,26 @@ export class ApiXbrowsersyncServiceInfoComponent implements OnInit {
   apiSvc: ApiXbrowsersyncService;
   appHelperSvc: AppHelperService;
   platformSvc: PlatformService;
+  storeSvc: StoreService;
   syncSvc: SyncService;
   utilitySvc: UtilityService;
 
-  @Input() serviceInfo: ApiXbrowsersyncServiceInfo;
-
   apiServiceStatus = ApiServiceStatus;
   dataUsageProgressWidth = 0;
+  maxSyncSize = 0;
+  serviceInfo: ApiXbrowsersyncServiceInfo;
   syncDataSize: number;
   syncDataUsed: number;
+  syncEnabled: boolean;
 
   static $inject = [
     '$q',
     '$timeout',
     '$scope',
-    'ApiService',
+    'ApiXbrowsersyncService',
     'AppHelperService',
     'PlatformService',
+    'StoreService',
     'SyncService',
     'UtilityService'
   ];
@@ -51,6 +60,7 @@ export class ApiXbrowsersyncServiceInfoComponent implements OnInit {
     ApiSvc: ApiXbrowsersyncService,
     AppHelperSvc: AppHelperService,
     PlatformSvc: PlatformService,
+    StoreSvc: StoreService,
     SyncSvc: SyncService,
     UtilitySvc: UtilityService
   ) {
@@ -59,24 +69,36 @@ export class ApiXbrowsersyncServiceInfoComponent implements OnInit {
     this.apiSvc = ApiSvc;
     this.appHelperSvc = AppHelperSvc;
     this.platformSvc = PlatformSvc;
+    this.storeSvc = StoreSvc;
     this.syncSvc = SyncSvc;
     this.utilitySvc = UtilitySvc;
 
     $scope.$on(AppEventType.RefreshSyncDataUsage, () => this.refreshSyncDataUsage());
-
-    $scope.$watch(
-      () => this.serviceInfo,
-      (newVal, oldVal) => {
-        if (newVal !== oldVal) {
-          this.refreshSyncDataUsage();
-        }
-      }
-    );
   }
 
   ngOnInit(): void {
-    // Set service message links to open in new tabs
-    this.appHelperSvc.attachClickEventsToNewTabLinks(document.querySelector('.service-message'));
+    this.$q.all([this.storeSvc.get<ApiSyncInfo>(StoreKey.SyncInfo), this.utilitySvc.isSyncEnabled()]).then((data) => {
+      const [syncInfo, syncEnabled] = data;
+      this.syncEnabled = syncEnabled;
+      this.serviceInfo = {
+        url: (syncInfo as ApiXbrowsersyncSyncInfo).serviceUrl
+      };
+
+      // Update displayed service info
+      this.refreshServiceStatus().then(this.refreshSyncDataUsage);
+    });
+  }
+
+  refreshServiceStatus(): ng.IPromise<void> {
+    return this.apiSvc.checkServiceStatus().then((serviceInfoResponse) => {
+      this.serviceInfo = {
+        ...this.serviceInfo,
+        ...this.apiSvc.formatServiceInfo(serviceInfoResponse)
+      };
+
+      // Set service message links to open in new tabs
+      this.appHelperSvc.attachClickEventsToNewTabLinks(document.querySelector('.service-message'));
+    });
   }
 
   refreshSyncDataUsage(): ng.IPromise<void> {
@@ -88,8 +110,9 @@ export class ApiXbrowsersyncServiceInfoComponent implements OnInit {
 
       // Get bookmarks sync size and calculate sync data percentage used
       return this.syncSvc.getSyncSize().then((bookmarksSyncSize) => {
-        this.syncDataSize = bookmarksSyncSize / 1024;
-        this.syncDataUsed = Math.ceil((this.syncDataSize / this.serviceInfo.maxSyncSize) * 150);
+        this.maxSyncSize = this.serviceInfo.maxSyncSize * 1024;
+        this.syncDataSize = bookmarksSyncSize;
+        this.syncDataUsed = Math.ceil((this.syncDataSize / this.maxSyncSize) * 100);
         this.$timeout(() => {
           // Add a slight delay when setting progress bar width to ensure transitions are enabled
           this.dataUsageProgressWidth = this.syncDataUsed;

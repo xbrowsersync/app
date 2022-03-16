@@ -1,4 +1,5 @@
 import { BookmarkIdMapping } from '../../webext/shared/bookmark-id-mapper/bookmark-id-mapper.interface';
+import { ApiSyncInfo } from '../api/api.interface';
 import { AutoBackUpSchedule } from '../backup-restore/backup-restore.interface';
 import { LogLevel } from '../log/log.enum';
 import { RemovedSync } from '../sync/sync.interface';
@@ -19,13 +20,10 @@ export interface StoreContent {
   defaultToFolderView: boolean;
   installBackup: string;
   lastUpdated: string;
-  password: string;
   removedSync: RemovedSync;
-  serviceUrl: string;
   syncBookmarksToolbar: boolean;
   syncEnabled: boolean;
-  syncId: string;
-  syncVersion: string;
+  syncInfo: ApiSyncInfo;
   traceLog: string[];
 }
 

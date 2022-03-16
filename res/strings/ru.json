@@ -251,6 +251,16 @@
         "default": "Ошибка синхронизации"
       }
     },
+    "IncompleteSyncInfo": {
+      "Message": {
+        "key": "Error_IncompleteSyncInfo_Message",
+        "default": "Не удалось найти сохраненные учетные данные. Включите синхронизацию повторно и повторите попытку."
+      },
+      "Title": {
+        "key": "Error_IncompleteSyncInfo_Title",
+        "default": "Отсутствуют учетные данные"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
@@ -289,16 +299,6 @@
       "Title": {
         "key": "Error_LocalSyncError_Title",
         "default": "Ошибка синхронизации"
-      }
-    },
-    "MissingClientData": {
-      "Message": {
-        "key": "Error_MissingClientData_Message",
-        "default": "Не удалось найти сохраненные учетные данные. Включите синхронизацию повторно и повторите попытку."
-      },
-      "Title": {
-        "key": "Error_MissingClientData_Title",
-        "default": "Отсутствуют учетные данные"
       }
     },
     "NetworkConnection": {

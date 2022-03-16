@@ -325,26 +325,28 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
         this.platformSvc.getAppVersionName(),
         this.platformSvc.getCurrentLocale(),
         this.settingsSvc.checkForAppUpdates(),
-        this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId]),
-        this.utilitySvc.getServiceUrl(),
-        this.utilitySvc.getSyncVersion(),
+        this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncInfo]),
         this.utilitySvc.isSyncEnabled()
       ])
       .then((result) => {
         // Add useful debug info to beginning of trace log
-        const [appVersion, currentLocale, checkForAppUpdates, storeContent, serviceUrl, syncVersion, syncEnabled] =
-          result;
-        const debugInfo = angular.copy(storeContent) as any;
-        debugInfo.appVersion = appVersion;
-        debugInfo.checkForAppUpdates = checkForAppUpdates;
-        debugInfo.currentLocale = currentLocale;
-        debugInfo.platform = {
-          name: window.device.platform,
-          device: `${window.device.manufacturer} ${window.device.model}`
+        const [appVersion, currentLocale, checkForAppUpdates, storeContent, syncEnabled] = result;
+        const { lastUpdated, syncInfo } = storeContent;
+        const { password, ...syncInfoNoPassword } = syncInfo ?? {};
+        const debugInfo: any = {
+          appVersion,
+          checkForAppUpdates,
+          currentLocale,
+          platform: {
+            device: `${window.device.manufacturer} ${window.device.model}`,
+            name: window.device.platform
+          },
+          syncEnabled,
+          lastUpdated
         };
-        debugInfo.serviceUrl = serviceUrl;
-        debugInfo.syncEnabled = syncEnabled;
-        debugInfo.syncVersion = syncVersion;
+        if (Object.keys(syncInfoNoPassword).length > 0) {
+          debugInfo.syncInfo = syncInfoNoPassword;
+        }
         this.logSvc.logInfo(
           Object.keys(debugInfo)
             .filter((key) => {

@@ -62,7 +62,7 @@
           <span class="lookahead" ng-show="vm.tagLookahead"
                 ng-click="vm.utilitySvc.handleEvent(vm.selectTagsLookahead)"><span
                   ng-bind-html="vm.tagLookahead"></span>
-            <icon type="'edit-3'"></icon>
+            <icon type="'edit-3'" ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"></icon>
           </span>
         </div>
         <icon-button type="'trash-2'"

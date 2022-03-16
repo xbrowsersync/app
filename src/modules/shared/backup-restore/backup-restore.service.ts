@@ -1,8 +1,8 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { ApiServiceType } from '../api/api.enum';
-import { ApiService } from '../api/api.interface';
+import { ApiSyncInfo } from '../api/api.interface';
+import { ApiXbrowsersyncSyncInfo } from '../api/api-xbrowsersync/api-xbrowsersync.interface';
 import { Bookmark, BookmarkService } from '../bookmark/bookmark.interface';
 import { FailedRestoreDataError } from '../errors/errors';
 import { MessageCommand } from '../global-shared.enum';
@@ -13,13 +13,12 @@ import { StoreService } from '../store/store.service';
 import { SyncType } from '../sync/sync.enum';
 import { UpgradeService } from '../upgrade/upgrade.service';
 import { UtilityService } from '../utility/utility.service';
-import { AutoBackUpSchedule, Backup, BackupSync } from './backup-restore.interface';
+import { AutoBackUpSchedule, Backup } from './backup-restore.interface';
 
 @autobind
 @Injectable('BackupRestoreService')
 export class BackupRestoreService {
   $q: ng.IQService;
-  apiSvc: ApiService;
   bookmarkSvc: BookmarkService;
   logSvc: LogService;
   platformSvc: PlatformService;
@@ -29,7 +28,6 @@ export class BackupRestoreService {
 
   static $inject = [
     '$q',
-    'ApiService',
     'BookmarkService',
     'LogService',
     'PlatformService',
@@ -39,7 +37,6 @@ export class BackupRestoreService {
   ];
   constructor(
     $q: ng.IQService,
-    ApiSvc: ApiService,
     BookmarkSvc: BookmarkService,
     LogSvc: LogService,
     PlatformSvc: PlatformService,
@@ -48,7 +45,6 @@ export class BackupRestoreService {
     UtilitySvc: UtilityService
   ) {
     this.$q = $q;
-    this.apiSvc = ApiSvc;
     this.bookmarkSvc = BookmarkSvc;
     this.logSvc = LogSvc;
     this.platformSvc = PlatformSvc;
@@ -57,32 +53,16 @@ export class BackupRestoreService {
     this.utilitySvc = UtilitySvc;
   }
 
-  createBackupData(bookmarksData: Bookmark[], syncId: string, serviceUrl: string, syncVersion: string): Backup {
-    const backupData: Backup = {
+  createBackupData(bookmarks: Bookmark[], syncInfo: ApiSyncInfo): Backup {
+    return {
       xbrowsersync: {
         date: this.utilitySvc.getDateTimeString(new Date()),
-        sync: {},
-        data: {}
+        sync: syncInfo,
+        data: {
+          bookmarks
+        }
       }
-    };
-
-    // Add sync info if provided
-    if (syncId) {
-      backupData.xbrowsersync!.sync = this.createSyncInfoObject(syncId, serviceUrl, syncVersion);
-    }
-
-    // Add bookmarks
-    backupData.xbrowsersync!.data.bookmarks = bookmarksData;
-    return backupData;
-  }
-
-  createSyncInfoObject(syncId: string, serviceUrl: string, syncVersion?: string): BackupSync {
-    return {
-      id: syncId,
-      type: ApiServiceType.xBrowserSync,
-      url: serviceUrl,
-      version: syncVersion
-    } as BackupSync;
+    } as Backup;
   }
 
   getBackupFilename(): string {
@@ -106,27 +86,43 @@ export class BackupRestoreService {
     });
   }
 
+  getSyncInfo(): ng.IPromise<ApiSyncInfo> {
+    // Remove sensitive data from sync info before returning
+    return this.storeSvc.get<ApiSyncInfo>(StoreKey.SyncInfo).then((syncInfo) => {
+      const { password, ...syncInfoNoPassword } = syncInfo;
+      return syncInfoNoPassword;
+    });
+  }
+
   restoreBackupData(backupData: Backup): ng.IPromise<void> {
     let bookmarksToRestore: Bookmark[];
-    let serviceUrl: string;
     let syncEnabled: boolean;
     let syncId: string;
+    let syncInfo: ApiSyncInfo;
     let syncVersion: string;
 
-    switch (true) {
-      case !angular.isUndefined(backupData.xbrowsersync): // v1.5.0+
-        bookmarksToRestore = backupData.xbrowsersync.data?.bookmarks;
-        serviceUrl = backupData.xbrowsersync.sync?.url;
-        syncId = backupData.xbrowsersync.sync?.id;
-        syncVersion = backupData.xbrowsersync.sync?.version;
-        break;
-      case !angular.isUndefined(backupData.xBrowserSync): // Prior to v1.5.0
-        bookmarksToRestore = backupData.xBrowserSync.bookmarks;
-        syncId = backupData.xBrowserSync.id;
-        break;
-      default:
-        // Invalid restore data
-        throw new FailedRestoreDataError();
+    if (backupData.xbrowsersync) {
+      // > v1.5.2
+      if (backupData.xbrowsersync?.sync && 'serviceType' in backupData.xbrowsersync.sync) {
+        syncInfo = backupData.xbrowsersync.sync;
+      }
+      // v1.5.0 - v1.5.2
+      else if (backupData.xbrowsersync?.sync && 'type' in backupData.xbrowsersync.sync) {
+        const { id, url, version } = backupData.xbrowsersync.sync;
+        syncInfo = {
+          id,
+          serviceUrl: url,
+          version
+        } as ApiXbrowsersyncSyncInfo;
+      }
+      bookmarksToRestore = backupData.xbrowsersync.data?.bookmarks;
+    }
+    // < v1.5.0
+    else if (backupData.xBrowserSync) {
+      bookmarksToRestore = backupData.xBrowserSync.bookmarks;
+    } else {
+      // Invalid restore data
+      throw new FailedRestoreDataError('Unsupported backup data format');
     }
 
     this.logSvc.logInfo('Restoring data');
@@ -145,20 +141,13 @@ export class BackupRestoreService {
           .then((cachedSyncEnabled) => {
             syncEnabled = cachedSyncEnabled;
 
-            // If synced check service status before starting restore, otherwise restore sync settings
+            // If synced, check service status before starting restore, otherwise restore sync info
             return syncEnabled
-              ? this.apiSvc.checkServiceStatus()
-              : this.$q((resolve, reject) => {
-                  // Clear current password and set sync ID if supplied
-                  this.$q
-                    .all([
-                      this.storeSvc.remove(StoreKey.Password),
-                      syncId ? this.storeSvc.set(StoreKey.SyncId, syncId) : this.$q.resolve(),
-                      serviceUrl ? this.utilitySvc.updateServiceUrl(serviceUrl) : this.$q.resolve()
-                    ])
-                    .then(resolve)
-                    .catch(reject);
-                });
+              ? this.utilitySvc
+                  .getApiService()
+                  .then((apiSvc) => apiSvc.checkServiceStatus())
+                  .then(() => {})
+              : this.storeSvc.set(StoreKey.SyncInfo, syncInfo);
           })
           // Start restore
           .then(() =>
@@ -182,21 +171,10 @@ export class BackupRestoreService {
   saveBackupFile(displaySaveDialog?: boolean): ng.IPromise<string | void> {
     let filename: string;
     return this.$q
-      .all([
-        this.bookmarkSvc.getBookmarksForExport(),
-        this.storeSvc.get<string>(StoreKey.SyncId),
-        this.utilitySvc.getServiceUrl(),
-        this.utilitySvc.getSyncVersion(),
-        this.utilitySvc.isSyncEnabled()
-      ])
+      .all([this.getSyncInfo(), this.bookmarkSvc.getBookmarksForExport(), this.utilitySvc.isSyncEnabled()])
       .then((data) => {
-        const [bookmarksData, syncId, serviceUrl, syncVersion, syncEnabled] = data;
-        const backupData = this.createBackupData(
-          bookmarksData,
-          syncEnabled ? syncId : undefined,
-          syncEnabled ? serviceUrl : undefined,
-          syncEnabled ? syncVersion : undefined
-        );
+        const [syncInfo, bookmarksData, syncEnabled] = data;
+        const backupData = this.createBackupData(bookmarksData, syncEnabled ? syncInfo : undefined);
 
         // Beautify json and download data
         const beautifiedJson = JSON.stringify(backupData, null, 2);

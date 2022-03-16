@@ -29,7 +29,7 @@ export interface ApiService {
   createNewSync: () => ng.IPromise<ApiCreateBookmarksResponse>;
   getBookmarks: () => ng.IPromise<ApiGetBookmarksResponse>;
   getBookmarksLastUpdated: (skipNetworkConnectionCheck?: boolean) => ng.IPromise<ApiGetLastUpdatedResponse>;
-  getBookmarksVersion: (syncId: string) => ng.IPromise<ApiGetSyncVersionResponse>;
+  getSyncVersion: (syncId: string) => ng.IPromise<ApiGetSyncVersionResponse>;
   updateBookmarks: (
     encryptedBookmarks: string,
     updateSyncVersion?: boolean,
@@ -43,10 +43,15 @@ export interface ApiServiceInfo {
 
 export interface ApiServiceInfoResponse {}
 
+export enum ApiServiceNames {
+  XbrowsersyncService = 'ApiXbrowsersyncService'
+}
+
 export interface ApiSyncInfo {
+  id?: string;
+  password?: string;
   serviceType: ApiServiceType;
-  syncId?: string;
-  syncPassword?: string;
+  version?: string;
 }
 
 export interface ApiUpdateBookmarksRequest {

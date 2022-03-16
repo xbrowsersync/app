@@ -251,6 +251,16 @@
         "default": "Synkronisering misslyckades"
       }
     },
+    "IncompleteSyncInfo": {
+      "Message": {
+        "key": "Error_IncompleteSyncInfo_Message",
+        "default": "Kunde inte hitta sparade inloggningsuppgifter. Återaktivera synkronisering och försök igen."
+      },
+      "Title": {
+        "key": "Error_IncompleteSyncInfo_Title",
+        "default": "Saknar inloggningsuppgifter"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
@@ -289,16 +299,6 @@
       "Title": {
         "key": "Error_LocalSyncError_Title",
         "default": "Synkroniseringsfel"
-      }
-    },
-    "MissingClientData": {
-      "Message": {
-        "key": "Error_MissingClientData_Message",
-        "default": "Kunde inte hitta sparade inloggningsuppgifter. Återaktivera synkronisering och försök igen."
-      },
-      "Title": {
-        "key": "Error_MissingClientData_Title",
-        "default": "Saknar inloggningsuppgifter"
       }
     },
     "NetworkConnection": {
