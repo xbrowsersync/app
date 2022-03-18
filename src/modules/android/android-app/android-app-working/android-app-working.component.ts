@@ -1,5 +1,4 @@
 import { Component, Output } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { AppHelperService } from '../../../app/shared/app-helper/app-helper.service';
 import { AlertService } from '../../../shared/alert/alert.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
@@ -7,7 +6,6 @@ import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingContext } from '../../../shared/working/working.enum';
 import { WorkingService } from '../../../shared/working/working.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appWorking'

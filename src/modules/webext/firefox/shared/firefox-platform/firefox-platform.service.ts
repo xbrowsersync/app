@@ -1,10 +1,9 @@
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import browser from 'webextension-polyfill';
 import { PlatformType } from '../../../../shared/global-shared.enum';
 import { WebExtPlatformService } from '../../../shared/webext-platform/webext-platform.service';
 
-@autobind
 @Injectable('PlatformService')
 export class FirefoxPlatformService extends WebExtPlatformService {
   platformName = PlatformType.Firefox;
@@ -13,6 +12,7 @@ export class FirefoxPlatformService extends WebExtPlatformService {
     return 'about:newtab';
   }
 
+  @boundMethod
   openUrl(url: string): void {
     // If url is native config page, open new tab intead
     if (this.urlIsNativeConfigPage(url)) {

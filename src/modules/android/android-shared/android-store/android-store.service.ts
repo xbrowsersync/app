@@ -1,13 +1,11 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { FailedLocalStorageError } from '../../../shared/errors/errors';
 import { StoreKey } from '../../../shared/store/store.enum';
 import { StoreContent, TraceLogItem } from '../../../shared/store/store.interface';
 import { StoreService } from '../../../shared/store/store.service';
 import { NativeStorageError, Table, TraceLogColumn } from './android-store.enum';
 
-@autobind
 @Injectable('StoreService')
 export class AndroidStoreService extends StoreService {
   appRowId = 1;
@@ -24,12 +22,13 @@ export class AndroidStoreService extends StoreService {
     StoreKey.DisplayOtherSyncsWarning,
     StoreKey.DisplayPermissions,
     StoreKey.DisplayUpdated,
+    StoreKey.LastUpdated,
     StoreKey.LastUpgradeVersion,
     StoreKey.SyncBookmarksToolbar,
     StoreKey.SyncEnabled,
     StoreKey.SyncInfo
   ];
-  sqlKeys: string[] = [StoreKey.Bookmarks, StoreKey.LastUpdated, StoreKey.RemovedSync, StoreKey.TraceLog];
+  sqlKeys: string[] = [StoreKey.Bookmarks, StoreKey.RemovedSync, StoreKey.TraceLog];
 
   static $inject = ['$q'];
 
@@ -47,14 +46,16 @@ export class AndroidStoreService extends StoreService {
           reject
         );
       });
-    }).catch(this.handleSqlError);
+    }).catch((err) => this.handleSqlError(err));
   }
 
   protected clear(): ng.IPromise<void> {
     return this.$q
       .all([
         this.$q((resolve, reject) => window.NativeStorage.clear(resolve, reject)),
-        this.openDatabase().then(this.createTables).catch(this.handleSqlError)
+        this.openDatabase()
+          .then((db) => this.createTables(db))
+          .catch((err) => this.handleSqlError(err))
       ])
       .then(() => {});
   }
@@ -64,7 +65,7 @@ export class AndroidStoreService extends StoreService {
       this.openDatabase().then((db) => {
         db.executeSql(`DELETE FROM ${Table.TraceLog}`, [], () => resolve(), reject);
       });
-    }).catch(this.handleSqlError);
+    }).catch((err) => this.handleSqlError(err));
   }
 
   protected createTables(db: any): ng.IPromise<any> {
@@ -90,7 +91,7 @@ export class AndroidStoreService extends StoreService {
         reject,
         resolve
       );
-    }).catch(this.handleSqlError);
+    }).catch((err) => this.handleSqlError(err));
   }
 
   protected getFromStore<T = StoreContent>(keys: string[] = []): ng.IPromise<T[]> {
@@ -144,7 +145,7 @@ export class AndroidStoreService extends StoreService {
           reject
         );
       });
-    }).catch(this.handleSqlError);
+    }).catch((err) => this.handleSqlError(err));
   }
 
   protected getFromNativeStorage<T = StoreContent>(key: string): ng.IPromise<T> {
@@ -195,7 +196,7 @@ export class AndroidStoreService extends StoreService {
         });
       })
       .then(() => values)
-      .catch(this.handleSqlError);
+      .catch((err) => this.handleSqlError(err));
   }
 
   protected handleSqlError(err: Error): never {
@@ -225,7 +226,7 @@ export class AndroidStoreService extends StoreService {
         this.db = db;
         return db;
       })
-      .catch(this.handleSqlError);
+      .catch((err) => this.handleSqlError(err));
   }
 
   protected removeFromStore(keys: string[] = []): ng.IPromise<void> {
@@ -270,6 +271,6 @@ export class AndroidStoreService extends StoreService {
           reject
         );
       });
-    }).catch(this.handleSqlError);
+    }).catch((err) => this.handleSqlError(err));
   }
 }

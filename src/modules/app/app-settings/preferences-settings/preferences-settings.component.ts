@@ -1,5 +1,5 @@
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { AllSettings } from '../../../shared/settings/settings.interface';
 import { SettingsService } from '../../../shared/settings/settings.service';
@@ -8,7 +8,6 @@ import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingService } from '../../../shared/working/working.service';
 import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'preferencesSettings',
@@ -52,11 +51,13 @@ export class PreferencesSettingsComponent implements OnInit {
     this.workingSvc = WorkingSvc;
   }
 
+  @boundMethod
   cancelSyncBookmarksToolbar(): void {
     this.displaySyncBookmarksToolbarConfirmation = false;
     this.settings.syncBookmarksToolbar = false;
   }
 
+  @boundMethod
   confirmSyncBookmarksToolbar(): void {
     this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
       if (!syncEnabled) {
@@ -81,31 +82,37 @@ export class PreferencesSettingsComponent implements OnInit {
     });
   }
 
+  @boundMethod
   toggleAlternateSearchBarPosition(): void {
     this.settings.alternateSearchBarPosition = !this.settings.alternateSearchBarPosition;
     this.settingsSvc.alternateSearchBarPosition(this.settings.alternateSearchBarPosition);
   }
 
+  @boundMethod
   toggleAutoFetchMetadata(): void {
     this.settings.autoFetchMetadata = !this.settings.autoFetchMetadata;
     this.settingsSvc.autoFetchMetadata(this.settings.autoFetchMetadata);
   }
 
+  @boundMethod
   toggleCheckForAppUpdates(): void {
     this.settings.checkForAppUpdates = !this.settings.checkForAppUpdates;
     this.settingsSvc.checkForAppUpdates(this.settings.checkForAppUpdates);
   }
 
+  @boundMethod
   toggleDefaultToFolderView(): void {
     this.settings.defaultToFolderView = !this.settings.defaultToFolderView;
     this.settingsSvc.defaultToFolderView(this.settings.defaultToFolderView);
   }
 
+  @boundMethod
   toggleEnableDarkMode(): void {
     this.settings.darkModeEnabled = !this.settings.darkModeEnabled;
     this.settingsSvc.darkModeEnabled(this.settings.darkModeEnabled);
   }
 
+  @boundMethod
   toggleSyncBookmarksToolbar(): void {
     this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
       this.settings.syncBookmarksToolbar = !this.settings.syncBookmarksToolbar;

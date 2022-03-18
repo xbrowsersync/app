@@ -1,10 +1,8 @@
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import Globals from '../../shared/global-shared.constants';
 import { UtilityService } from '../../shared/utility/utility.service';
 import { RoutePath } from '../app.enum';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appBackground',

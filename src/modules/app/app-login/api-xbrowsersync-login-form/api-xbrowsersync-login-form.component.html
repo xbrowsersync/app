@@ -13,7 +13,7 @@
       <div class="loading animate-fade-in"
            ng-show="vm.serviceInfo.url !== undefined && vm.serviceInfo.status === undefined"
            title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Loading) }}">
-        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
       </div>
       <div class="success animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Online"
            title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Online) }}">
@@ -132,8 +132,7 @@
                  for="txtId">{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.SyncId.Label) }}</label>
           <input type="text" name="txtId" ng-model="vm.syncId" class="form-control" ng-disabled="vm.syncEnabled"
                  placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.SyncId.Description) }}"
-                 maxlength="32" ng-change="vm.syncIdChanged()" autocapitalize="off" autocorrect="off"
-                 spellcheck="false" />
+                 maxlength="32" autocapitalize="off" autocorrect="off" spellcheck="false" />
           <div class="validation" ng-if="vm.syncId && vm.syncForm.txtId.$error.InvalidSyncId">
             {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.SyncId.Invalid) }}
           </div>
@@ -226,8 +225,7 @@
                   ng-click="vm.utilitySvc.handleEvent(vm.updateServiceUrl)"
                   ng-disabled="vm.newServiceInfo.url === vm.serviceInfo.url || vm.syncForm.newServiceUrl.$invalid || vm.validatingServiceUrl"
                   ng-class="{ 'working': vm.validatingServiceUrl }">
-            <span class="spinner-border spinner-border-sm" ng-show="vm.validatingServiceUrl" role="status"
-                  aria-hidden="true"></span>
+            <span class="spinner-border spinner-border-sm" ng-show="vm.validatingServiceUrl" aria-hidden="true"></span>
             <span ng-show="vm.validatingServiceUrl">{{
           vm.platformSvc.getI18nString(vm.Strings.Service.Status.Loading) }}
             </span>

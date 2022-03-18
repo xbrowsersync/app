@@ -2,7 +2,7 @@
 
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { compare } from 'compare-versions';
 import * as detectBrowser from 'detect-browser';
 import XRegExp from 'xregexp';
@@ -19,7 +19,6 @@ import { NetworkService } from '../network/network.service';
 import { StoreKey } from '../store/store.enum';
 import { StoreService } from '../store/store.service';
 
-@autobind
 @Injectable('UtilityService')
 export class UtilityService {
   $exceptionHandler: ExceptionHandler;
@@ -189,12 +188,13 @@ export class UtilityService {
     return window.crypto.getRandomValues(new Uint32Array(1))[0].toString(36);
   }
 
+  @boundMethod
   handleEvent(eventHandler: (...args: any[]) => any, ...args: any[]): void {
     try {
       this.$q
         .resolve()
         .then(() => eventHandler(...args))
-        .catch(this.$exceptionHandler);
+        .catch((err) => this.$exceptionHandler(err));
     } catch (err) {
       this.$exceptionHandler(err);
     }
@@ -204,6 +204,7 @@ export class UtilityService {
     return !angular.isUndefined(window.navigator.brave);
   }
 
+  @boundMethod
   isMobilePlatform(platformName: string): boolean {
     return platformName === PlatformType.Android;
   }

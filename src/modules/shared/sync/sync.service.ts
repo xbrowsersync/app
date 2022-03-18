@@ -1,6 +1,5 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { ApiSyncInfo } from '../api/api.interface';
 import { Bookmark } from '../bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../bookmark/bookmark-helper/bookmark-helper.service';
@@ -34,7 +33,6 @@ import { BookmarkSyncProviderService } from './bookmark-sync-provider/bookmark-s
 import { SyncType } from './sync.enum';
 import { RemovedSync, Sync, SyncProvider } from './sync.interface';
 
-@autobind
 @Injectable('SyncService')
 export class SyncService {
   $exceptionHandler: ExceptionHandler;
@@ -601,6 +599,6 @@ export class SyncService {
     }
 
     // Get cached sync enabled value and update browser action icon
-    return this.utilitySvc.isSyncEnabled().then(this.platformSvc.refreshNativeInterface);
+    return this.utilitySvc.isSyncEnabled().then((syncEnabled) => this.platformSvc.refreshNativeInterface(syncEnabled));
   }
 }

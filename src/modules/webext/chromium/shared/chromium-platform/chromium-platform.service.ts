@@ -1,9 +1,7 @@
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { BrowserName, PlatformType } from '../../../../shared/global-shared.enum';
 import { WebExtPlatformService } from '../../../shared/webext-platform/webext-platform.service';
 
-@autobind
 @Injectable('PlatformService')
 export class ChromiumPlatformService extends WebExtPlatformService {
   platformName = PlatformType.Chromium;

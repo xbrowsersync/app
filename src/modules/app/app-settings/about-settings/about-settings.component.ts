@@ -1,12 +1,11 @@
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { RoutePath } from '../../app.enum';
 import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'aboutSettings',
@@ -38,6 +37,7 @@ export class AboutSettingsComponent implements OnInit {
     });
   }
 
+  @boundMethod
   switchToSupportView(): void {
     this.appHelperSvc.switchView(RoutePath.Support);
   }

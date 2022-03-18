@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Component, OnDestroy } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import PullToRefresh from 'pulltorefreshjs';
 import { AppEventType } from '../../../app/app.enum';
 import { AppSearchComponent } from '../../../app/app-search/app-search.component';
@@ -22,7 +22,6 @@ import { AndroidPlatformService } from '../../android-shared/android-platform/an
 import { AndroidAlert } from '../android-app.interface';
 import { AndroidAppHelperService } from '../shared/android-app-helper/android-app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appSearch',
@@ -83,6 +82,7 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
     });
   }
 
+  @boundMethod
   deleteBookmark(event: Event, bookmark: Bookmark): void {
     // Stop event propogation
     this.utilitySvc.stopEventPropagation(event);
@@ -239,7 +239,7 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
       if (doRefresh && !this.displayFolderView) {
         // Update search results if new results are different to current results
         return this.getSearchResults()
-          .then(this.displaySearchResults)
+          .then((results) => this.displaySearchResults(results))
           .then(() => true);
       }
       return false;
@@ -251,6 +251,7 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
     this.refreshBookmarks();
   }
 
+  @boundMethod
   toggleBookmarkTreeView(): ng.IPromise<void> {
     return super.toggleBookmarkTreeView().then(() => this.initPullToRefresh());
   }

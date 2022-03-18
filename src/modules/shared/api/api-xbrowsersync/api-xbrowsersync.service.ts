@@ -1,6 +1,5 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import {
@@ -44,7 +43,6 @@ import {
   ApiXbrowsersyncSyncInfo
 } from './api-xbrowsersync.interface';
 
-@autobind
 @Injectable('ApiXbrowsersyncService')
 export class ApiXbrowsersyncService implements ApiService {
   $injector: ng.auto.IInjectorService;
@@ -103,9 +101,11 @@ export class ApiXbrowsersyncService implements ApiService {
             url: `${serviceUrl}/${ApiXbrowsersyncResource.ServiceInformation}`,
             timeout: 3000
           };
-          return this.$http<ApiXbrowsersyncServiceInfoResponse>(requestConfig).catch(this.handleFailedRequest);
+          return this.$http<ApiXbrowsersyncServiceInfoResponse>(requestConfig).catch((err) =>
+            this.handleFailedRequest(err)
+          );
         })
-        .then(this.apiRequestSucceeded)
+        .then((response) => this.apiRequestSucceeded(response))
         .then((response) => {
           // Check service is a valid xBrowserSync API
           const { data: serviceInfo } = response;
@@ -136,9 +136,9 @@ export class ApiXbrowsersyncService implements ApiService {
             };
             return this.$http
               .post<ApiCreateBookmarksResponse>(requestUrl, JSON.stringify(requestBody))
-              .catch(this.handleFailedRequest);
+              .catch((err) => this.handleFailedRequest(err));
           })
-          .then(this.apiRequestSucceeded)
+          .then((response) => this.apiRequestSucceeded(response))
           .then((response) => {
             // Check response data is valid before returning
             const { data } = response;
@@ -164,9 +164,9 @@ export class ApiXbrowsersyncService implements ApiService {
         const requestUrl = `${(syncInfo as ApiXbrowsersyncSyncInfo).serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${
           syncInfo.id
         }`;
-        return this.$http.get<ApiGetBookmarksResponse>(requestUrl).catch(this.handleFailedRequest);
+        return this.$http.get<ApiGetBookmarksResponse>(requestUrl).catch((err) => this.handleFailedRequest(err));
       })
-      .then(this.apiRequestSucceeded)
+      .then((response) => this.apiRequestSucceeded(response))
       .then((response) => {
         // Check response data is valid before returning
         const { data } = response;
@@ -195,9 +195,11 @@ export class ApiXbrowsersyncService implements ApiService {
               const requestUrl = `${(syncInfo as ApiXbrowsersyncSyncInfo).serviceUrl}/${
                 ApiXbrowsersyncResource.Bookmarks
               }/${syncInfo.id}/${ApiXbrowsersyncResource.LastUpdated}`;
-              return this.$http.get<ApiGetLastUpdatedResponse>(requestUrl).catch(this.handleFailedRequest);
+              return this.$http
+                .get<ApiGetLastUpdatedResponse>(requestUrl)
+                .catch((err) => this.handleFailedRequest(err));
             })
-            .then(this.apiRequestSucceeded)
+            .then((response) => this.apiRequestSucceeded(response))
             .then((response) => {
               // Check response data is valid before returning
               const { data } = response;
@@ -228,9 +230,9 @@ export class ApiXbrowsersyncService implements ApiService {
         return this.getServiceUrl()
           .then((serviceUrl) => {
             const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${syncId}/${ApiXbrowsersyncResource.Version}`;
-            return this.$http.get<ApiGetSyncVersionResponse>(requestUrl).catch(this.handleFailedRequest);
+            return this.$http.get<ApiGetSyncVersionResponse>(requestUrl).catch((err) => this.handleFailedRequest(err));
           })
-          .then(this.apiRequestSucceeded)
+          .then((response) => this.apiRequestSucceeded(response))
           .then((response) => {
             // Check response data is valid before returning
             const { data: version } = response;
@@ -356,9 +358,9 @@ export class ApiXbrowsersyncService implements ApiService {
 
               return this.$http
                 .put<ApiUpdateBookmarksResponse>(requestUrl, JSON.stringify(requestBody))
-                .catch(this.handleFailedRequest);
+                .catch((err) => this.handleFailedRequest(err));
             })
-            .then(this.apiRequestSucceeded)
+            .then((response) => this.apiRequestSucceeded(response))
             .then((response) => {
               // Check response data is valid before returning
               const { data: responseData } = response;

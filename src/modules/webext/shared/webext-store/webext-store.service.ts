@@ -1,11 +1,9 @@
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { clear, createStore, del, get, keys as idbKeys, set, UseStore } from 'idb-keyval';
 import { StoreKey } from '../../../shared/store/store.enum';
 import { StoreContent, TraceLogItem } from '../../../shared/store/store.interface';
 import { StoreService } from '../../../shared/store/store.service';
 
-@autobind
 @Injectable('StoreService')
 export class WebExtStoreService extends StoreService {
   dbName = 'xbs-store';

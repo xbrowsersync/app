@@ -7,7 +7,7 @@
     <div class="status-icon">
       <div class="loading animate-fade-in" ng-show="vm.serviceInfo.url !== undefined && vm.serviceInfo.status == null"
            title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Loading) }}">
-        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
       </div>
       <div class="success animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Online"
            title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Online) }}">

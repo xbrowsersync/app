@@ -1,12 +1,10 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { LogService } from '../log/log.service';
 import { StoreKey } from '../store/store.enum';
 import { StoreService } from '../store/store.service';
 import { AllSettings } from './settings.interface';
 
-@autobind
 @Injectable('SettingsService')
 export class SettingsService {
   logSvc: LogService;

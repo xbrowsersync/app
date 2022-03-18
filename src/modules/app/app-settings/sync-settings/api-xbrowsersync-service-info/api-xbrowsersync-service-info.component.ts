@@ -1,5 +1,4 @@
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { ApiServiceStatus } from '../../../../shared/api/api.enum';
 import { ApiSyncInfo } from '../../../../shared/api/api.interface';
 import {
@@ -15,7 +14,6 @@ import { UtilityService } from '../../../../shared/utility/utility.service';
 import { AppEventType } from '../../../app.enum';
 import { AppHelperService } from '../../../shared/app-helper/app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'apiXbrowsersyncServiceInfo',
@@ -85,7 +83,7 @@ export class ApiXbrowsersyncServiceInfoComponent implements OnInit {
       };
 
       // Update displayed service info
-      this.refreshServiceStatus().then(this.refreshSyncDataUsage);
+      this.refreshServiceStatus().then(() => this.refreshSyncDataUsage());
     });
   }
 

@@ -1,5 +1,4 @@
 import angular from 'angular';
-import autobind from 'autobind-decorator';
 import { ExceptionHandler } from '../../../shared/errors/errors.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
@@ -12,7 +11,6 @@ import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingService } from '../../../shared/working/working.service';
 import { RoutePath } from '../../app.enum';
 
-@autobind
 export abstract class AppHelperService {
   Strings = require('../../../../../res/strings/en.json');
 

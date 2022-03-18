@@ -1,6 +1,5 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import browser, { Bookmarks as NativeBookmarks } from 'webextension-polyfill';
 import { BookmarkChangeType, BookmarkContainer } from '../../../../shared/bookmark/bookmark.enum';
 import {
@@ -19,10 +18,9 @@ import {
 import { WebpageMetadata } from '../../../../shared/global-shared.interface';
 import { WebExtBookmarkService } from '../../../shared/webext-bookmark/webext-bookmark.service';
 
-@autobind
 @Injectable('BookmarkService')
 export class FirefoxBookmarkService extends WebExtBookmarkService {
-  unsupportedContainers = [];
+  unsupportedContainers: string[] = [];
 
   clearNativeBookmarks(): ng.IPromise<void> {
     // Get native container ids

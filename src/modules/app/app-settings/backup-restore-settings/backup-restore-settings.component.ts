@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { OnDestroy, OnInit, ViewParent } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { detect } from 'detect-browser';
 import { AlertType } from '../../../shared/alert/alert.enum';
 import { AlertService } from '../../../shared/alert/alert.service';
@@ -104,7 +104,7 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
     this.workingSvc = WorkingSvc;
   }
 
-  @autobind
+  @boundMethod
   backupFileChanged(): void {
     const fileInput = document.getElementById('backupFile') as HTMLInputElement;
 
@@ -138,7 +138,7 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
     }
   }
 
-  @autobind
+  @boundMethod
   confirmRestore(): void {
     if (!this.dataToRestore) {
       // Display alert
@@ -158,7 +158,7 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
     this.workingSvc.show(WorkingContext.Restoring);
     this.backupRestoreSvc
       .restoreBackupData(JSON.parse(this.dataToRestore))
-      .then(this.restoreBookmarksSuccess)
+      .then(() => this.restoreBookmarksSuccess())
       .catch((err) => {
         if (err instanceof SyncVersionNotSupportedError) {
           // Display specific message if user is trying to restore an unsupported backup version
@@ -171,10 +171,10 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
         }
         throw err;
       })
-      .finally(this.workingSvc.hide);
+      .finally(() => this.workingSvc.hide());
   }
 
-  @autobind
+  @boundMethod
   confirmReset(): void {
     // Display loading overlay
     this.workingSvc.show(WorkingContext.Resetting);
@@ -207,7 +207,7 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
       });
   }
 
-  @autobind
+  @boundMethod
   displayRestorePanel(): void {
     this.backupFileName = null;
     this.restoreCompletedMessage = null;
@@ -226,7 +226,7 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
     }
   }
 
-  @autobind
+  @boundMethod
   displayResetPanel(): void {
     // Retrieve install backup from store
     this.storeSvc.get<any>(StoreKey.InstallBackup).then((installBackup) => {
@@ -253,7 +253,7 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
     });
   }
 
-  @autobind
+  @boundMethod
   downloadBackup(): void {
     this.savingBackup = true;
     this.backupRestoreSvc
@@ -273,7 +273,7 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
       });
   }
 
-  @autobind
+  @boundMethod
   hideResetPanel(): void {
     this.displayResetConfirmation = false;
     this.resetCompleted = false;
@@ -281,7 +281,7 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
     this.resetUnavailable = false;
   }
 
-  @autobind
+  @boundMethod
   hideRestorePanel(): void {
     this.displayRestoreForm = false;
     this.restoreForm.$setPristine();
@@ -311,12 +311,12 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
     });
   }
 
-  @autobind
+  @boundMethod
   resetRestoreFormValidity(): void {
     this.restoreForm.dataToRestore.$setValidity('InvalidData', true);
   }
 
-  @autobind
+  @boundMethod
   restore(): void {
     if (!this.validateBackupData()) {
       return;
@@ -330,7 +330,7 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
     this.appHelperSvc.focusOnElement('.btn-confirm-restore');
   }
 
-  @autobind
+  @boundMethod
   restoreBookmarksSuccess(): void {
     // Update view model
     this.displayRestoreForm = false;
@@ -346,7 +346,7 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
     this.appHelperSvc.focusOnElement('.restore-completed .focused');
   }
 
-  @autobind
+  @boundMethod
   selectBackupFile(): void {
     (document.querySelector('#backupFile') as HTMLInputElement).click();
   }

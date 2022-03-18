@@ -38,8 +38,7 @@
           <button type="button" class="btn btn-default" ng-class="{ 'working': vm.savingLog }"
                   ng-click="vm.utilitySvc.handleEvent(vm.downloadLog)"
                   ng-disabled="vm.savingLog || vm.logSize === 0 || vm.logSize == null">
-            <span class="spinner-border spinner-border-sm" ng-show="vm.savingLog" role="status"
-                  aria-hidden="true"></span>
+            <span class="spinner-border spinner-border-sm" ng-show="vm.savingLog" aria-hidden="true"></span>
             <span ng-show="vm.savingLog">{{ vm.platformSvc.getI18nString(vm.Strings.Button.Saving) }}
             </span>
             <span

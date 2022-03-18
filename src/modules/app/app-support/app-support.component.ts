@@ -1,10 +1,9 @@
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { PlatformService } from '../../shared/global-shared.interface';
 import { UtilityService } from '../../shared/utility/utility.service';
 import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appSupport',
@@ -32,6 +31,7 @@ export class AppSupportComponent implements OnInit {
     this.utilitySvc = UtilitySvc;
   }
 
+  @boundMethod
   close(event?: Event): void {
     event?.preventDefault();
     this.appHelperSvc.switchView();

@@ -1,10 +1,8 @@
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { Bookmark, BookmarkService } from '../../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
 
-@autobind
 @Injectable('BookmarkService')
 export class AndroidBookmarkService implements BookmarkService {
   $q: ng.IQService;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService } from '../../shared/global-shared.interface';
 import { StoreKey } from '../../shared/store/store.enum';
@@ -8,7 +8,6 @@ import { UtilityService } from '../../shared/utility/utility.service';
 import { RoutePath } from '../app.enum';
 import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appUpdated',
@@ -42,12 +41,14 @@ export class AppUpdatedComponent implements OnInit {
     this.utilitySvc = UtilitySvc;
   }
 
+  @boundMethod
   close(event?: Event): void {
     event?.preventDefault();
     this.storeSvc.set(StoreKey.DisplayUpdated, false);
     this.appHelperSvc.switchView(RoutePath.Support);
   }
 
+  @boundMethod
   displayReleaseNotes(): void {
     this.appHelperSvc.openUrl(null, this.releaseNotesUrl);
   }

@@ -1,5 +1,5 @@
 import { Component } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { BackupRestoreService } from '../../shared/backup-restore/backup-restore.service';
 import { PlatformService } from '../../shared/global-shared.interface';
 import { StoreKey } from '../../shared/store/store.enum';
@@ -12,7 +12,6 @@ import { AppHelperService } from '../shared/app-helper/app-helper.service';
  * Panel that is displayed when the active sync is not found or has been removed by the service.
  * Allows the user to download their cached sync data as a backup file before it is cleared locally.
  */
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appSyncRemoved',
@@ -59,6 +58,7 @@ export class AppSyncRemovedComponent {
   /**
    * Removes removed sync from store and switches to the default view.
    */
+  @boundMethod
   close(event?: Event): void {
     event?.preventDefault();
     this.storeSvc.remove(StoreKey.RemovedSync);
@@ -69,6 +69,7 @@ export class AppSyncRemovedComponent {
    * Event handler for Download Backup button.
    * Updates button view model to display saving spinner and triggers backup.
    */
+  @boundMethod
   downloadBackup(): void {
     this.savingBackup = true;
     this.saveRemovedSyncAsBackupFile()

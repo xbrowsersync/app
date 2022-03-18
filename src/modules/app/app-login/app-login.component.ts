@@ -1,5 +1,5 @@
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { ApiServiceType } from '../../shared/api/api.enum';
 import { ApiSyncInfo } from '../../shared/api/api.interface';
 import { CryptoService } from '../../shared/crypto/crypto.service';
@@ -23,7 +23,6 @@ import { WorkingService } from '../../shared/working/working.service';
 import { RoutePath } from '../app.enum';
 import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appLogin',
@@ -89,6 +88,7 @@ export class AppLoginComponent implements OnInit {
     this.workingSvc = WorkingSvc;
   }
 
+  @boundMethod
   dismissOtherSyncsWarning(): void {
     // Hide disable other syncs warning panel and update cache setting
     this.otherSyncsWarningVisible = false;
@@ -98,6 +98,7 @@ export class AppLoginComponent implements OnInit {
     this.appHelperSvc.focusOnElement('.active-login-form input[name="txtPassword"]');
   }
 
+  @boundMethod
   executeSync(syncPassword: string, syncConfirmed = false, upgradeConfirmed = false): ng.IPromise<void> {
     this.setSyncConfirmationVisible(false);
     this.confirmSync = undefined;
@@ -209,6 +210,7 @@ export class AppLoginComponent implements OnInit {
       });
   }
 
+  @boundMethod
   setSyncConfirmationVisible(isVisible = true): void {
     this.syncConfirmationVisible = isVisible;
     if (isVisible) {
@@ -216,10 +218,12 @@ export class AppLoginComponent implements OnInit {
     }
   }
 
+  @boundMethod
   switchToHelpView(): void {
     this.appHelperSvc.switchView(RoutePath.Help);
   }
 
+  @boundMethod
   switchToSettingsView(): void {
     this.appHelperSvc.switchView(RoutePath.Settings);
   }

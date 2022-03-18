@@ -17,8 +17,7 @@
         <div class="buttons animate-fade-in" ng-hide="vm.backupCompletedMessage != null">
           <button class="btn btn-default" ng-disabled="vm.savingBackup" ng-class="{ 'working': vm.savingBackup }"
                   ng-click="vm.utilitySvc.handleEvent(vm.downloadBackup)" ng-disabled="vm.savingBackup">
-            <span class="spinner-border spinner-border-sm" ng-show="vm.savingBackup" role="status"
-                  aria-hidden="true"></span>
+            <span class="spinner-border spinner-border-sm" ng-show="vm.savingBackup" aria-hidden="true"></span>
             <span ng-show="vm.savingBackup">{{
             vm.platformSvc.getI18nString(vm.Strings.Button.Saving) }}
             </span>
@@ -174,7 +173,7 @@
                   {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Invalid) }}
                 </span>
               </div>
-              <span class="spinner-border spinner-border-sm" ng-show="vm.validatingRestoreData" role="status"
+              <span class="spinner-border spinner-border-sm" ng-show="vm.validatingRestoreData"
                     aria-hidden="true"></span>
             </div>
             <button class="btn btn-default btn-select-file focused" ng-if="!vm.useTextarea"

@@ -1,9 +1,7 @@
 import { Component } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { AlertService } from '../../shared/alert/alert.service';
 import { WebExtBackgroundService } from './webext-background.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'webextBackground',

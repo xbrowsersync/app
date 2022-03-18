@@ -1,10 +1,9 @@
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'permissionsSettings',
@@ -34,12 +33,14 @@ export class PermissionsSettingsComponent implements OnInit {
     });
   }
 
+  @boundMethod
   requestPermissions(): void {
     this.appHelperSvc.requestPermissions().then((granted) => {
       this.readWebsiteDataPermissionsGranted = granted;
     });
   }
 
+  @boundMethod
   revokePermissions(): void {
     this.appHelperSvc.removePermissions().then(() => {
       this.readWebsiteDataPermissionsGranted = false;

@@ -1,12 +1,11 @@
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { PlatformService } from '../../shared/global-shared.interface';
 import { StoreKey } from '../../shared/store/store.enum';
 import { StoreService } from '../../shared/store/store.service';
 import { UtilityService } from '../../shared/utility/utility.service';
 import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appPermissions',
@@ -45,10 +44,11 @@ export class AppPermissionsComponent implements OnInit {
     this.appHelperSvc.focusOnElement('.focused');
   }
 
+  @boundMethod
   requestPermissions(): ng.IPromise<void> {
     return this.$q
       .all([this.appHelperSvc.requestPermissions(), this.storeSvc.set(StoreKey.DisplayPermissions, false)])
       .then(() => {})
-      .finally(this.appHelperSvc.switchView);
+      .finally(() => this.appHelperSvc.switchView());
   }
 }

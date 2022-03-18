@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import * as detectBrowser from 'detect-browser';
 import browser, { Alarms, Downloads, Notifications } from 'webextension-polyfill';
 import { Alert } from '../../shared/alert/alert.interface';
@@ -35,7 +35,6 @@ import {
   SyncBookmarksMessage
 } from '../webext.interface';
 
-@autobind
 @Injectable('WebExtBackgroundService')
 export class WebExtBackgroundService {
   Strings = require('../../../../res/strings/en.json');
@@ -144,7 +143,7 @@ export class WebExtBackgroundService {
     }
 
     // Exit if sync not enabled
-    return this.syncSvc.executeSync().catch(this.checkForSyncUpdatesFailed);
+    return this.syncSvc.executeSync().catch((err) => this.checkForSyncUpdatesFailed(err));
   }
 
   checkForSyncUpdatesFailed(err: Error): void {
@@ -234,7 +233,7 @@ export class WebExtBackgroundService {
     // Before initialising, check if upgrade required
     this.platformSvc
       .getAppVersion()
-      .then(this.upgradeSvc.checkIfUpgradeRequired)
+      .then((appVersion) => this.upgradeSvc.checkIfUpgradeRequired(appVersion))
       .then((upgradeRequired) => upgradeRequired && this.upgradeExtension())
       .then(() =>
         this.$q
@@ -281,14 +280,14 @@ export class WebExtBackgroundService {
 
             // Check for new app version after a delay
             if (settings.checkForAppUpdates) {
-              this.$timeout(this.checkForNewVersion, 5e3);
+              this.$timeout(() => this.checkForNewVersion(), 5e3);
             }
 
             // Enable sync and check for updates after a delay to allow for initialising network connection
             if (!syncEnabled) {
               return;
             }
-            return this.syncSvc.enableSync().then(() => this.$timeout(this.checkForSyncUpdatesOnStartup, 5e3));
+            return this.syncSvc.enableSync().then(() => this.$timeout(() => this.checkForSyncUpdatesOnStartup(), 5e3));
           })
       );
   }
@@ -330,6 +329,7 @@ export class WebExtBackgroundService {
     );
   }
 
+  @boundMethod
   onAlarm(alarm: Alarms.Alarm): void {
     switch (alarm?.name) {
       case Globals.Alarms.AutoBackUp.Name:
@@ -345,9 +345,10 @@ export class WebExtBackgroundService {
   onInstall(event: InputEvent): void {
     // Check if fresh install needed
     const details = angular.element(event.currentTarget as Element).data('details');
-    (details?.reason === 'install' ? this.installExtension() : this.$q.resolve()).then(this.init);
+    (details?.reason === 'install' ? this.installExtension() : this.$q.resolve()).then(() => this.init());
   }
 
+  @boundMethod
   onNotificationClicked(notificationId: string): void {
     // Execute the event handler if one exists and then remove
     const notificationClickHandler = this.notificationClickHandlers.find((x) => {
@@ -359,6 +360,7 @@ export class WebExtBackgroundService {
     }
   }
 
+  @boundMethod
   onNotificationClosed(notificationId: string): void {
     // Remove the handler for this notification if one exists
     const index = this.notificationClickHandlers.findIndex((x) => {
@@ -369,6 +371,7 @@ export class WebExtBackgroundService {
     }
   }
 
+  @boundMethod
   onMessage(message: Message): Promise<any> {
     // Use native Promise not $q otherwise browser.runtime.sendMessage will return immediately in Firefox
     return new Promise((resolve, reject) => {
@@ -557,7 +560,7 @@ export class WebExtBackgroundService {
     // Run upgrade process and display notification to user
     return this.platformSvc
       .getAppVersion()
-      .then(this.upgradeSvc.upgrade)
+      .then((appVersion) => this.upgradeSvc.upgrade(appVersion))
       .then(() => {
         return this.platformSvc.getAppVersionName().then((appVersion) => {
           const alert: Alert = {

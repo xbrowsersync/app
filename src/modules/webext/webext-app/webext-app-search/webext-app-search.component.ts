@@ -1,9 +1,8 @@
 import { Component } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { AppSearchComponent } from '../../../app/app-search/app-search.component';
 import { WebExtAppHelperService } from '../shared/webext-app-helper/webext-app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appSearch',
@@ -20,12 +19,13 @@ export class WebExtAppSearchComponent extends AppSearchComponent {
         .then((currentUrlBookmarked) => {
           this.currentUrlBookmarked = currentUrlBookmarked;
         })
-        .then(super.ngOnInit)
+        .then(() => super.ngOnInit())
         // Focus on search box
         .then(() => this.appHelperSvc.focusOnElement('input[name=txtSearch]'))
     );
   }
 
+  @boundMethod
   toggleBookmarkTreeView(): ng.IPromise<void> {
     return (
       super

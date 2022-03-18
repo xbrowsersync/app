@@ -1,6 +1,5 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { Bookmarks as NativeBookmarks } from 'webextension-polyfill';
 import { BookmarkSearchResult } from '../../../app/app-search/app-search.interface';
 import { CryptoService } from '../../crypto/crypto.service';
@@ -13,7 +12,6 @@ import { UtilityService } from '../../utility/utility.service';
 import { BookmarkContainer, BookmarkType } from '../bookmark.enum';
 import { Bookmark, BookmarkMetadata, BookmarkSearchQuery } from '../bookmark.interface';
 
-@autobind
 @Injectable('BookmarkHelperService')
 export class BookmarkHelperService {
   Strings = require('../../../../../res/strings/en.json');

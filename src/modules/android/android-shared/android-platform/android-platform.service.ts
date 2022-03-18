@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { AppEventType } from '../../../app/app.enum';
 import { AlertService } from '../../../shared/alert/alert.service';
 import { BookmarkChangeType } from '../../../shared/bookmark/bookmark.enum';
@@ -32,7 +32,6 @@ import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingContext } from '../../../shared/working/working.enum';
 import { WorkingService } from '../../../shared/working/working.service';
 
-@autobind
 @Injectable('PlatformService')
 export class AndroidPlatformService implements PlatformService {
   Strings = require('../../../../../res/strings/en.json');
@@ -201,7 +200,7 @@ export class AndroidPlatformService implements PlatformService {
 
       this.executeSync(true)
         // Disable background sync if sync successfull
-        .then(this.disableBackgroundSync)
+        .then(() => this.disableBackgroundSync())
         .catch((err) => {
           // Swallow sync uncommitted and network connection errors to not flood logs with duplicate error messages
           if (err instanceof SyncUncommittedError || this.networkSvc.isNetworkConnectionError(err)) {
@@ -265,6 +264,7 @@ export class AndroidPlatformService implements PlatformService {
     return this.$q.resolve(this.sharedBookmark?.url);
   }
 
+  @boundMethod
   getI18nString(i18nObj: I18nObject): string {
     const i18nStr = this.i18nObjects[i18nObj.key];
     if (angular.isUndefined(i18nStr ?? undefined)) {
@@ -398,6 +398,7 @@ export class AndroidPlatformService implements PlatformService {
     return this.$q.resolve();
   }
 
+  @boundMethod
   openUrl(url: string): void {
     window.open(url, '_system', '');
   }
@@ -471,7 +472,7 @@ export class AndroidPlatformService implements PlatformService {
             throw err;
           });
       })
-      .finally(this.workingSvc.hide);
+      .finally(() => this.workingSvc.hide());
   }
 
   refreshNativeInterface(): ng.IPromise<void> {

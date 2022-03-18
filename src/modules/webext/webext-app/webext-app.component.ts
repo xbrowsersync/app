@@ -1,13 +1,12 @@
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { AppMainComponent } from '../../app/app-main/app-main.component';
 import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync } from '../../shared/sync/sync.interface';
 import { WorkingContext } from '../../shared/working/working.enum';
 import { WebExtPlatformService } from '../shared/webext-platform/webext-platform.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'app',
@@ -85,6 +84,7 @@ export class WebExtAppComponent extends AppMainComponent implements OnInit {
     return this.utilitySvc.asyncWhile<Sync>({} as any, condition, action).then(() => {});
   }
 
+  @boundMethod
   workingCancelAction(): ng.IPromise<void> {
     this.logSvc.logInfo('Cancelling sync');
     return this.platformSvc

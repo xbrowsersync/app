@@ -1,9 +1,7 @@
 <div class="animate overlay"
      ng-class="{ 'darker-overlay': vm.currentContext !== vm.WorkingContext.WaitingForSyncsToFinish, 'fullsize': vm.currentContext === vm.WorkingContext.WaitingForSyncsToFinish }"
      ng-show="vm.show">
-  <div class="spinner-border" role="status">
-    <span class="sr-only">{{ vm.message }}</span>
-  </div>
+  <div class="spinner-border" aria-hidden="true"></div>
   <h3>{{ vm.message }}</h3>
   <div class="buttons" ng-if="vm.enableCancel">
     <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.cancelSync)">

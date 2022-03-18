@@ -1,5 +1,5 @@
 import angular from 'angular';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import browser, { Bookmarks as NativeBookmarks } from 'webextension-polyfill';
 import { BookmarkChangeType, BookmarkContainer, BookmarkType } from '../../../shared/bookmark/bookmark.enum';
 import {
@@ -39,7 +39,6 @@ import { UtilityService } from '../../../shared/utility/utility.service';
 import { BookmarkIdMapping } from '../bookmark-id-mapper/bookmark-id-mapper.interface';
 import { BookmarkIdMapperService } from '../bookmark-id-mapper/bookmark-id-mapper.service';
 
-@autobind
 export abstract class WebExtBookmarkService implements BookmarkService {
   $injector: ng.auto.IInjectorService;
   $q: ng.IQService;
@@ -55,7 +54,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
 
   nativeBookmarkEventsQueue: any[] = [];
   processNativeBookmarkEventsTimeout: ng.IPromise<void>;
-  unsupportedContainers = [];
+  unsupportedContainers: string[] = [];
 
   static $inject = [
     '$injector',
@@ -478,21 +477,25 @@ export abstract class WebExtBookmarkService implements BookmarkService {
     });
   }
 
+  @boundMethod
   onNativeBookmarkChanged(...args: any[]): void {
     this.logSvc.logInfo('onChanged event detected');
     this.queueNativeBookmarkEvent(BookmarkChangeType.Modify, ...args);
   }
 
+  @boundMethod
   onNativeBookmarkCreated(...args: any[]): void {
     this.logSvc.logInfo('onCreated event detected');
     this.queueNativeBookmarkEvent(BookmarkChangeType.Add, ...args);
   }
 
+  @boundMethod
   onNativeBookmarkMoved(...args: any[]): void {
     this.logSvc.logInfo('onMoved event detected');
     this.queueNativeBookmarkEvent(BookmarkChangeType.Move, ...args);
   }
 
+  @boundMethod
   onNativeBookmarkRemoved(...args: any[]): void {
     this.logSvc.logInfo('onRemoved event detected');
     this.queueNativeBookmarkEvent(BookmarkChangeType.Remove, ...args);
@@ -906,7 +909,9 @@ export abstract class WebExtBookmarkService implements BookmarkService {
       this.$timeout(() => {
         this.syncSvc.executeSync().then(() => {
           // Move native unsupported containers into the correct order
-          return this.disableEventListeners().then(this.reorderUnsupportedContainers).then(this.enableEventListeners);
+          return this.disableEventListeners()
+            .then(() => this.reorderUnsupportedContainers())
+            .then(() => this.enableEventListeners());
         });
       }, 100);
     });
@@ -949,7 +954,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
       changeType,
       eventArgs
     });
-    this.processNativeBookmarkEventsTimeout = this.$timeout(this.processNativeBookmarkEventsQueue, 200);
+    this.processNativeBookmarkEventsTimeout = this.$timeout(() => this.processNativeBookmarkEventsQueue(), 200);
   }
 
   removeNativeBookmarks(id: string): ng.IPromise<void> {
@@ -961,22 +966,24 @@ export abstract class WebExtBookmarkService implements BookmarkService {
 
   reorderUnsupportedContainers(): ng.IPromise<void> {
     // Get unsupported containers
-    return this.$q.all(this.unsupportedContainers.map(this.getNativeBookmarkByTitle)).then((results) => {
-      return this.$q
-        .all(
-          results
-            // Remove falsy results
-            .filter((x) => x)
-            // Reorder each native bookmark to top of parent
-            .map((container, index) => {
-              return browser.bookmarks.move(container.id, {
-                index,
-                parentId: container.parentId
-              });
-            })
-        )
-        .then(() => {});
-    });
+    return this.$q
+      .all(this.unsupportedContainers.map((container) => this.getNativeBookmarkByTitle(container)))
+      .then((results) => {
+        return this.$q
+          .all(
+            results
+              // Remove falsy results
+              .filter((x) => x)
+              // Reorder each native bookmark to top of parent
+              .map((container, index) => {
+                return browser.bookmarks.move(container.id, {
+                  index,
+                  parentId: container.parentId
+                });
+              })
+          )
+          .then(() => {});
+      });
   }
 
   syncChange(changeInfo: BookmarkChange): ng.IPromise<any> {

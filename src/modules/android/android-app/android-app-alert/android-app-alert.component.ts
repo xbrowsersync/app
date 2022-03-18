@@ -1,6 +1,5 @@
 import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { AlertType } from '../../../shared/alert/alert.enum';
 import { AlertService } from '../../../shared/alert/alert.service';
 import { AndroidError } from '../../../shared/errors/errors';
@@ -9,7 +8,6 @@ import Globals from '../../../shared/global-shared.constants';
 import { AndroidPlatformService } from '../../android-shared/android-platform/android-platform.service';
 import { AndroidAlert } from '../android-app.interface';
 
-@autobind
 @Component({
   selector: 'appAlert'
 })

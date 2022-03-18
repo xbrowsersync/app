@@ -1,5 +1,5 @@
 import { Component, OnInit, Output } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import * as countriesList from 'countries-list';
 import { ApiServiceStatus, ApiServiceType } from '../../../shared/api/api.enum';
 import {
@@ -20,7 +20,6 @@ import { WorkingService } from '../../../shared/working/working.service';
 import { RoutePath } from '../../app.enum';
 import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'apiXbrowsersyncLoginForm',
@@ -101,21 +100,25 @@ export class XbrowsersyncLoginComponent implements OnInit {
     this.workingSvc = WorkingSvc;
   }
 
+  @boundMethod
   cancelConfirmPassword(): void {
     this.syncPasswordConfirmationVisible = false;
     this.syncPasswordConfirmation = null;
   }
 
+  @boundMethod
   cancelUpdateService(): void {
     this.updateServiceConfirmationVisible = false;
     this.updateServicePanelVisible = false;
   }
 
+  @boundMethod
   confirmPassword(): void {
     this.syncPasswordConfirmationVisible = true;
     this.appHelperSvc.focusOnElement('input[name="txtPasswordConfirmation"]');
   }
 
+  @boundMethod
   confirmUpdateService(): void {
     // Update view model and remove stored creds
     const url = this.newServiceInfo.url.replace(/\/$/, '');
@@ -162,6 +165,7 @@ export class XbrowsersyncLoginComponent implements OnInit {
     });
   }
 
+  @boundMethod
   displayExistingSyncPanel(event?: Event): void {
     event?.preventDefault();
     this.newSync = false;
@@ -169,6 +173,7 @@ export class XbrowsersyncLoginComponent implements OnInit {
     this.appHelperSvc.focusOnElement('input[name="txtId"]');
   }
 
+  @boundMethod
   displayNewSyncPanel(event?: Event): void {
     event?.preventDefault();
     this.newSync = true;
@@ -181,6 +186,7 @@ export class XbrowsersyncLoginComponent implements OnInit {
     this.appHelperSvc.focusOnElement('.login-form-new input[name="txtPassword"]');
   }
 
+  @boundMethod
   enableManualEntry(event?: Event): void {
     event?.preventDefault();
     this.getSyncIdPanelVisible = false;
@@ -272,6 +278,7 @@ export class XbrowsersyncLoginComponent implements OnInit {
       });
   }
 
+  @boundMethod
   scanId(event?: Event) {
     event?.preventDefault();
     this.appHelperSvc.switchView(RoutePath.Scan);
@@ -302,6 +309,7 @@ export class XbrowsersyncLoginComponent implements OnInit {
     }
   }
 
+  @boundMethod
   submitForm(): void {
     this.$timeout(() => {
       // Handle enter key press
@@ -319,6 +327,7 @@ export class XbrowsersyncLoginComponent implements OnInit {
     });
   }
 
+  @boundMethod
   switchService(): void {
     // Reset view
     this.newServiceInfo = {
@@ -332,6 +341,7 @@ export class XbrowsersyncLoginComponent implements OnInit {
     this.validateServiceUrl().finally(() => this.appHelperSvc.focusOnElement('.update-service-panel input'));
   }
 
+  @boundMethod
   sync(): ng.IPromise<void> {
     // Add sync info to store and execute sync
     const syncInfo: ApiXbrowsersyncSyncInfo = {
@@ -342,11 +352,13 @@ export class XbrowsersyncLoginComponent implements OnInit {
     return this.storeSvc.set(StoreKey.SyncInfo, syncInfo).then(() => this.executeSync()(this.syncPassword));
   }
 
+  @boundMethod
   toggleShowPassword(): void {
     // Toggle show password
     this.showPassword = !this.showPassword;
   }
 
+  @boundMethod
   updateServiceUrl(): void {
     // Check for protocol
     if (this.newServiceInfo.url?.trim() && !new RegExp(Globals.URL.ProtocolRegex).test(this.newServiceInfo.url ?? '')) {

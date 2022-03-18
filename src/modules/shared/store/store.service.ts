@@ -1,9 +1,7 @@
 import angular from 'angular';
-import autobind from 'autobind-decorator';
 import { StoreKey } from './store.enum';
 import { StoreContent } from './store.interface';
 
-@autobind
 export abstract class StoreService {
   $q: ng.IQService;
   dbName = 'xbs-store';

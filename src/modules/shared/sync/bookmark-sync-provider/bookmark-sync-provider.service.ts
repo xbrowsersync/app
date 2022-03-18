@@ -1,6 +1,5 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { BookmarkChangeType, BookmarkContainer } from '../../bookmark/bookmark.enum';
 import {
   AddBookmarkChangeData,
@@ -25,7 +24,6 @@ import { UtilityService } from '../../utility/utility.service';
 import { SyncType } from '../sync.enum';
 import { ProcessSyncResult, Sync, SyncProvider } from '../sync.interface';
 
-@autobind
 @Injectable('BookmarkSyncProviderService')
 export class BookmarkSyncProviderService implements SyncProvider {
   $q: ng.IQService;
@@ -226,7 +224,7 @@ export class BookmarkSyncProviderService implements SyncProvider {
                             .then(() => updateResults.bookmarks);
                         });
                       })
-                      .finally(this.platformSvc.enableNativeEventListeners)
+                      .finally(() => this.platformSvc.enableNativeEventListeners())
                   )
               );
             })
@@ -294,7 +292,7 @@ export class BookmarkSyncProviderService implements SyncProvider {
                   .disableNativeEventListeners()
                   .then(() => this.populateNativeBookmarks(bookmarks))
                   .then(() => this.bookmarkSvc.buildIdMappings(bookmarks))
-                  .finally(this.platformSvc.enableNativeEventListeners);
+                  .finally(() => this.platformSvc.enableNativeEventListeners());
               })
               // Update cached last updated date
               .then(() => this.storeSvc.set(StoreKey.LastUpdated, lastUpdated))

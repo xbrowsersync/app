@@ -1,13 +1,12 @@
 import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { AlertType } from '../../../shared/alert/alert.enum';
 import { Alert } from '../../../shared/alert/alert.interface';
 import { AlertService } from '../../../shared/alert/alert.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { UtilityService } from '../../../shared/utility/utility.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appAlert',
@@ -52,6 +51,7 @@ export class WebExtAppAlertComponent {
     );
   }
 
+  @boundMethod
   close(): void {
     this.$timeout(() => {
       this.showAlert = false;

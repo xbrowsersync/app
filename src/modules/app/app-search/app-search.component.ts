@@ -1,7 +1,7 @@
 import './app-search.component.scss';
 import angular, { IScope } from 'angular';
 import { OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { AndroidAppHelperService } from '../../android/android-app/shared/android-app-helper/android-app-helper.service';
 import { AlertService } from '../../shared/alert/alert.service';
 import { Bookmark, BookmarkSearchQuery } from '../../shared/bookmark/bookmark.interface';
@@ -16,7 +16,6 @@ import { KeyCode, RoutePath } from '../app.enum';
 import { AppHelperService } from '../shared/app-helper/app-helper.service';
 import { BookmarkSearchResult, BookmarkTreeItem } from './app-search.interface';
 
-@autobind
 export abstract class AppSearchComponent implements OnInit {
   Strings = require('../../../../res/strings/en.json');
 
@@ -91,6 +90,7 @@ export abstract class AppSearchComponent implements OnInit {
     this.enableQueryWatch();
   }
 
+  @boundMethod
   addBookmark(): void {
     this.appHelperSvc.switchView(RoutePath.Bookmark);
   }
@@ -120,6 +120,7 @@ export abstract class AppSearchComponent implements OnInit {
     return angular.equals(b1Props, b2Props);
   }
 
+  @boundMethod
   clearSearch(): void {
     this.resetSearch();
     this.displayFolderView = false;
@@ -148,6 +149,7 @@ export abstract class AppSearchComponent implements OnInit {
     }, Globals.InterfaceReadyTimeout);
   }
 
+  @boundMethod
   editBookmark(event: Event, bookmarkToUpdate: Bookmark): void {
     // Stop event propogation
     this.utilitySvc.stopEventPropagation(event);
@@ -258,9 +260,10 @@ export abstract class AppSearchComponent implements OnInit {
   }
 
   searchBookmarks(): ng.IPromise<void> {
-    return this.getSearchResults().then(this.displaySearchResults);
+    return this.getSearchResults().then((results) => this.displaySearchResults(results));
   }
 
+  @boundMethod
   searchBoxKeyDown(event: KeyboardEvent): void {
     switch (event.keyCode) {
       case KeyCode.Enter:
@@ -268,7 +271,7 @@ export abstract class AppSearchComponent implements OnInit {
 
         // Get search results
         this.displayFolderView = false;
-        this.$timeout(this.searchBookmarks, Globals.Debounce);
+        this.$timeout(() => this.searchBookmarks(), Globals.Debounce);
 
         // Return focus to search box
         this.appHelperSvc.focusOnElement('input[name=txtSearch]');
@@ -304,6 +307,7 @@ export abstract class AppSearchComponent implements OnInit {
     }
   }
 
+  @boundMethod
   searchResultsKeyDown(event: KeyboardEvent): void {
     let currentIndex: number;
     let newIndex: number;
@@ -430,6 +434,7 @@ export abstract class AppSearchComponent implements OnInit {
     });
   }
 
+  @boundMethod
   selectBookmark(event: Event, bookmarkId: number): void {
     this.utilitySvc.stopEventPropagation(event);
     if (!this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
@@ -440,6 +445,7 @@ export abstract class AppSearchComponent implements OnInit {
     this.selectedBookmarkId = bookmarkId;
   }
 
+  @boundMethod
   selectLookahead(): void {
     this.query = `${this.query}${this.lookahead}`;
     this.lookahead = null;
@@ -447,6 +453,7 @@ export abstract class AppSearchComponent implements OnInit {
     this.appHelperSvc.focusOnElement('input[name=txtSearch]');
   }
 
+  @boundMethod
   shareBookmark(event: Event, bookmarkToShare: Bookmark) {
     // Stop event propogation
     this.utilitySvc.stopEventPropagation(event);
@@ -455,14 +462,17 @@ export abstract class AppSearchComponent implements OnInit {
     (this.appHelperSvc as AndroidAppHelperService).shareBookmark(bookmarkToShare);
   }
 
+  @boundMethod
   switchToBookmarkView(): void {
     this.appHelperSvc.switchView(RoutePath.Bookmark);
   }
 
+  @boundMethod
   switchToSettingsView(): void {
     this.appHelperSvc.switchView(RoutePath.Settings);
   }
 
+  @boundMethod
   toggleBookmarkTreeView(): ng.IPromise<void> {
     // Clear current query and switch view
     this.resetSearch();

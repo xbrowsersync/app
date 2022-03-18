@@ -1,5 +1,5 @@
 import angular from 'angular';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import browser, { Tabs } from 'webextension-polyfill';
 import { AlertService } from '../../../shared/alert/alert.service';
 import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
@@ -23,7 +23,6 @@ import { DownloadFileMessage, Message, SyncBookmarksMessage } from '../../webext
 import { WebExtBackgroundService } from '../../webext-background/webext-background.service';
 import { BookmarkIdMapperService } from '../bookmark-id-mapper/bookmark-id-mapper.service';
 
-@autobind
 export abstract class WebExtPlatformService implements PlatformService {
   Strings = require('../../../../../res/strings/en.json');
 
@@ -149,6 +148,7 @@ export abstract class WebExtPlatformService implements PlatformService {
     });
   }
 
+  @boundMethod
   getI18nString(i18nObj: I18nObject): string {
     let i18nStr: string;
     let platformName = this.platformName.toString();
@@ -221,6 +221,7 @@ export abstract class WebExtPlatformService implements PlatformService {
     });
   }
 
+  @boundMethod
   openUrl(url: string): void {
     const createProperties: Tabs.CreateCreatePropertiesType = {};
 
@@ -248,7 +249,7 @@ export abstract class WebExtPlatformService implements PlatformService {
           ? browser.tabs.update(activeTab.id, { url }).then(window.close)
           : openInNewTab(url);
       })
-      .catch(openInNewTab);
+      .catch(() => openInNewTab());
   }
 
   queueLocalResync(): ng.IPromise<void> {
@@ -263,7 +264,7 @@ export abstract class WebExtPlatformService implements PlatformService {
       sync,
       runSync
     };
-    return this.sendMessage(message).finally(this.workingSvc.hide);
+    return this.sendMessage(message).finally(() => this.workingSvc.hide());
   }
 
   refreshNativeInterface(syncEnabled?: boolean, syncType?: SyncType): ng.IPromise<void> {

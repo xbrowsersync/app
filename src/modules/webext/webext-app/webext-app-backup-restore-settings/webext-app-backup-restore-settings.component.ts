@@ -1,5 +1,5 @@
 import angular from 'angular';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { BackupRestoreSettingsComponent } from '../../../app/app-settings/backup-restore-settings/backup-restore-settings.component';
 import { AutoBackUpSchedule } from '../../../shared/backup-restore/backup-restore.interface';
 import { MessageCommand } from '../../../shared/global-shared.enum';
@@ -55,13 +55,13 @@ export abstract class WebExtAppBackupRestoreSettingsComponent extends BackupRest
     this.displayAutoBackUpForm = false;
   }
 
-  @autobind
+  @boundMethod
   confirmAutoBackUpForm(): void {
     this.displayAutoBackUpConfirmation = false;
     this.displayAutoBackUpForm = false;
   }
 
-  @autobind
+  @boundMethod
   hideAutoBackUpPanel(): void {
     this.displayAutoBackUpConfirmation = false;
     if (this.displayAutoBackUpForm) {
@@ -91,7 +91,7 @@ export abstract class WebExtAppBackupRestoreSettingsComponent extends BackupRest
     this.autoBackUpEveryUnit = 'day';
   }
 
-  @autobind
+  @boundMethod
   submitAutoBackUpForm(): void {
     // Save the localised schedule display strings to the store
     this.autoBackUpSchedule = {
@@ -117,7 +117,7 @@ export abstract class WebExtAppBackupRestoreSettingsComponent extends BackupRest
       .then(() => this.autoBackUpFormComplete());
   }
 
-  @autobind
+  @boundMethod
   toggleAutoBackUp(): void {
     this.autoBackUpEnabled = !this.autoBackUpEnabled;
     if (this.autoBackUpEnabled) {

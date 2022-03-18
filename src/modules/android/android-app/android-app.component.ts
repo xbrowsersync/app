@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { AppEventType, RoutePath } from '../../app/app.enum';
 import { AppMainComponent } from '../../app/app-main/app-main.component';
 import { AppHelperService } from '../../app/shared/app-helper/app-helper.service';
@@ -23,7 +23,6 @@ import { AndroidPlatformService } from '../android-shared/android-platform/andro
 import { AndroidAlert } from './android-app.interface';
 import { AndroidAppHelperService } from './shared/android-app-helper/android-app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'app',
@@ -218,6 +217,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
       });
   }
 
+  @boundMethod
   handleBackButton(event: Event): void {
     if (
       this.utilitySvc.checkCurrentRoute(RoutePath.Bookmark) ||
@@ -244,7 +244,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     }
   }
 
-  handleDeviceReady(success: () => any, failure: () => any): ng.IPromise<any> {
+  handleDeviceReady(success: () => any, failure: (err: any) => any): ng.IPromise<any> {
     // Prime cache for faster startup
     this.$q.all([this.bookmarkHelperSvc.getCachedBookmarks(), this.settingsSvc.all()]).catch(() => {});
 
@@ -268,11 +268,10 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
           // Check for upgrade or do fresh install
           return this.checkForInstallOrUpgrade();
         })
-
         // Run startup process after install/upgrade
-        .then(this.handleStartup)
-        .then(success)
-        .catch(failure)
+        .then(() => this.handleStartup())
+        .then(() => success())
+        .catch((err) => failure(err))
     );
   }
 
@@ -286,6 +285,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     );
   }
 
+  @boundMethod
   handleKeyboardDidShow(event: any): void {
     document.body.style.height = `calc(100% - ${event.keyboardHeight}px)`;
     setTimeout(() => {
@@ -293,6 +293,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     }, 100);
   }
 
+  @boundMethod
   handleKeyboardWillHide(): void {
     document.body.style.removeProperty('height');
   }
@@ -380,6 +381,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
       });
   }
 
+  @boundMethod
   handleTouchStart(event: Event): void {
     // Blur focus (and hide keyboard) when pressing out of text fields
     if (!this.utilitySvc.isTextInput(event.target as Element) && this.utilitySvc.isTextInput(document.activeElement)) {
@@ -417,6 +419,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     );
   }
 
+  @boundMethod
   workingCancelAction(): ng.IPromise<void> {
     this.utilitySvc.broadcastEvent(AppEventType.WorkingCancelAction);
     return this.$q.resolve();

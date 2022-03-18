@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { AppEventType } from '../../../app/app.enum';
 import { AppBookmarkComponent } from '../../../app/app-bookmark/app-bookmark.component';
 import { AppHelperService } from '../../../app/shared/app-helper/app-helper.service';
@@ -21,7 +21,6 @@ import { AndroidPlatformService } from '../../android-shared/android-platform/an
 import { AndroidAlert } from '../android-app.interface';
 import { AndroidAppHelperService } from '../shared/android-app-helper/android-app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appBookmark',
@@ -93,6 +92,7 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
     });
   }
 
+  @boundMethod
   createBookmark(): ng.IPromise<void> {
     return super.createBookmark().then((result) => {
       this.$timeout(() => {
@@ -103,6 +103,7 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
     });
   }
 
+  @boundMethod
   deleteBookmark(): ng.IPromise<void> {
     // Get current cached bookmarks for undo
     return this.bookmarkHelperSvc.getCachedBookmarks().then((cachedBookmarks) => {
@@ -162,6 +163,7 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
       .finally(() => this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults));
   }
 
+  @boundMethod
   updateBookmark(): ng.IPromise<void> {
     // Get current cached bookmarks for undo
     return this.bookmarkHelperSvc.getCachedBookmarks().then((cachedBookmarks) => {

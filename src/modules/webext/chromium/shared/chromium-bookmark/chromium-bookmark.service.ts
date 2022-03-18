@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import browser, { Bookmarks as NativeBookmarks } from 'webextension-polyfill';
 import { BookmarkChangeType, BookmarkContainer, BookmarkType } from '../../../../shared/bookmark/bookmark.enum';
 import {
@@ -21,12 +21,11 @@ import Globals from '../../../../shared/global-shared.constants';
 import { WebpageMetadata } from '../../../../shared/global-shared.interface';
 import { WebExtBookmarkService } from '../../../shared/webext-bookmark/webext-bookmark.service';
 
-@autobind
 @Injectable('BookmarkService')
 export class ChromiumBookmarkService extends WebExtBookmarkService {
   otherBookmarksNodeId = '2';
   toolbarBookmarksNodeId = '1';
-  unsupportedContainers = [BookmarkContainer.Menu];
+  unsupportedContainers: string[] = [BookmarkContainer.Menu];
 
   clearNativeBookmarks(): ng.IPromise<void> {
     // Get native container ids
@@ -124,7 +123,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
               return browser.bookmarks.create(separator);
             });
           })
-          .finally(this.enableEventListeners);
+          .finally(() => this.enableEventListeners());
       })
       .then((nativeSeparator: NativeBookmarks.BookmarkTreeNode) => {
         // Set type to separator to identify type when syncing
@@ -492,6 +491,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
     );
   }
 
+  @boundMethod
   onNativeBookmarkChildrenReordered(...args: any[]): void {
     this.logSvc.logInfo('onChildrenReordered event detected');
     this.queueNativeBookmarkEvent(BookmarkChangeType.ChildrenReordered, ...args);

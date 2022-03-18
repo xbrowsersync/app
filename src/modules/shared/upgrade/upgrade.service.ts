@@ -1,6 +1,5 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { Bookmark } from '../bookmark/bookmark.interface';
 import { SyncVersionNotSupportedError, UpgradeFailedError } from '../errors/errors';
 import { PlatformService } from '../global-shared.interface';
@@ -11,7 +10,6 @@ import { UtilityService } from '../utility/utility.service';
 import { UpgradeProvider } from './upgrade.interface';
 import { V160UpgradeProviderService } from './v1.6.0-upgrade-provider/v1.6.0-upgrade-provider.service';
 
-@autobind
 @Injectable('UpgradeService')
 export class UpgradeService {
   $q: ng.IQService;

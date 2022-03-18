@@ -1,9 +1,7 @@
 import { IHttpInterceptor } from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import Globals from '../../global-shared.constants';
 
-@autobind
 @Injectable('ApiRequestInterceptorFactory')
 export class ApiRequestInterceptorFactory implements IHttpInterceptor {
   $q: ng.IQService;

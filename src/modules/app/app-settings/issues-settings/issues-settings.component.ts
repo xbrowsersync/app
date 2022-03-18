@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { LogLevel } from '../../../shared/log/log.enum';
 import { LogService } from '../../../shared/log/log.service';
@@ -8,7 +8,6 @@ import { UtilityService } from '../../../shared/utility/utility.service';
 import { RoutePath } from '../../app.enum';
 import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'issuesSettings',
@@ -40,6 +39,7 @@ export class IssuesSettingsComponent implements OnInit {
     this.utilitySvc = UtilitySvc;
   }
 
+  @boundMethod
   clearLog(): void {
     // Clear trace log and update view model
     this.logSvc.clear().then(() => {
@@ -47,6 +47,7 @@ export class IssuesSettingsComponent implements OnInit {
     });
   }
 
+  @boundMethod
   downloadLog(): void {
     this.savingLog = true;
     this.saveLogFile()
@@ -106,6 +107,7 @@ export class IssuesSettingsComponent implements OnInit {
     });
   }
 
+  @boundMethod
   switchToHelpView(): void {
     this.appHelperSvc.switchView(RoutePath.Help);
   }

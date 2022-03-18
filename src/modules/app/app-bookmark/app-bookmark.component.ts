@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { AndroidAppHelperService } from '../../android/android-app/shared/android-app-helper/android-app-helper.service';
 import { AlertType } from '../../shared/alert/alert.enum';
 import { AlertService } from '../../shared/alert/alert.service';
@@ -24,7 +24,6 @@ import { KeyCode, RoutePath } from '../app.enum';
 import { AppHelperService } from '../shared/app-helper/app-helper.service';
 import { BookmarkRouteParams } from './app-bookmark.interface';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appBookmark',
@@ -111,16 +110,19 @@ export class AppBookmarkComponent implements OnInit {
     return this.appHelperSvc.syncBookmarksSuccess();
   }
 
+  @boundMethod
   clearExistingTags(): void {
     this.bookmarkFormData.tags = [];
     this.bookmarkForm.$setDirty();
     this.appHelperSvc.focusOnElement('input[name="bookmarkTags"]');
   }
 
+  @boundMethod
   close(): void {
     this.appHelperSvc.switchView();
   }
 
+  @boundMethod
   createBookmark(): ng.IPromise<void> {
     // Add tags if tag text present
     if (this.tagText?.length) {
@@ -174,6 +176,7 @@ export class AppBookmarkComponent implements OnInit {
     });
   }
 
+  @boundMethod
   deleteBookmark(): ng.IPromise<void> {
     // Display loading overlay
     this.workingSvc.show();
@@ -186,9 +189,10 @@ export class AppBookmarkComponent implements OnInit {
       changeData: data,
       type: BookmarkChangeType.Remove
     };
-    return this.queueSync(changeInfo).then(this.changesSynced);
+    return this.queueSync(changeInfo).then(() => this.changesSynced());
   }
 
+  @boundMethod
   descriptionChanged(): void {
     // Limit the bookmark description to the max length
     this.$timeout(() => {
@@ -200,7 +204,7 @@ export class AppBookmarkComponent implements OnInit {
   }
 
   getMetadataForCurrentPage(): ng.IPromise<Boolean | BookmarkMetadata> {
-    return this.platformSvc.getPageMetadata(true).then(this.getPageMetadataAsBookmarkMetadata);
+    return this.platformSvc.getPageMetadata(true).then((metadata) => this.getPageMetadataAsBookmarkMetadata(metadata));
   }
 
   getMetadataForUrl(url: string): ng.IPromise<BookmarkMetadata> {
@@ -210,7 +214,7 @@ export class AppBookmarkComponent implements OnInit {
       }
       return this.platformSvc
         .getPageMetadata(true, url)
-        .then(this.getPageMetadataAsBookmarkMetadata)
+        .then((metadata) => this.getPageMetadataAsBookmarkMetadata(metadata))
         .then(resolve)
         .catch(reject);
     });
@@ -273,7 +277,7 @@ export class AppBookmarkComponent implements OnInit {
               }
               return true;
             })
-            .catch(this.$exceptionHandler)
+            .catch((err) => this.$exceptionHandler(err))
             .finally(() => {
               this.addButtonDisabledUntilEditForm = false;
             });
@@ -296,6 +300,7 @@ export class AppBookmarkComponent implements OnInit {
     );
   }
 
+  @boundMethod
   populateFromUrlMetadata(): void {
     this.getMetadataForUrl(this.bookmarkFormData.url).then((metadata) => {
       this.displayUpdatePropertiesButton = false;
@@ -330,18 +335,21 @@ export class AppBookmarkComponent implements OnInit {
       );
   }
 
+  @boundMethod
   removeTag(tag: string): void {
     this.bookmarkFormData.tags = this.bookmarkFormData.tags.filter((x) => x !== tag);
     this.bookmarkForm.$setDirty();
     this.appHelperSvc.focusOnElement('#bookmarkForm input[name="bookmarkTags"]');
   }
 
+  @boundMethod
   selectTagsLookahead(): void {
     this.tagText += this.tagLookahead.replace(/&nbsp;/g, ' ');
     this.createTags();
     this.appHelperSvc.focusOnElement('input[name="bookmarkTags"]');
   }
 
+  @boundMethod
   shareBookmark(event: Event, bookmarkToShare: Bookmark) {
     // Stop event propogation
     this.utilitySvc.stopEventPropagation(event);
@@ -389,12 +397,13 @@ export class AppBookmarkComponent implements OnInit {
     });
   }
 
+  @boundMethod
   tagsTextKeyDown(event: KeyboardEvent): void {
     switch (event.keyCode) {
       case KeyCode.Enter:
         // Add new tags
         event.preventDefault();
-        this.$timeout(this.createTags, Globals.Debounce);
+        this.$timeout(() => this.createTags(), Globals.Debounce);
         break;
       case KeyCode.Tab:
       case KeyCode.ArrowRight:
@@ -413,6 +422,7 @@ export class AppBookmarkComponent implements OnInit {
     }
   }
 
+  @boundMethod
   updateBookmark(): ng.IPromise<void> {
     // Add tags if tag text present
     if (this.tagText?.length) {
@@ -449,6 +459,7 @@ export class AppBookmarkComponent implements OnInit {
     });
   }
 
+  @boundMethod
   urlChanged(): void {
     // Reset form if field is invalid
     if (this.bookmarkForm.bookmarkUrl.$invalid) {

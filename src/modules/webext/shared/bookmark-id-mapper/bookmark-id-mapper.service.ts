@@ -1,11 +1,9 @@
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { BookmarkMappingNotFoundError } from '../../../shared/errors/errors';
 import { StoreKey } from '../../../shared/store/store.enum';
 import { StoreService } from '../../../shared/store/store.service';
 import { BookmarkIdMapping } from './bookmark-id-mapper.interface';
 
-@autobind
 @Injectable('BookmarkIdMapperService')
 export class BookmarkIdMapperService {
   $q: ng.IQService;

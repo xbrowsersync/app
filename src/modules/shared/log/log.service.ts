@@ -1,6 +1,5 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import stackTrace from 'stacktrace-js';
 import { BaseError } from '../errors/errors';
 import { StoreKey } from '../store/store.enum';
@@ -9,7 +8,6 @@ import { StoreService } from '../store/store.service';
 import { LogLevel } from './log.enum';
 import { LogQueueItem } from './log.interface';
 
-@autobind
 @Injectable('LogService')
 export class LogService {
   $injector: ng.auto.IInjectorService;

@@ -1,9 +1,7 @@
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { WorkingContext } from './working.enum';
 import { WorkingStatus } from './working.interface';
 
-@autobind
 @Injectable('WorkingService')
 export class WorkingService {
   status: WorkingStatus;

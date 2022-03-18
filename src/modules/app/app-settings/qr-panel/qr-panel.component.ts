@@ -1,5 +1,5 @@
 import { Component, OnInit, Output } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import QRCode from 'qrcode-svg';
 import { BackupRestoreService } from '../../../shared/backup-restore/backup-restore.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
@@ -7,7 +7,6 @@ import { StoreService } from '../../../shared/store/store.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'qrPanel',
@@ -54,6 +53,7 @@ export class AppQrComponent implements OnInit {
     this.utilitySvc = UtilitySvc;
   }
 
+  @boundMethod
   copySyncId(): void {
     this.appHelperSvc.copyTextToClipboard(this.syncId).then(() => {
       this.syncIdCopied = true;

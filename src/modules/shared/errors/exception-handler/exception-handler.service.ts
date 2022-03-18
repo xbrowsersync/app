@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { AlertType } from '../../alert/alert.enum';
 import { Alert } from '../../alert/alert.interface';
 import { AlertService } from '../../alert/alert.service';
@@ -8,7 +8,6 @@ import { PlatformService } from '../../global-shared.interface';
 import { LogService } from '../../log/log.service';
 import * as Errors from '../errors';
 
-@autobind
 @Injectable('ExceptionHandler')
 export class ExceptionHandlerService {
   Strings = require('../../../../../res/strings/en.json');
@@ -160,6 +159,7 @@ export class ExceptionHandlerService {
     return alertMessage;
   }
 
+  @boundMethod
   handleError(error: Errors.BaseError, cause?: string, displayAlert = true): void {
     switch (error.constructor) {
       case Errors.HttpRequestAbortedError:

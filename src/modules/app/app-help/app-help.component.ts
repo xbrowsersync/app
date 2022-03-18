@@ -1,5 +1,5 @@
 import { Component, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { PlatformService } from '../../shared/global-shared.interface';
 import { StoreKey } from '../../shared/store/store.enum';
 import { StoreService } from '../../shared/store/store.service';
@@ -8,7 +8,6 @@ import { KeyCode, RoutePath } from '../app.enum';
 import { AppHelperService } from '../shared/app-helper/app-helper.service';
 import { HelpRouteParams } from './app-help.interface';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appHelp',
@@ -57,6 +56,7 @@ export class AppHelpComponent implements OnInit {
     this.utilitySvc = UtilitySvc;
   }
 
+  @boundMethod
   close(event: Event): void {
     this.utilitySvc.stopEventPropagation(event);
     this.storeSvc.set(StoreKey.DisplayHelp, false).then(() => this.appHelperSvc.switchView());
@@ -70,10 +70,12 @@ export class AppHelpComponent implements OnInit {
     this.$location.path(`${RoutePath.Help}/${pageToDisplay}`);
   }
 
+  @boundMethod
   displayNextPage(event: Event): void {
     this.displayPage(event, this.currentPage + 1);
   }
 
+  @boundMethod
   displayPreviousPage(event: Event): void {
     this.displayPage(event, this.currentPage - 1);
   }

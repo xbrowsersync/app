@@ -1,10 +1,8 @@
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { FailedLocalStorageError } from '../../../shared/errors/errors';
 import { StoreKey } from '../../../shared/store/store.enum';
 import { V160UpgradeProviderService } from '../../../shared/upgrade/v1.6.0-upgrade-provider/v1.6.0-upgrade-provider.service';
 
-@autobind
 @Injectable('V160UpgradeProviderService')
 export class AndroidV160UpgradeProviderService extends V160UpgradeProviderService {
   static $inject = ['$q', 'BookmarkHelperService', 'PlatformService', 'StoreService', 'UtilityService'];
@@ -25,7 +23,7 @@ export class AndroidV160UpgradeProviderService extends V160UpgradeProviderServic
         this.$q
           .all(
             keys.map((key) => {
-              return this.$q((resolveGetItem, rejectGetItem) => {
+              return this.$q((resolveGetItem, rejectGetItem) =>
                 window.NativeStorage.getItem(
                   key,
                   (result: any) => {
@@ -33,14 +31,12 @@ export class AndroidV160UpgradeProviderService extends V160UpgradeProviderServic
                     resolveGetItem();
                   },
                   rejectGetItem
-                );
-              });
+                )
+              );
             })
           )
-          .then(() => {
-            resolve(nativeStorageItems);
-          })
-          .catch(failure);
+          .then(() => resolve(nativeStorageItems))
+          .catch((err) => failure(err));
       };
 
       window.NativeStorage.keys(success, failure);

@@ -1,6 +1,5 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
 import { ApiSyncInfo } from '../api/api.interface';
 import { ApiXbrowsersyncSyncInfo } from '../api/api-xbrowsersync/api-xbrowsersync.interface';
 import { Bookmark, BookmarkService } from '../bookmark/bookmark.interface';
@@ -15,7 +14,6 @@ import { UpgradeService } from '../upgrade/upgrade.service';
 import { UtilityService } from '../utility/utility.service';
 import { AutoBackUpSchedule, Backup } from './backup-restore.interface';
 
-@autobind
 @Injectable('BackupRestoreService')
 export class BackupRestoreService {
   $q: ng.IQService;

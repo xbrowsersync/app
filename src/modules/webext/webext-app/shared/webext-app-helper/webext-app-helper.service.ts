@@ -1,5 +1,5 @@
 import angular from 'angular';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import browser from 'webextension-polyfill';
 import { AppHelperService } from '../../../../app/shared/app-helper/app-helper.service';
 import { BookmarkHelperService } from '../../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
@@ -14,7 +14,6 @@ import { UtilityService } from '../../../../shared/utility/utility.service';
 import { WorkingService } from '../../../../shared/working/working.service';
 import { WebExtPlatformService } from '../../../shared/webext-platform/webext-platform.service';
 
-@autobind
 export abstract class WebExtAppHelperService extends AppHelperService {
   $filter: ng.FilterFactory;
   bookmarkHelperSvc: BookmarkHelperService;
@@ -95,6 +94,7 @@ export abstract class WebExtAppHelperService extends AppHelperService {
     });
   }
 
+  @boundMethod
   openUrl(event?: Event, url?: string): void {
     // Stop event propogation
     event?.preventDefault();

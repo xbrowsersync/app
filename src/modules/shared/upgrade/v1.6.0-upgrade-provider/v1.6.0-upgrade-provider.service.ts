@@ -1,5 +1,4 @@
 import angular from 'angular';
-import autobind from 'autobind-decorator';
 import { ApiServiceType } from '../../api/api.enum';
 import { ApiXbrowsersyncSyncInfo } from '../../api/api-xbrowsersync/api-xbrowsersync.interface';
 import { BookmarkContainer } from '../../bookmark/bookmark.enum';
@@ -12,7 +11,6 @@ import { StoreService } from '../../store/store.service';
 import { UtilityService } from '../../utility/utility.service';
 import { UpgradeProvider } from '../upgrade.interface';
 
-@autobind
 export abstract class V160UpgradeProviderService implements UpgradeProvider {
   $q: ng.IQService;
   bookmarkHelperSvc: BookmarkHelperService;

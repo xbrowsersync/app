@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
+import { boundMethod } from 'autobind-decorator';
 import { ApiSyncInfo } from '../../../shared/api/api.interface';
 import { AndroidError, FailedScanError, InvalidSyncInfoError } from '../../../shared/errors/errors';
 import Globals from '../../../shared/global-shared.constants';
@@ -10,7 +10,6 @@ import { StoreService } from '../../../shared/store/store.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { AndroidAppHelperService } from '../shared/android-app-helper/android-app-helper.service';
 
-@autobind
 @Component({
   controllerAs: 'vm',
   selector: 'appScan',
@@ -59,6 +58,7 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
     this.utilitySvc = UtilitySvc;
   }
 
+  @boundMethod
   close(): void {
     this.appHelperSvc.switchView();
   }
@@ -160,7 +160,7 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
         }
       });
     })
-      .then(this.scanCompleted)
+      .then((scanResult) => this.scanCompleted(scanResult))
       .catch((err) => {
         this.appHelperSvc.switchView().then(() => {
           throw new FailedScanError(undefined, err);
@@ -180,6 +180,7 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
     );
   }
 
+  @boundMethod
   toggleCameraLight(switchOn?: boolean): ng.IPromise<void> {
     // If state was elected toggle light based on value
     if (switchOn !== undefined) {
