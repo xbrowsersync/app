@@ -7,11 +7,8 @@ module.exports = (env, argv) => {
     ...webExtConfig,
     entry: {
       ...webExtConfig.entry,
-      app: Path.resolve(__dirname, '../src/modules/webext/chromium/chromium-app/chromium-app.module.ts'),
-      background: Path.resolve(
-        __dirname,
-        '../src/modules/webext/chromium/chromium-background/chromium-background.module.ts'
-      )
+      app: './src/modules/webext/chromium/chromium-app/chromium-app.module.ts',
+      background: './src/modules/webext/chromium/chromium-background/chromium-background.module.ts'
     },
     output: {
       ...webExtConfig.output,

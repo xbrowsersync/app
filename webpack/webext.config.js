@@ -1,5 +1,4 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const fs = require('fs');
 const Path = require('path');
 const BaseConfig = require('./base.config');
@@ -34,10 +33,7 @@ module.exports = (env, argv) => {
     ...baseConfig,
     entry: {
       'webpage-metadata-collecter': {
-        import: Path.resolve(
-          __dirname,
-          '../src/modules/webext/webpage-metadata-collecter/webpage-metadata-collecter.ts'
-        ),
+        import: './src/modules/webext/webpage-metadata-collecter/webpage-metadata-collecter.ts',
         library: {
           name: 'WebpageMetadataCollecter',
           type: 'var',
@@ -45,20 +41,12 @@ module.exports = (env, argv) => {
         }
       }
     },
-    optimization: {
-      ...baseConfig.optimization,
-      splitChunks: {
-        chunks: 'all',
-        maxSize: 250000,
-        minSize: 10000
-      }
-    },
     plugins: [
       ...baseConfig.plugins,
       new CopyWebpackPlugin({
         patterns: [
           {
-            from: Path.resolve(__dirname, '../res/strings'),
+            from: './res/strings',
             to: '../_locales/[name]/messages.json',
             toType: 'template',
             transform: (buffer) => {
@@ -69,10 +57,18 @@ module.exports = (env, argv) => {
             }
           },
           {
-            from: Path.resolve(__dirname, '../res/webext/images')
+            from: './res/webext/app.html',
+            to: '..'
           },
           {
-            from: Path.resolve(__dirname, '../res/webext/manifest.json'),
+            from: './res/webext/background.html',
+            to: '..'
+          },
+          {
+            from: './res/webext/images'
+          },
+          {
+            from: './res/webext/manifest.json',
             to: '../manifest.json',
             transform: (buffer) => {
               // Set version in webext manifest
@@ -84,16 +80,6 @@ module.exports = (env, argv) => {
             }
           }
         ]
-      }),
-      new HtmlWebpackPlugin({
-        chunks: ['app'],
-        filename: '../app.html',
-        template: Path.resolve(__dirname, '../res/webext/app.html')
-      }),
-      new HtmlWebpackPlugin({
-        chunks: ['background'],
-        filename: '../background.html',
-        template: Path.resolve(__dirname, '../res/webext/background.html')
       })
     ]
   };

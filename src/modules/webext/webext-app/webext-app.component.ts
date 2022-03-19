@@ -50,7 +50,6 @@ export class WebExtAppComponent extends AppMainComponent implements OnInit {
 
           // Display working panel
           this.logSvc.logInfo('Waiting for syncs to finish...');
-          this.initialised = true;
           this.workingSvc.show(WorkingContext.WaitingForSyncsToFinish);
           return this.waitForSyncsToFinish()
             .then(() => {

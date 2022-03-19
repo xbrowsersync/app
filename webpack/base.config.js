@@ -1,11 +1,12 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = (env, argv) => {
   const devMode = argv.mode === 'development';
   const createBundleReport = false;
   return {
-    devtool: 'inline-source-map',
+    devtool: devMode ? 'inline-source-map' : 'source-map',
     externals: ['fs'],
     mode: devMode ? 'development' : 'production',
     module: {
@@ -42,7 +43,10 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.(eot|gif|jpg|otf|png|ttf|woff|woff2)$/,
-          type: 'asset/resource'
+          type: 'asset/resource',
+          generator: {
+            filename: '[name][ext][query]'
+          }
         },
         {
           test: /\.html$/i,
@@ -53,11 +57,30 @@ module.exports = (env, argv) => {
         }
       ]
     },
-    optimization: {
-      minimize: false
-    },
+    optimization: !devMode
+      ? {
+          minimizer: [
+            new TerserPlugin({
+              parallel: true,
+              terserOptions: {
+                keep_classnames: true
+              }
+            })
+          ],
+          splitChunks: {
+            cacheGroups: {
+              vendor: {
+                chunks: 'all',
+                name: 'vendor',
+                test: /node_modules/
+              }
+            }
+          }
+        }
+      : {},
     output: {
       chunkFilename: '[name].js',
+      clean: true,
       filename: '[name].js'
     },
     plugins: [

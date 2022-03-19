@@ -1,5 +1,5 @@
 <div class="theme-container"
-     ng-class="{ 'theme-dark': vm.darkModeEnabled || vm.darkThemeEnabled, 'disable-transitions': vm.disableTransitions }"
+     ng-class="{ 'animate-fade-in': vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName), 'disable-transitions': vm.disableTransitions,'theme-dark': vm.darkModeEnabled || vm.darkThemeEnabled }"
      ng-show="vm.initialised">
   <div class="container {{ vm.$location.path().substring(1) }}">
     <app-alert></app-alert>

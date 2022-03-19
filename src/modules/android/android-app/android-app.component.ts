@@ -298,6 +298,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     document.body.style.removeProperty('height');
   }
 
+  @boundMethod
   handleResume(): ng.IPromise<void> {
     // Check if sync enabled and reset network disconnected flag
     return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
@@ -399,13 +400,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     // Bind to cordova device events
     return (
       this.$q<void>((resolve, reject) => {
-        document.addEventListener(
-          'deviceready',
-          () => {
-            this.handleDeviceReady(resolve, reject);
-          },
-          false
-        );
+        document.addEventListener('deviceready', () => this.handleDeviceReady(resolve, reject), false);
         document.addEventListener('resume', this.handleResume, false);
       })
         .then(() => {

@@ -80,6 +80,7 @@ export class AppHelpComponent implements OnInit {
     this.displayPage(event, this.currentPage - 1);
   }
 
+  @boundMethod
   handleKeyDown(event: KeyboardEvent): void {
     switch (event.keyCode) {
       case KeyCode.Escape:

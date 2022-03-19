@@ -1,5 +1,39 @@
-@import '~@fontsource/roboto-condensed/400.css';
-@import '~@fontsource/roboto-condensed/400-italic.css';
-@import '~@fontsource/roboto-condensed/700.css';
-@import '~@fontsource/roboto-condensed/700-italic.css';
-@import '~@fontsource/source-code-pro/500.css';
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('~@fontsource/roboto-condensed/files/roboto-condensed-all-400-normal.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src: url('~@fontsource/roboto-condensed/files/roboto-condensed-all-400-italic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('~@fontsource/roboto-condensed/files/roboto-condensed-all-700-normal.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 700;
+  src: url('~@fontsource/roboto-condensed/files/roboto-condensed-all-700-italic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Source Code Pro';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url('~@fontsource/source-code-pro/files/source-code-pro-all-500-normal.woff') format('woff');
+}

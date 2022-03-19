@@ -1,5 +1,3 @@
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const fs = require('fs');
 const Path = require('path');
 const WebExtConfig = require('./webext.config');
 
@@ -25,11 +23,8 @@ module.exports = (env, argv) => {
     ...webExtConfig,
     entry: {
       ...webExtConfig.entry,
-      app: Path.resolve(__dirname, '../src/modules/webext/firefox/firefox-app/firefox-app.module.ts'),
-      background: Path.resolve(
-        __dirname,
-        '../src/modules/webext/firefox/firefox-background/firefox-background.module.ts'
-      )
+      app: './src/modules/webext/firefox/firefox-app/firefox-app.module.ts',
+      background: './src/modules/webext/firefox/firefox-background/firefox-background.module.ts'
     },
     output: {
       ...webExtConfig.output,

@@ -21,7 +21,7 @@ module.exports = (env, argv) => {
   return {
     ...baseConfig,
     entry: {
-      app: Path.resolve(__dirname, '../src/modules/android/android-app/android-app.module.ts')
+      app: './src/modules/android/android-app/android-app.module.ts'
     },
     output: {
       ...baseConfig.output,
@@ -32,7 +32,7 @@ module.exports = (env, argv) => {
       new CopyWebpackPlugin({
         patterns: [
           {
-            from: Path.resolve(__dirname, '../res/strings'),
+            from: './res/strings',
             to: './strings_[name].json',
             toType: 'template',
             transform: (buffer) => {
@@ -43,11 +43,11 @@ module.exports = (env, argv) => {
             }
           },
           {
-            from: Path.resolve(__dirname, '../res/android'),
+            from: './res/android',
             to: '../../'
           },
           {
-            from: Path.resolve(__dirname, '../res/android/config.xml'),
+            from: './res/android/config.xml',
             to: '../../',
             transform: (buffer) => {
               // Set version in android config
