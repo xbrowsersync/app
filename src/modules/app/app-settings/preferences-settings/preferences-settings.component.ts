@@ -113,6 +113,12 @@ export class PreferencesSettingsComponent implements OnInit {
   }
 
   @boundMethod
+  toggleEnableTelemetry(): void {
+    this.settings.telemetryEnabled = !this.settings.telemetryEnabled;
+    this.settingsSvc.telemetryEnabled(this.settings.telemetryEnabled);
+  }
+
+  @boundMethod
   toggleSyncBookmarksToolbar(): void {
     this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
       this.settings.syncBookmarksToolbar = !this.settings.syncBookmarksToolbar;

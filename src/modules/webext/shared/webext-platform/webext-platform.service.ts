@@ -1,5 +1,6 @@
 import angular from 'angular';
 import { boundMethod } from 'autobind-decorator';
+import * as detectBrowser from 'detect-browser';
 import browser, { Tabs } from 'webextension-polyfill';
 import { AlertService } from '../../../shared/alert/alert.service';
 import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
@@ -12,7 +13,7 @@ import {
 import * as Errors from '../../../shared/errors/errors';
 import Globals from '../../../shared/global-shared.constants';
 import { BrowserName, MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
-import { I18nObject, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
+import { I18nObject, PlatformInfo, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
 import { LogService } from '../../../shared/log/log.service';
 import { StoreService } from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
@@ -215,10 +216,19 @@ export abstract class WebExtPlatformService implements PlatformService {
           return metadata;
         })
         .catch((err) => {
-          this.logSvc.logWarning(`Unable to get metadata: ${err ? err.message : ''}`);
+          this.logSvc.logWarning(`Failed to get metadata: ${err ? err.message : ''}`);
           return metadata;
         });
     });
+  }
+
+  getPlatformInfo(): PlatformInfo {
+    const { name, os, version: browserVersion } = detectBrowser.detect();
+    return {
+      browser: name,
+      browserVersion,
+      device: os
+    };
   }
 
   @boundMethod

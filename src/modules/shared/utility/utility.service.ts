@@ -163,6 +163,16 @@ export class UtilityService {
     return year + month + day + hour + minute + second;
   }
 
+  getInstallationId(): ng.IPromise<string> {
+    return this.storeSvc.get<string>(StoreKey.InstallationId).then((installationId) => {
+      if (!installationId) {
+        installationId = this.uuidv4();
+        return this.storeSvc.set(StoreKey.InstallationId, installationId).then(() => installationId);
+      }
+      return installationId;
+    });
+  }
+
   getSemVerAlignedVersion(version: string): string {
     return version.replace(/^[vV]?(\d+\.\d+\.\d+)(\.\d+|-\w+\.\d+)?$/, '$1');
   }
@@ -426,5 +436,12 @@ export class UtilityService {
 
     const trimmedText = `${text.substring(0, text.lastIndexOf(' ', limit))}\u2026`;
     return trimmedText;
+  }
+
+  uuidv4(): string {
+    return `${1e7}-${1e3}-${4e3}-${8e3}-${1e11}`.replace(/[018]/g, (c) => {
+      const num = parseInt(c, 10);
+      return (num ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (num / 4)))).toString(16);
+    });
   }
 }

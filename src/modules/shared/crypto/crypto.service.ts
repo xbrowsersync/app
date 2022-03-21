@@ -62,7 +62,7 @@ export class CryptoService {
           })
           .then((decryptedBytes) => {
             if (!decryptedBytes) {
-              throw new Error('Unable to decrypt data.');
+              throw new Error('Failed to decrypt data.');
             }
 
             // Uncompress the decrypted data and return

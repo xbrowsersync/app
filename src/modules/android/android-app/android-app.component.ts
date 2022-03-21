@@ -15,6 +15,7 @@ import { SettingsService } from '../../shared/settings/settings.service';
 import { StoreKey } from '../../shared/store/store.enum';
 import { StoreService } from '../../shared/store/store.service';
 import { SyncService } from '../../shared/sync/sync.service';
+import { TelemetryService } from '../../shared/telemetry/telemetry.service';
 import { UpgradeService } from '../../shared/upgrade/upgrade.service';
 import { UtilityService } from '../../shared/utility/utility.service';
 import { WorkingContext } from '../../shared/working/working.enum';
@@ -34,6 +35,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
   appHelperSvc: AndroidAppHelperService;
   platformSvc: AndroidPlatformService;
   syncSvc: SyncService;
+  telemetrySvc: TelemetryService;
   upgradeSvc: UpgradeService;
 
   darkThemeEnabled = false;
@@ -53,6 +55,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     'SettingsService',
     'StoreService',
     'SyncService',
+    'TelemetryService',
     'UpgradeService',
     'UtilityService',
     'WorkingService'
@@ -72,6 +75,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     SettingsSvc: SettingsService,
     StoreSvc: StoreService,
     SyncSvc: SyncService,
+    TelemetrySvc: TelemetryService,
     UpgradeSvc: UpgradeService,
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
@@ -95,6 +99,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
 
     this.$interval = $interval;
     this.syncSvc = SyncSvc;
+    this.telemetrySvc = TelemetrySvc;
     this.upgradeSvc = UpgradeSvc;
   }
 
@@ -324,41 +329,18 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
 
     return this.$q
       .all([
-        this.platformSvc.getAppVersionName(),
-        this.platformSvc.getCurrentLocale(),
         this.settingsSvc.checkForAppUpdates(),
-        this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncInfo]),
+        this.settingsSvc.telemetryEnabled(),
+        this.telemetrySvc.getTelemetryPayload(),
         this.utilitySvc.isSyncEnabled()
       ])
-      .then((result) => {
-        // Add useful debug info to beginning of trace log
-        const [appVersion, currentLocale, checkForAppUpdates, storeContent, syncEnabled] = result;
-        const { lastUpdated, syncInfo } = storeContent;
-        const { password, ...syncInfoNoPassword } = syncInfo ?? {};
-        const debugInfo: any = {
-          appVersion,
-          checkForAppUpdates,
-          currentLocale,
-          platform: {
-            device: `${window.device.manufacturer} ${window.device.model}`,
-            name: window.device.platform
-          },
-          syncEnabled,
-          lastUpdated
-        };
-        if (Object.keys(syncInfoNoPassword).length > 0) {
-          debugInfo.syncInfo = syncInfoNoPassword;
+      .then((data) => {
+        // Log telemetry and submit if enabled
+        const [checkForAppUpdates, telemetryEnabled, telemetry, syncEnabled] = data;
+        this.logSvc.logInfo(telemetry);
+        if (telemetryEnabled) {
+          this.$timeout(() => this.telemetrySvc.submitTelemetry(), 5e3);
         }
-        this.logSvc.logInfo(
-          Object.keys(debugInfo)
-            .filter((key) => {
-              return debugInfo[key] != null;
-            })
-            .reduce((prev, current) => {
-              prev[current] = debugInfo[current];
-              return prev;
-            }, {})
-        );
 
         // Check for new app version
         if (checkForAppUpdates) {

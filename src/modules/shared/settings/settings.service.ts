@@ -26,7 +26,8 @@ export class SettingsService {
         StoreKey.CheckForAppUpdates,
         StoreKey.DarkModeEnabled,
         StoreKey.DefaultToFolderView,
-        StoreKey.SyncBookmarksToolbar
+        StoreKey.SyncBookmarksToolbar,
+        StoreKey.TelemetryEnabled
       ])
       .then((values) => {
         return {
@@ -101,6 +102,17 @@ export class SettingsService {
 
     return this.storeSvc.set(StoreKey.SyncBookmarksToolbar, newValue).then(() => {
       this.logSvc.logInfo(`Toolbar sync setting: ${newValue ? 'enabled' : 'disabled'}`);
+      return newValue;
+    });
+  }
+
+  telemetryEnabled(newValue?: boolean): ng.IPromise<boolean> {
+    if (angular.isUndefined(newValue ?? undefined)) {
+      return this.storeSvc.get<boolean>(StoreKey.TelemetryEnabled);
+    }
+
+    return this.storeSvc.set(StoreKey.TelemetryEnabled, newValue).then(() => {
+      this.logSvc.logInfo(`Telemetry setting: ${newValue ? 'enabled' : 'disabled'}`);
       return newValue;
     });
   }

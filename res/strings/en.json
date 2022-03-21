@@ -1220,6 +1220,16 @@
             "default": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
           }
         },
+        "Telemetry": {
+          "Label": {
+            "key": "View_Settings_Prefs_Telemetry_Label",
+            "default": "Enable telemetry"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_Telemetry_Description",
+            "default": "Send anonymous technical data to improve xBrowserSync (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>more info</a>)."
+          }
+        },
         "Title": {
           "key": "View_Settings_Prefs_Title",
           "default": "Preferences"

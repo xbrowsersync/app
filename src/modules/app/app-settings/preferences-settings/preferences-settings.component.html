@@ -104,5 +104,20 @@
         {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.CheckForAppUpdates.Description) }}
       </p>
     </div>
+    <div class="form-group setting-group">
+      <div class="setting-title">
+        <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.Telemetry.Label) }}</label>
+        <div>
+          <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleEnableTelemetry)">
+            <input type="checkbox" id="enableTelemetry" ng-model="vm.settings.telemetryEnabled" />
+            <label for="enableTelemetry" ng-class="{ 'animate': true }"
+                   ng-if="vm.settings.telemetryEnabled !== undefined"></label>
+          </div>
+        </div>
+      </div>
+      <p class="description"
+         ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.Telemetry.Description)"></p>
+    </div>
   </div>
+</div>
 </div>

@@ -10,6 +10,12 @@ export interface I18nObject {
   firefox?: string;
 }
 
+export interface PlatformInfo {
+  browser?: string;
+  browserVersion?: string;
+  device: string;
+}
+
 export interface PlatformService {
   checkOptionalNativePermissions: () => ng.IPromise<boolean>;
   disableNativeEventListeners: () => ng.IPromise<void>;
@@ -23,6 +29,7 @@ export interface PlatformService {
   getI18nString: (i18nObj: I18nObject) => string;
   getNewTabUrl?: () => string;
   getPageMetadata: (getFullMetadata?: boolean, pageUrl?: string) => ng.IPromise<WebpageMetadata>;
+  getPlatformInfo: () => PlatformInfo;
   openUrl: (url: string) => void;
   platformName: string;
   queueLocalResync: () => ng.IPromise<void>;

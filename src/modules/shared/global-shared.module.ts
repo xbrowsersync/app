@@ -11,6 +11,7 @@ import { MetadataService } from './metadata/metadata.service';
 import { NetworkService } from './network/network.service';
 import { SettingsService } from './settings/settings.service';
 import { SyncModule } from './sync/sync.module';
+import { TelemetryService } from './telemetry/telemetry.service';
 import { UpgradeService } from './upgrade/upgrade.service';
 import { UtilityService } from './utility/utility.service';
 import { WorkingService } from './working/working.service';
@@ -30,6 +31,7 @@ import { WorkingService } from './working/working.service';
     MetadataService,
     NetworkService,
     SettingsService,
+    TelemetryService,
     UpgradeService,
     UtilityService,
     WorkingService

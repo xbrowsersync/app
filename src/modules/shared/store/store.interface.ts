@@ -24,6 +24,7 @@ export interface StoreContent {
   syncBookmarksToolbar: boolean;
   syncEnabled: boolean;
   syncInfo: ApiSyncInfo;
+  telemetryEnabled: boolean;
   traceLog: string[];
 }
 

@@ -6,9 +6,6 @@ import {
   BaseError,
   DailyNewSyncLimitReachedError,
   DataOutOfSyncError,
-  HttpRequestAbortedError,
-  HttpRequestFailedError,
-  HttpRequestTimedOutError,
   InvalidServiceError,
   NetworkConnectionError,
   NotAcceptingNewSyncsError,
@@ -286,17 +283,8 @@ export class ApiXbrowsersyncService implements ApiService {
       case response.status >= 500:
         error = new ServiceOfflineError(message);
         break;
-      // Request timed out
-      case response.xhrStatus === 'timeout':
-        error = new HttpRequestTimedOutError();
-        break;
-      // Request timed out
-      case response.xhrStatus === 'abort':
-        error = new HttpRequestAbortedError();
-        break;
-      // Otherwise generic request failed
       default:
-        error = new HttpRequestFailedError(message);
+        error = this.networkSvc.getErrorFromHttpResponse(response);
     }
     return error;
   }

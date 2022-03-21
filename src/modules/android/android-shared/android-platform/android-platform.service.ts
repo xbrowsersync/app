@@ -20,7 +20,7 @@ import {
 import { ExceptionHandler } from '../../../shared/errors/errors.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformType } from '../../../shared/global-shared.enum';
-import { I18nObject, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
+import { I18nObject, PlatformInfo, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
 import { LogService } from '../../../shared/log/log.service';
 import { MetadataService } from '../../../shared/metadata/metadata.service';
 import { NetworkService } from '../../../shared/network/network.service';
@@ -373,6 +373,12 @@ export class AndroidPlatformService implements PlatformService {
     });
 
     return promise;
+  }
+
+  getPlatformInfo(): PlatformInfo {
+    return {
+      device: `${window.device.manufacturer} ${window.device.model}`
+    };
   }
 
   getSupportedUrl(url: string): string {

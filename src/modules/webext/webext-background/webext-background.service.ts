@@ -1,7 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import { boundMethod } from 'autobind-decorator';
-import * as detectBrowser from 'detect-browser';
 import browser, { Alarms, Downloads, Notifications } from 'webextension-polyfill';
 import { Alert } from '../../shared/alert/alert.interface';
 import { AlertService } from '../../shared/alert/alert.service';
@@ -23,6 +22,7 @@ import { StoreKey } from '../../shared/store/store.enum';
 import { StoreService } from '../../shared/store/store.service';
 import { Sync } from '../../shared/sync/sync.interface';
 import { SyncService } from '../../shared/sync/sync.service';
+import { TelemetryService } from '../../shared/telemetry/telemetry.service';
 import { UpgradeService } from '../../shared/upgrade/upgrade.service';
 import { UtilityService } from '../../shared/utility/utility.service';
 import { ChromiumBookmarkService } from '../chromium/shared/chromium-bookmark/chromium-bookmark.service';
@@ -53,6 +53,7 @@ export class WebExtBackgroundService {
   settingsSvc: SettingsService;
   storeSvc: StoreService;
   syncSvc: SyncService;
+  telemetrySvc: TelemetryService;
   upgradeSvc: UpgradeService;
   utilitySvc: UtilityService;
 
@@ -73,6 +74,7 @@ export class WebExtBackgroundService {
     'SettingsService',
     'StoreService',
     'SyncService',
+    'TelemetryService',
     'UpgradeService',
     'UtilityService'
   ];
@@ -91,6 +93,7 @@ export class WebExtBackgroundService {
     SettingsSvc: SettingsService,
     StoreSvc: StoreService,
     SyncSvc: SyncService,
+    TelemetrySvc: TelemetryService,
     UpgradeSvc: UpgradeService,
     UtilitySvc: UtilityService
   ) {
@@ -108,6 +111,7 @@ export class WebExtBackgroundService {
     this.settingsSvc = SettingsSvc;
     this.storeSvc = StoreSvc;
     this.syncSvc = SyncSvc;
+    this.telemetrySvc = TelemetrySvc;
     this.upgradeSvc = UpgradeSvc;
     this.utilitySvc = UtilitySvc;
 
@@ -220,7 +224,7 @@ export class WebExtBackgroundService {
     return browser.downloads.search({ id }).then((results) => {
       const [download] = results;
       if ((download ?? undefined) === undefined) {
-        this.logSvc.logWarning('Unable to find download');
+        this.logSvc.logWarning('Failed to find download');
         return;
       }
       return download;
@@ -238,56 +242,32 @@ export class WebExtBackgroundService {
       .then(() =>
         this.$q
           .all([
-            this.platformSvc.getAppVersionName(),
-            this.platformSvc.getCurrentLocale(),
-            this.settingsSvc.all(),
-            this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncInfo]),
+            this.settingsSvc.checkForAppUpdates(),
+            this.settingsSvc.telemetryEnabled(),
+            this.telemetrySvc.getTelemetryPayload(),
             this.utilitySvc.isSyncEnabled()
           ])
           .then((data) => {
-            // Add useful debug info to beginning of trace log
-            const [appVersion, currentLocale, settings, storeContent, syncEnabled] = data;
-            const { lastUpdated, syncInfo } = storeContent;
-            const { password, ...syncInfoNoPassword } = syncInfo ?? {};
-            const debugInfo: any = {
-              appVersion,
-              checkForAppUpdates: settings.checkForAppUpdates,
-              currentLocale,
-              platform: {
-                name: this.utilitySvc.getBrowserName(),
-                ...detectBrowser.detect()
-              },
-              syncBookmarksToolbar: settings.syncBookmarksToolbar,
-              syncEnabled,
-              lastUpdated
-            };
-            if (Object.keys(syncInfoNoPassword).length > 0) {
-              debugInfo.syncInfo = syncInfoNoPassword;
-            }
-            this.logSvc.logInfo(
-              Object.keys(debugInfo)
-                .filter((key) => {
-                  return debugInfo[key] != null;
-                })
-                .reduce((prev, current) => {
-                  prev[current] = debugInfo[current];
-                  return prev;
-                }, {})
-            );
-
             // Update browser action icon
+            const [checkForAppUpdates, telemetryEnabled, telemetry, syncEnabled] = data;
             this.platformSvc.refreshNativeInterface(syncEnabled);
 
-            // Check for new app version after a delay
-            if (settings.checkForAppUpdates) {
+            // Log telemetry and submit if enabled
+            this.logSvc.logInfo(telemetry);
+            if (telemetryEnabled) {
+              this.$timeout(() => this.telemetrySvc.submitTelemetry(), 4e3);
+            }
+
+            // Check for new app version
+            if (checkForAppUpdates) {
               this.$timeout(() => this.checkForNewVersion(), 5e3);
             }
 
-            // Enable sync and check for updates after a delay to allow for initialising network connection
+            // Enable sync and check for updates
             if (!syncEnabled) {
               return;
             }
-            return this.syncSvc.enableSync().then(() => this.$timeout(() => this.checkForSyncUpdatesOnStartup(), 5e3));
+            return this.syncSvc.enableSync().then(() => this.$timeout(() => this.checkForSyncUpdatesOnStartup(), 3e3));
           })
       );
   }

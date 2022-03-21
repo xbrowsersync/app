@@ -12,12 +12,14 @@ enum StoreKey {
   DisplayUpdated = 'displayUpdated',
   DefaultToFolderView = 'defaultToFolderView',
   InstallBackup = 'installBackup',
+  InstallationId = 'installationId',
   LastUpdated = 'lastUpdated',
   LastUpgradeVersion = 'lastUpgradeVersion',
   RemovedSync = 'removedSync',
   SyncBookmarksToolbar = 'syncBookmarksToolbar',
   SyncEnabled = 'syncEnabled',
   SyncInfo = 'syncInfo',
+  TelemetryEnabled = 'telemetryEnabled',
   TraceLog = 'traceLog'
 }
 

@@ -22,11 +22,13 @@ export class AndroidStoreService extends StoreService {
     StoreKey.DisplayOtherSyncsWarning,
     StoreKey.DisplayPermissions,
     StoreKey.DisplayUpdated,
+    StoreKey.InstallationId,
     StoreKey.LastUpdated,
     StoreKey.LastUpgradeVersion,
     StoreKey.SyncBookmarksToolbar,
     StoreKey.SyncEnabled,
-    StoreKey.SyncInfo
+    StoreKey.SyncInfo,
+    StoreKey.TelemetryEnabled
   ];
   sqlKeys: string[] = [StoreKey.Bookmarks, StoreKey.RemovedSync, StoreKey.TraceLog];
 
@@ -76,9 +78,7 @@ export class AndroidStoreService extends StoreService {
           tx.executeSql(`CREATE TABLE ${Table.App} (
             ${this.idCol} INTEGER PRIMARY KEY,
             ${StoreKey.Bookmarks} TEXT,
-            ${StoreKey.LastUpdated} TEXT,
-            ${StoreKey.RemovedSync} TEXT,
-            ${StoreKey.SyncInfo} TEXT
+            ${StoreKey.RemovedSync} TEXT
           )`);
           tx.executeSql(`INSERT INTO ${Table.App} (${this.idCol}) VALUES (?)`, [this.appRowId]);
           tx.executeSql(`DROP TABLE IF EXISTS ${Table.TraceLog}`);
