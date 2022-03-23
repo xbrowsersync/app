@@ -66,7 +66,7 @@ export class ExceptionHandlerService {
         break;
       case Errors.IncompleteSyncInfoError:
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Error.IncompleteSyncInfo.Title);
-        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Error.IncompleteSyncInfoError.Message);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Error.IncompleteSyncInfo.Message);
         break;
       case Errors.SyncNotFoundError:
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Error.SyncRemoved.Title);
