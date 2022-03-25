@@ -19,7 +19,6 @@ export class AlertService {
   }
 
   set currentMessage(value: string) {
-    console.log('set currentMessage', value);
     this._currentMessage = value;
   }
 

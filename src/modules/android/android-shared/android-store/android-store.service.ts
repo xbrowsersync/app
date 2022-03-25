@@ -214,19 +214,17 @@ export class AndroidStoreService extends StoreService {
       return this.$q.resolve(this.db);
     }
     return this.$q((resolve, reject) => {
-      window.resolveLocalFileSystemURL(window.cordova.file.externalDataDirectory, (dataDir: any) => {
-        window.sqlitePlugin.openDatabase(
-          { name: this.dbName, androidDatabaseLocation: dataDir.toURL() },
-          resolve,
-          reject
-        );
-      });
-    })
-      .then((db) => {
-        this.db = db;
-        return db;
-      })
-      .catch((err) => this.handleSqlError(err));
+      try {
+        this.db = window.sqlitePlugin.openDatabase({
+          androidDatabaseProvider: 'system',
+          location: 'default',
+          name: this.dbName
+        });
+        resolve(this.db);
+      } catch (err) {
+        reject(new FailedLocalStorageError(err.message));
+      }
+    });
   }
 
   protected removeFromStore(keys: string[] = []): ng.IPromise<void> {

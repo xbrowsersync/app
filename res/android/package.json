@@ -30,7 +30,7 @@
     "cordova-plugin-snackbar": "github:xbrowsersync/cordova-plugin-snackbar#2.2.2",
     "cordova-plugin-whitelist": "1.3.4",
     "cordova-plugin-x-socialsharing": "github:xbrowsersync/SocialSharing-PhoneGap-Plugin#5.6.6",
-    "cordova-sqlite-evcore-extbuild-free": "^0.12.1",
+    "cordova-sqlite-storage": "^6.0.0",
     "es6-promise-plugin": "^4.2.2"
   },
   "cordova": {
@@ -54,10 +54,10 @@
       "cordova-plugin-exit": {},
       "cordova-plugin-globalization": {},
       "cordova-plugin-app-version": {},
-      "cordova-sqlite-evcore-extbuild-free": {},
       "com-darryncampbell-cordova-plugin-intent": {},
       "cordova-plugin-android-dark-mode-support": {},
-      "cordova-plugin-androidx-adapter": {}
+      "cordova-plugin-androidx-adapter": {},
+      "cordova-sqlite-storage": {}
     },
     "platforms": [
       "android"
