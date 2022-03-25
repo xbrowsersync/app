@@ -185,7 +185,7 @@ export class ExceptionHandlerService {
     }
 
     if (displayAlert) {
-      this.alertSvc.setCurrentAlert(this.getAlertFromError(error));
+      this.alertSvc.currentAlert = this.getAlertFromError(error);
     }
   }
 

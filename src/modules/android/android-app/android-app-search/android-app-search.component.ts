@@ -149,11 +149,11 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
             })
             .then(() => {
               this.$timeout(() => {
-                this.alertSvc.setCurrentAlert({
+                this.alertSvc.currentAlert = {
                   action: this.platformSvc.getI18nString(this.Strings.Button.Undo),
                   actionCallback: () => this.undoBookmarkAction(cachedBookmarks),
                   message: this.platformSvc.getI18nString(this.Strings.Alert.BookmarkDeleted)
-                } as AndroidAlert);
+                } as AndroidAlert;
               }, Globals.InterfaceReadyTimeout);
             });
         })

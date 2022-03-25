@@ -9,7 +9,7 @@ import {
 
 @Injectable('NetworkService')
 export class NetworkService {
-  $q: ng.IQService;
+  private $q: ng.IQService;
 
   static $inject = ['$q'];
   constructor($q: ng.IQService) {

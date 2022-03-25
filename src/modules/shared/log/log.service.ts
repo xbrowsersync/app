@@ -1,4 +1,3 @@
-import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import stackTrace from 'stacktrace-js';
 import { BaseError } from '../errors/errors';
@@ -10,13 +9,13 @@ import { LogQueueItem } from './log.interface';
 
 @Injectable('LogService')
 export class LogService {
-  $injector: ng.auto.IInjectorService;
-  $log: ng.ILogService;
-  _$q: ng.IQService;
-  _storeSvc: StoreService;
+  private $injector: ng.auto.IInjectorService;
+  private $log: ng.ILogService;
+  private _$q: ng.IQService;
+  private _storeSvc: StoreService;
 
-  currentLogQueueItem: LogQueueItem;
-  logItemQueue = [];
+  private currentLogQueueItem: LogQueueItem;
+  private logItemQueue = [];
 
   static $inject = ['$injector', '$log'];
   constructor($injector: ng.auto.IInjectorService, $log: ng.ILogService) {
@@ -24,21 +23,21 @@ export class LogService {
     this.$log = $log;
   }
 
-  get $q(): ng.IQService {
-    if (angular.isUndefined(this._$q)) {
+  private get $q(): ng.IQService {
+    if (!this._$q) {
       this._$q = this.$injector.get('$q');
     }
     return this._$q;
   }
 
-  get storeSvc(): StoreService {
-    if (angular.isUndefined(this._storeSvc)) {
+  private get storeSvc(): StoreService {
+    if (!this._storeSvc) {
       this._storeSvc = this.$injector.get('StoreService');
     }
     return this._storeSvc;
   }
 
-  addLogItemToQueue(logItem: LogQueueItem): void {
+  private addLogItemToQueue(logItem: LogQueueItem): void {
     this.logItemQueue.push(logItem);
   }
 
@@ -60,73 +59,63 @@ export class LogService {
     error.logged = true;
 
     // Output message to console
-    this.logToConsole(message, LogLevel.Error, error);
+    if (message) {
+      this.$log.warn(message, error);
+    } else {
+      this.$log.warn(error);
+    }
 
     // Convert stack trace to show source files then add to queue and process
-    return angular.isUndefined(error.stack ?? undefined)
-      ? this.$q.resolve()
-      : stackTrace.fromError(error).then((frames) => {
-          if (frames) {
-            const stack = `${error.name} (${error.constructor.name}): ${error.message}\n${frames
-              .map((f) => {
-                return `\tat ${f.functionName} (${f.fileName}:${f.lineNumber}:${f.columnNumber})`;
-              })
-              .join('\n')}`;
-            error.stack = stack;
-          }
-
-          this.addLogItemToQueue({
-            level: LogLevel.Error,
-            message,
-            error
-          });
-          this.processLogItemQueue();
-        });
+    return (
+      !error.stack
+        ? this.$q.resolve()
+        : stackTrace.fromError(error).then((frames) => {
+            if (frames) {
+              const stack = `${error.name} (${error.constructor.name}): ${error.message}\n${frames
+                .map((f) => `\tat ${f.functionName} (${f.fileName}:${f.lineNumber}:${f.columnNumber})`)
+                .join('\n')}`;
+              error.stack = stack;
+            }
+          })
+    ).then(() => {
+      this.addLogItemToQueue({
+        level: LogLevel.Error,
+        message,
+        error
+      });
+      return this.processLogItemQueue();
+    });
   }
 
-  logInfo(message: object | string): void {
+  logInfo(message: object | string): ng.IPromise<void> {
     if (!message) {
       return;
     }
 
     // Output message to console, add to queue and process
-    this.logToConsole(message);
+    this.$log.info(message);
     this.addLogItemToQueue({
       level: LogLevel.Trace,
       message
     });
-    this.processLogItemQueue();
+    return this.processLogItemQueue();
   }
 
-  logToConsole(message: object | string, level = LogLevel.Trace, error?: BaseError): void {
-    switch (level) {
-      case LogLevel.Error:
-        this.$log.warn(error ?? message);
-        break;
-      case LogLevel.Warn:
-        this.$log.warn(message);
-        break;
-      case LogLevel.Trace:
-      default:
-        this.$log.info(message);
-    }
-  }
-
-  logWarning(message: object | string): void {
+  logWarning(message: object | string): ng.IPromise<void> {
     if (!message) {
       return;
     }
 
     // Output message to console, add to queue and process
-    this.logToConsole(message, LogLevel.Warn);
+    this.$log.warn(message);
     this.addLogItemToQueue({
       level: LogLevel.Warn,
       message
     });
-    this.processLogItemQueue();
+    return this.processLogItemQueue();
   }
 
-  processLogItemQueue(): ng.IPromise<void> {
+  private processLogItemQueue(): ng.IPromise<void> {
     // Return if currently processing or no more items to process
     if (this.currentLogQueueItem || this.logItemQueue.length === 0) {
       return this.$q.resolve();
@@ -136,11 +125,14 @@ export class LogService {
     this.currentLogQueueItem = this.logItemQueue.shift();
 
     // Format log message
-    let message = angular.isObject(this.currentLogQueueItem.message)
-      ? JSON.stringify(this.currentLogQueueItem.message)
-      : this.currentLogQueueItem.message ?? '';
+    let message =
+      typeof this.currentLogQueueItem.message === 'object'
+        ? JSON.stringify(this.currentLogQueueItem.message)
+        : this.currentLogQueueItem.message ?? '';
     if (this.currentLogQueueItem.error) {
-      message += `${this.currentLogQueueItem.error.stack.replace(/\s+/g, ' ')}`;
+      message += this.currentLogQueueItem.error.stack
+        ? `${this.currentLogQueueItem.error.stack.replace(/\s+/g, ' ')}`
+        : '';
     }
 
     // Add log item to store

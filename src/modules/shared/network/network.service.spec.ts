@@ -10,28 +10,29 @@ import { NetworkService } from './network.service';
 
 describe('NetworkService', () => {
   beforeEach(() => {
-    jest.restoreAllMocks();
     (window as any).Connection = {
       NONE: 'NONE',
       UNKNOWN: 'UNKNOWN'
     };
   });
 
-  it('checkNetworkConnection: Does not throw when isNetworkConnected returns true', async () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  test('checkNetworkConnection: Does not throw when isNetworkConnected returns true', async () => {
     const networkSvc = new NetworkService($q);
     jest.spyOn(networkSvc, 'isNetworkConnected').mockReturnValue(true);
 
     await expect(networkSvc.checkNetworkConnection()).resolves;
   });
 
-  it('checkNetworkConnection: Throws NetworkConnectionError when isNetworkConnected returns false', async () => {
+  test('checkNetworkConnection: Throws NetworkConnectionError when isNetworkConnected returns false', async () => {
     const networkSvc = new NetworkService($q);
     jest.spyOn(networkSvc, 'isNetworkConnected').mockReturnValue(false);
 
     await expect(networkSvc.checkNetworkConnection()).rejects.toThrow(NetworkConnectionError);
   });
 
-  it('getErrorFromHttpResponse: Returns HttpRequestFailedError by default', () => {
+  test('getErrorFromHttpResponse: Returns HttpRequestFailedError by default', () => {
     const networkSvc = new NetworkService($q);
     const testResponse = {
       status: 'TEST_STATUS'
@@ -42,7 +43,7 @@ describe('NetworkService', () => {
     expect(result).toStrictEqual(new HttpRequestFailedError('status: TEST_STATUS'));
   });
 
-  it('getErrorFromHttpResponse: Returns HttpRequestTimedOutError when response timed out', () => {
+  test('getErrorFromHttpResponse: Returns HttpRequestTimedOutError when response timed out', () => {
     const networkSvc = new NetworkService($q);
     const testResponse = {
       xhrStatus: 'timeout'
@@ -53,7 +54,7 @@ describe('NetworkService', () => {
     expect(result).toStrictEqual(new HttpRequestTimedOutError());
   });
 
-  it('getErrorFromHttpResponse: Returns HttpRequestAbortedError when response was aborted', () => {
+  test('getErrorFromHttpResponse: Returns HttpRequestAbortedError when response was aborted', () => {
     const networkSvc = new NetworkService($q);
     const testResponse = {
       xhrStatus: 'abort'
@@ -64,7 +65,7 @@ describe('NetworkService', () => {
     expect(result).toStrictEqual(new HttpRequestAbortedError());
   });
 
-  it('isNetworkConnected: Returns true when navigator.Online is true', () => {
+  test('isNetworkConnected: Returns true when navigator.Online is true', () => {
     const networkSvc = new NetworkService($q);
     jest.spyOn(window.navigator, 'onLine', 'get').mockReturnValue(true);
 
@@ -73,7 +74,7 @@ describe('NetworkService', () => {
     expect(result).toStrictEqual(true);
   });
 
-  it('isNetworkConnected: Returns false when navigator.Online is false', async () => {
+  test('isNetworkConnected: Returns false when navigator.Online is false', async () => {
     const networkSvc = new NetworkService($q);
     jest.spyOn(window.navigator, 'onLine', 'get').mockReturnValue(false);
 
@@ -82,7 +83,7 @@ describe('NetworkService', () => {
     expect(result).toStrictEqual(false);
   });
 
-  it('isNetworkConnected: Returns true when connection type is WIFI', async () => {
+  test('isNetworkConnected: Returns true when connection type is WIFI', async () => {
     const networkSvc = new NetworkService($q);
     (window.navigator as any).connection = {
       type: 'WIFI'
@@ -93,7 +94,7 @@ describe('NetworkService', () => {
     expect(result).toStrictEqual(true);
   });
 
-  it('isNetworkConnected: Returns false when connection type is NONE', async () => {
+  test('isNetworkConnected: Returns false when connection type is NONE', async () => {
     const networkSvc = new NetworkService($q);
     (window.navigator as any).connection = {
       type: 'NONE'
@@ -104,7 +105,7 @@ describe('NetworkService', () => {
     expect(result).toStrictEqual(false);
   });
 
-  it('isNetworkConnected: Returns false when connection type is UNKNOWN', async () => {
+  test('isNetworkConnected: Returns false when connection type is UNKNOWN', async () => {
     const networkSvc = new NetworkService($q);
     (window.navigator as any).connection = {
       type: 'UNKNOWN'
@@ -115,7 +116,7 @@ describe('NetworkService', () => {
     expect(result).toStrictEqual(false);
   });
 
-  it('isNetworkConnectionError: Returns true for NetworkConnectionError', () => {
+  test('isNetworkConnectionError: Returns true for NetworkConnectionError', () => {
     const networkSvc = new NetworkService($q);
 
     const result = networkSvc.isNetworkConnectionError(new NetworkConnectionError());
@@ -123,7 +124,7 @@ describe('NetworkService', () => {
     expect(result).toBe(true);
   });
 
-  it('isNetworkConnectionError: Returns false for BaseError', () => {
+  test('isNetworkConnectionError: Returns false for BaseError', () => {
     const networkSvc = new NetworkService($q);
 
     const result = networkSvc.isNetworkConnectionError(new BaseError());

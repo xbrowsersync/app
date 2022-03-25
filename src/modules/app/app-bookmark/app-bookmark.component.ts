@@ -315,10 +315,10 @@ export class AppBookmarkComponent implements OnInit {
       this.bookmarkForm.bookmarkUrl.$setPristine();
 
       // Display alert
-      this.alertSvc.setCurrentAlert({
+      this.alertSvc.currentAlert = {
         message: this.platformSvc.getI18nString(this.Strings.Alert.GetMetadata.Success),
         type: AlertType.Information
-      });
+      };
     });
   }
 

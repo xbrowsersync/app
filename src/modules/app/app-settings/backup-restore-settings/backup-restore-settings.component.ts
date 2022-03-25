@@ -142,11 +142,11 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
   confirmRestore(): void {
     if (!this.dataToRestore) {
       // Display alert
-      this.alertSvc.setCurrentAlert({
+      this.alertSvc.currentAlert = {
         message: this.platformSvc.getI18nString(this.Strings.Error.NoDataToRestore.Message),
         title: this.platformSvc.getI18nString(this.Strings.Error.NoDataToRestore.Title),
         type: AlertType.Error
-      });
+      };
       return;
     }
 
@@ -162,11 +162,11 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
       .catch((err) => {
         if (err instanceof SyncVersionNotSupportedError) {
           // Display specific message if user is trying to restore an unsupported backup version
-          this.alertSvc.setCurrentAlert({
+          this.alertSvc.currentAlert = {
             message: this.platformSvc.getI18nString(this.Strings.Error.SyncVersionNotSupported.Restore.Message),
             title: this.platformSvc.getI18nString(this.Strings.Error.SyncVersionNotSupported.Title),
             type: AlertType.Error
-          });
+          };
           return;
         }
         throw err;

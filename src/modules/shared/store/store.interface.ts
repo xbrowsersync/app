@@ -29,7 +29,7 @@ export interface StoreContent {
 }
 
 export interface TraceLogItem {
-  timestamp: number;
   level: LogLevel;
   message: string;
+  timestamp: number;
 }

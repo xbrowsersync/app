@@ -96,9 +96,9 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
   createBookmark(): ng.IPromise<void> {
     return super.createBookmark().then((result) => {
       this.$timeout(() => {
-        this.alertSvc.setCurrentAlert({
+        this.alertSvc.currentAlert = {
           message: this.platformSvc.getI18nString(this.Strings.Alert.BookmarkCreated)
-        } as AndroidAlert);
+        } as AndroidAlert;
       }, Globals.InterfaceReadyTimeout);
     });
   }
@@ -109,11 +109,11 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
     return this.bookmarkHelperSvc.getCachedBookmarks().then((cachedBookmarks) => {
       return super.deleteBookmark().then(() => {
         this.$timeout(() => {
-          this.alertSvc.setCurrentAlert({
+          this.alertSvc.currentAlert = {
             action: this.platformSvc.getI18nString(this.Strings.Button.Undo),
             actionCallback: () => this.undoBookmarkAction(cachedBookmarks),
             message: this.platformSvc.getI18nString(this.Strings.Alert.BookmarkDeleted)
-          } as AndroidAlert);
+          } as AndroidAlert;
         }, Globals.InterfaceReadyTimeout);
       });
     });
@@ -126,10 +126,10 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
 
     // Show a message if current page has no url - user shared an value that did not contain a valid url
     if (angular.isUndefined(this.platformSvc.sharedBookmark.url)) {
-      this.alertSvc.setCurrentAlert({
+      this.alertSvc.currentAlert = {
         message: this.platformSvc.getI18nString(this.Strings.View.Bookmark.InvalidUrlShared),
         type: AlertType.Error
-      });
+      };
       return this.$q.resolve().then(() => false);
     }
 
@@ -169,11 +169,11 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
     return this.bookmarkHelperSvc.getCachedBookmarks().then((cachedBookmarks) => {
       return super.updateBookmark().then(() => {
         this.$timeout(() => {
-          this.alertSvc.setCurrentAlert({
+          this.alertSvc.currentAlert = {
             action: this.platformSvc.getI18nString(this.Strings.Button.Undo),
             actionCallback: () => this.undoBookmarkAction(cachedBookmarks),
             message: this.platformSvc.getI18nString(this.Strings.Alert.BookmarkUpdated)
-          } as AndroidAlert);
+          } as AndroidAlert;
         }, Globals.InterfaceReadyTimeout);
       });
     });

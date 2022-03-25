@@ -147,7 +147,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
             return;
           }
 
-          this.alertSvc.setCurrentAlert({
+          this.alertSvc.currentAlert = {
             message: this.platformSvc
               .getI18nString(this.Strings.Alert.AppUpdateAvailable.Message)
               .replace('{version}', `v${newVersion}`),
@@ -155,7 +155,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
             actionCallback: () => {
               this.platformSvc.openUrl(`${Globals.ReleaseNotesUrlStem}${newVersion}`);
             }
-          } as AndroidAlert);
+          } as AndroidAlert;
         });
       });
     }, 1e3);
