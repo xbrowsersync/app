@@ -1,10 +1,3 @@
-<div class="theme-container"
-     ng-class="{ 'animate-fade-in': vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName), 'disable-transitions': vm.disableTransitions,'theme-dark': vm.darkModeEnabled || vm.darkThemeEnabled }"
-     ng-show="vm.initialised">
-  <div class="container {{ vm.$location.path().substring(1) }}">
-    <app-alert></app-alert>
-    <app-working cancel-action="vm.workingCancelAction"></app-working>
-    <div class="view" ng-view></div>
-  </div>
-  <app-background></app-background>
+<div class="message-container">
+  <p>{{vm.message}}</p>
 </div>

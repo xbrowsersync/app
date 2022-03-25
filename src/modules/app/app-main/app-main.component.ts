@@ -34,6 +34,7 @@ export abstract class AppMainComponent implements OnInit {
   disableTransitions = true;
   initialised = false;
   vm: AppMainComponent = this;
+  message: string;
 
   constructor(
     $location: ng.ILocationService,
@@ -73,6 +74,15 @@ export abstract class AppMainComponent implements OnInit {
         }
       }
     );
+
+    $scope.$watch(
+      () => this.alertSvc.currentMessage,
+      (newVal, oldVal) => {
+        if (newVal !== oldVal) {
+          this.message = newVal;
+        }
+      }
+    );
   }
 
   ngOnInit(): ng.IPromise<void> {
@@ -83,15 +93,20 @@ export abstract class AppMainComponent implements OnInit {
         this.darkModeEnabled = darkModeEnabled;
 
         // Check if a sync is currently in progress
-        return this.appHelperSvc.getCurrentSync().then((currentSync) => {
-          // Return here if view has already been set or waiting for syncs to finish
-          if (this.$location.path() !== '/' || currentSync) {
-            return;
-          }
+        return this.appHelperSvc
+          .getCurrentSync()
+          .then((currentSync) => {
+            // Return here if view has already been set or waiting for syncs to finish
+            if (this.$location.path() !== '/' || currentSync) {
+              return;
+            }
 
-          // Set initial view
-          return this.appHelperSvc.switchView();
-        });
+            // Set initial view
+            return this.appHelperSvc.switchView();
+          })
+          .then(() => {
+            this.alertSvc.currentMessage = 'Done!';
+          });
       })
       .catch((err) => {
         this.appHelperSvc.switchView().then(() => {

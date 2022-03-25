@@ -161,32 +161,7 @@ export class ExceptionHandlerService {
 
   @boundMethod
   handleError(error: Errors.BaseError, cause?: string, displayAlert = true): void {
-    switch (error.constructor) {
-      case Errors.HttpRequestAbortedError:
-        displayAlert = false;
-        return;
-      case Errors.NetworkConnectionError:
-        if (!error.logged) {
-          this.logSvc.logWarning('Connection lost');
-        }
-        error.logged = true;
-        break;
-      case Errors.ServiceOfflineError:
-        if (!error.logged) {
-          this.logSvc.logWarning('Service offline');
-        }
-        error.logged = true;
-        break;
-      case Errors.InvalidCredentialsError:
-      case Errors.SyncUncommittedError:
-        break;
-      default:
-        this.logSvc.logError(error, cause);
-    }
-
-    if (displayAlert) {
-      this.alertSvc.currentAlert = this.getAlertFromError(error);
-    }
+    this.logSvc.logError(error, cause);
   }
 
   static Factory($injector: ng.auto.IInjectorService, AlertSvc: AlertService, LogSvc: LogService) {

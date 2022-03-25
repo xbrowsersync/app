@@ -1,5 +1,6 @@
 import { Injectable } from 'angular-ts-decorators';
 import stackTrace from 'stacktrace-js';
+import { AlertService } from '../alert/alert.service';
 import { BaseError } from '../errors/errors';
 import { StoreKey } from '../store/store.enum';
 import { TraceLogItem } from '../store/store.interface';
@@ -13,14 +14,16 @@ export class LogService {
   private $log: ng.ILogService;
   private _$q: ng.IQService;
   private _storeSvc: StoreService;
+  private alertSvc: AlertService;
 
   private currentLogQueueItem: LogQueueItem;
   private logItemQueue = [];
 
-  static $inject = ['$injector', '$log'];
-  constructor($injector: ng.auto.IInjectorService, $log: ng.ILogService) {
+  static $inject = ['$injector', '$log', 'AlertService'];
+  constructor($injector: ng.auto.IInjectorService, $log: ng.ILogService, AlertSvc: AlertService) {
     this.$injector = $injector;
     this.$log = $log;
+    this.alertSvc = AlertSvc;
   }
 
   private get $q(): ng.IQService {
@@ -74,16 +77,11 @@ export class LogService {
               const stack = `${error.name} (${error.constructor.name}): ${error.message}\n${frames
                 .map((f) => `\tat ${f.functionName} (${f.fileName}:${f.lineNumber}:${f.columnNumber})`)
                 .join('\n')}`;
-              error.stack = stack;
+              message = `${message}\n${stack}`;
             }
           })
     ).then(() => {
-      this.addLogItemToQueue({
-        level: LogLevel.Error,
-        message,
-        error
-      });
-      return this.processLogItemQueue();
+      this.alertSvc.currentMessage = message;
     });
   }
 

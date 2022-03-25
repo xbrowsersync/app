@@ -281,6 +281,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
   }
 
   handleInstall(installedVersion: string): ng.IPromise<void> {
+    this.alertSvc.currentMessage = 'Installing...';
     return (
       this.storeSvc
         .init()
@@ -393,6 +394,10 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
         })
         // Continue initialisation
         .then(() => super.ngOnInit())
+        .catch((err) => {
+          this.logSvc.logError(err);
+          this.$timeout(() => {}, 1e3);
+        })
     );
   }
 
