@@ -4,6 +4,7 @@ import { Alert } from './alert.interface';
 @Injectable('AlertService')
 export class AlertService {
   private _currentAlert: Alert | undefined;
+  private _currentMessage: string;
 
   get currentAlert(): Alert | undefined {
     return this._currentAlert;
@@ -11,6 +12,15 @@ export class AlertService {
 
   set currentAlert(value: Alert) {
     this._currentAlert = value;
+  }
+
+  get currentMessage(): string {
+    return this._currentMessage;
+  }
+
+  set currentMessage(value: string) {
+    console.log('set currentMessage', value);
+    this._currentMessage = value;
   }
 
   clearCurrentAlert(): void {

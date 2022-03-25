@@ -2,6 +2,15 @@
 @import '../../../styles/modules/all';
 
 app {
+  .message-container {
+    color: white;
+    overflow: auto;
+    display: block;
+    height: 88vh;
+    margin: 3rem 1rem;
+    font-size: 0.8rem;
+  }
+
   .disable-transitions {
     .view-content * {
       transition: none !important;
