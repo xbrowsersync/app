@@ -1,6 +1,7 @@
 // eslint-disable-next-line unused-imports/no-unused-imports-ts
 import stackTrace from 'stacktrace-js';
 import { $injector, $log, $q } from '../../../test/mock-services';
+import { AlertService } from '../alert/alert.service';
 import { BaseError } from '../errors/errors';
 import { StoreKey } from '../store/store.enum';
 import { TraceLogItem } from '../store/store.interface';
@@ -45,7 +46,7 @@ describe('LogService', () => {
         return Promise.resolve(testLogEntries);
       }
     });
-    const logSvc = new LogService($injector, $log);
+    const logSvc = new LogService($injector, $log, AlertService.prototype);
 
     const result = await logSvc.getLogEntries();
 
@@ -54,7 +55,7 @@ describe('LogService', () => {
 
   test('clear: Removes TraceLog store key from store service', async () => {
     const storeSvcRemoveSpy = jest.spyOn(StoreService.prototype, 'remove').mockResolvedValue();
-    const logSvc = new LogService($injector, $log);
+    const logSvc = new LogService($injector, $log, AlertService.prototype);
 
     await logSvc.clear();
 
@@ -62,7 +63,7 @@ describe('LogService', () => {
   });
 
   test('logError: Does not log an error that has already been logged', async () => {
-    const logSvc = new LogService($injector, $log);
+    const logSvc = new LogService($injector, $log, AlertService.prototype);
     const $logWarnSpy = jest.spyOn($log, 'warn');
     const testError: Partial<BaseError> = {
       logged: true
@@ -74,7 +75,7 @@ describe('LogService', () => {
   });
 
   test('logError: Logs error to console', async () => {
-    const logSvc = new LogService($injector, $log);
+    const logSvc = new LogService($injector, $log, AlertService.prototype);
     jest.spyOn(StoreService.prototype, 'set').mockResolvedValue();
     const $logWarnSpy = jest.spyOn($log, 'warn');
     const testError: Partial<BaseError> = {
@@ -91,7 +92,7 @@ describe('LogService', () => {
   });
 
   test('logError: Logs message to console if no error supplied', async () => {
-    const logSvc = new LogService($injector, $log);
+    const logSvc = new LogService($injector, $log, AlertService.prototype);
     jest.spyOn(StoreService.prototype, 'set').mockResolvedValue();
     const $logWarnSpy = jest.spyOn($log, 'warn');
     const testError: Partial<BaseError> = {
@@ -109,44 +110,8 @@ describe('LogService', () => {
     );
   });
 
-  test('logError: Adds trace log entry to store service using TraceLog store key', async () => {
-    const logSvc = new LogService($injector, $log);
-    const storeSvcSetSpy = jest.spyOn(StoreService.prototype, 'set').mockResolvedValue();
-    const testError: Partial<BaseError> = {};
-
-    await logSvc.logError(testError as BaseError);
-
-    expect(storeSvcSetSpy).toBeCalledTimes(1);
-    expect(storeSvcSetSpy).toBeCalledWith(
-      StoreKey.TraceLog,
-      expect.objectContaining({
-        level: LogLevel.Error,
-        message: '',
-        timestamp: expect.any(Number)
-      })
-    );
-  });
-
-  test('logError: Adds trace log entry containing stack trace message to store service', async () => {
-    jest.spyOn(stackTrace, 'fromError').mockResolvedValue([{} as any]);
-    const storeSvcSetSpy = jest.spyOn(StoreService.prototype, 'set').mockResolvedValue();
-    const logSvc = new LogService($injector, $log);
-    const testError: Partial<BaseError> = {
-      stack: 'TEST_STACK_TRACE'
-    };
-
-    await logSvc.logError(testError as BaseError);
-
-    expect(storeSvcSetSpy).toBeCalledWith(
-      expect.any(String),
-      expect.not.objectContaining({
-        message: ''
-      })
-    );
-  });
-
   test('logInfo: Does not log anything if no message is supplied', async () => {
-    const logSvc = new LogService($injector, $log);
+    const logSvc = new LogService($injector, $log, AlertService.prototype);
     const $logInfoSpy = jest.spyOn($log, 'info');
     const testMessage = undefined;
 
@@ -156,7 +121,7 @@ describe('LogService', () => {
   });
 
   test('logInfo: Logs supplied message to console', async () => {
-    const logSvc = new LogService($injector, $log);
+    const logSvc = new LogService($injector, $log, AlertService.prototype);
     const $logInfoSpy = jest.spyOn($log, 'info');
     jest.spyOn(StoreService.prototype, 'set').mockResolvedValue();
     const testMessage = 'TEST_LOG_MESSAGE';
@@ -167,7 +132,7 @@ describe('LogService', () => {
   });
 
   test('logInfo: Adds trace log entry to store service using TraceLog store key', async () => {
-    const logSvc = new LogService($injector, $log);
+    const logSvc = new LogService($injector, $log, AlertService.prototype);
     const storeSvcSetSpy = jest.spyOn(StoreService.prototype, 'set').mockResolvedValue();
     const testMessage = 'TEST_LOG_MESSAGE';
 
@@ -185,7 +150,7 @@ describe('LogService', () => {
   });
 
   test('logWarning: Does not log anything if no message is supplied', async () => {
-    const logSvc = new LogService($injector, $log);
+    const logSvc = new LogService($injector, $log, AlertService.prototype);
     const $logWarnSpy = jest.spyOn($log, 'warn');
     const testMessage = undefined;
 
@@ -195,7 +160,7 @@ describe('LogService', () => {
   });
 
   test('logWarning: Logs supplied message to console', async () => {
-    const logSvc = new LogService($injector, $log);
+    const logSvc = new LogService($injector, $log, AlertService.prototype);
     const $logWarnSpy = jest.spyOn($log, 'warn');
     jest.spyOn(StoreService.prototype, 'set').mockResolvedValue();
     const testMessage = 'TEST_LOG_MESSAGE';
@@ -206,7 +171,7 @@ describe('LogService', () => {
   });
 
   test('logWarning: Adds trace log entry to store service using TraceLog store key', async () => {
-    const logSvc = new LogService($injector, $log);
+    const logSvc = new LogService($injector, $log, AlertService.prototype);
     const storeSvcSetSpy = jest.spyOn(StoreService.prototype, 'set').mockResolvedValue();
     const testMessage = 'TEST_LOG_MESSAGE';
 
