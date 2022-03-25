@@ -42,7 +42,6 @@ export abstract class StoreService {
   init(): ng.IPromise<void> {
     return this.clear()
       .then(() => {
-        throw new Error('test');
         return this.$q.all([
           this.setInStore(StoreKey.AlternateSearchBarPosition, false),
           this.setInStore(StoreKey.AutoFetchMetadata, true),
