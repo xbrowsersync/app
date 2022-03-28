@@ -1,6 +1,5 @@
 <div class="view-content" ng-if="vm.displayScanInterface">
   <h3>{{ vm.platformSvc.getI18nString(vm.Strings.View.Scan.Title) }}</h3>
-  <div class="target" ng-class="{ 'error': vm.invalidSyncId }"></div>
   <div class="validation" ng-show="vm.invalidSyncId">
     {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.SyncId.Invalid) }}
   </div>

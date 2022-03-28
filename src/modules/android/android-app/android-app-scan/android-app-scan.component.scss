@@ -13,13 +13,18 @@ app-scan {
 
   h3 {
     font-size: 1rem;
-    margin: 1rem 0 0;
+    left: 0;
+    position: fixed;
+    right: 0;
     text-align: center;
+    top: 12vh;
   }
 
   .buttons {
-    flex: 0 8rem;
-    width: 100%;
+    bottom: 20vh;
+    left: 0;
+    position: fixed;
+    right: 0;
 
     icon-button {
       &.enabled {
@@ -30,42 +35,35 @@ app-scan {
     }
   }
 
-  .target {
-    background: url('../../../../../res/images/scan.svg') 50% 50% no-repeat;
-    flex: 1;
-    height: 14rem;
-    opacity: 0.5;
-    width: 14rem;
-
-    &.error {
-      background-image: url('../../../../../res/images/scan_error.svg');
-    }
-  }
-
   .validation {
     font-size: 1rem;
-    margin-top: -2.5em;
     padding: 0.25em 1em;
     position: absolute;
-    top: 50%;
+    top: 42vh;
   }
 
   .view-content {
-    align-items: center;
+    border-color: rgba(0, 0, 0, 0.5);
+    border-style: solid;
+    border-width: 25vh 15vw 40vh;
+    padding: 0 !important;
   }
 
   @media (orientation: landscape) {
     h3 {
-      margin: 0;
+      top: 15vh;
     }
 
     .buttons {
-      flex: 0 5rem;
+      bottom: 10vh;
     }
 
-    .target {
-      height: 10rem;
-      width: 10rem;
+    .validation {
+      top: 47vh;
+    }
+
+    .view-content {
+      border-width: 27vh 40vw 32vh;
     }
   }
 }
