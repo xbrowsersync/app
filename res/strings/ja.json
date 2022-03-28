@@ -254,11 +254,11 @@
     "IncompleteSyncInfo": {
       "Message": {
         "key": "Error_IncompleteSyncInfo_Message",
-        "default": "保存されたユーザの情報が見つかりません。同期を再度有効にして再度お試し下さい。"
+        "default": "保存された資格情報が見つかりません。同期を再度有効にして再度お試し下さい。"
       },
       "Title": {
         "key": "Error_IncompleteSyncInfo_Title",
-        "default": "ユーザの情報が間違っています"
+        "default": "資格情報がありません"
       }
     },
     "InvalidCredentials": {
@@ -1218,6 +1218,16 @@
           "Confirmation": {
             "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
             "default": "<p>この設定を有効にすると、現在ブックマークツールバーにあるブックマークが同期ブックマークに置き換えられます。</p><p>続行しますか？</p>"
+          }
+        },
+        "Telemetry": {
+          "Label": {
+            "key": "View_Settings_Prefs_Telemetry_Label",
+            "default": "テレメトリーを有効にする"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_Telemetry_Description",
+            "default": "xBrowserSync (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>詳細情報</a> ) を改善するために匿名の技術データを送信します。"
           }
         },
         "Title": {

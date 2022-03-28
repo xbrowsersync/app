@@ -254,11 +254,11 @@
     "IncompleteSyncInfo": {
       "Message": {
         "key": "Error_IncompleteSyncInfo_Message",
-        "default": "Nie można znaleźć przechowywanych danych logowania. Włącz ponownie synchronizację i spróbuj ponownie."
+        "default": "Nie można znaleźć zapisanych poświadczeń. Włącz ponownie synchronizację i spróbuj ponownie."
       },
       "Title": {
         "key": "Error_IncompleteSyncInfo_Title",
-        "default": "Brak danych logowania"
+        "default": "Brakujące poświadczenia"
       }
     },
     "InvalidCredentials": {
@@ -1218,6 +1218,16 @@
           "Confirmation": {
             "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
             "default": "<p>Włączenie tego ustawienia zastąpi zakładki znajdujące się obecnie w pasku zakładek twoimi zsynchronizowanymi zakładkami.</p><p>OK, aby kontynuować?</p>"
+          }
+        },
+        "Telemetry": {
+          "Label": {
+            "key": "View_Settings_Prefs_Telemetry_Label",
+            "default": "Włącz telemetrię"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_Telemetry_Description",
+            "default": "Wyślij anonimowe dane techniczne, aby ulepszyć xBrowserSync (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>więcej informacji</a>)."
           }
         },
         "Title": {

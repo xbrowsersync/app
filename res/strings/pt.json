@@ -254,11 +254,11 @@
     "IncompleteSyncInfo": {
       "Message": {
         "key": "Error_IncompleteSyncInfo_Message",
-        "default": "Não é possível encontrar as credenciais armazenadas. Reative a sincronização e tente novamente."
+        "default": "Não foi possível encontrar as credenciais armazenadas. Reative a sincronização e tente novamente."
       },
       "Title": {
         "key": "Error_IncompleteSyncInfo_Title",
-        "default": "Credenciais ausentes"
+        "default": "Credenciais faltando"
       }
     },
     "InvalidCredentials": {
@@ -1218,6 +1218,16 @@
           "Confirmation": {
             "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
             "default": "<p>Ativar essa configuração substituirá os marcadores que estão na barra de ferramentas de favoritos com os seus favoritos sincronizados.</p><p>OK para prosseguir?</p>"
+          }
+        },
+        "Telemetry": {
+          "Label": {
+            "key": "View_Settings_Prefs_Telemetry_Label",
+            "default": "Ativar telemetria"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_Telemetry_Description",
+            "default": "Enviar dados técnicos anônimos para melhorar o xBrowserSync (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>mais informações</a>)."
           }
         },
         "Title": {

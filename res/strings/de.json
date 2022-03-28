@@ -254,11 +254,11 @@
     "IncompleteSyncInfo": {
       "Message": {
         "key": "Error_IncompleteSyncInfo_Message",
-        "default": "Es konnten keine gespeicherten Anmeldeinformationen gefunden werden. Synchronisation erneut aktivieren und erneut versuchen."
+        "default": "Die gespeicherten Anmeldeinformationen konnten nicht gefunden werden. Synchronisierung erneut aktivieren und erneut versuchen."
       },
       "Title": {
         "key": "Error_IncompleteSyncInfo_Title",
-        "default": "Fehlende Berechtigungsnachweise"
+        "default": "Zugangsdaten fehlen"
       }
     },
     "InvalidCredentials": {
@@ -564,7 +564,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Denken Sie an eine Sicherung</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in das Einstellungen-Fenster und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p><p>Wenn Ihre lokalen Browserdaten beschädigt werden und Sie keinerlei Sicherungskopien haben, können Sie Ihre Daten jederzeit wieder in den ursprünglichen Zustand zurückversetzen, in dem sie sich bei der Installation von xBrowserSync befanden.</p>",
+        "default": "<h4>Vergessen Sie nicht, eine Sicherung zu schaffen</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in das Einstellungen-Fenster und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p><p>Wenn Ihre lokalen Browserdaten beschädigt werden und Sie keinerlei Sicherungskopien haben, können Sie Ihre Daten jederzeit wieder in den ursprünglichen Zustand zurückversetzen, in dem sie sich bei der Installation von xBrowserSync befanden.</p>",
         "android": "<h4>Denken Sie an eine Sicherung</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in das Einstellungen-Fenster und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p>"
       },
       "BeforeYouBegin": {
@@ -1218,6 +1218,16 @@
           "Confirmation": {
             "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
             "default": "<p>Durch das Aktivieren dieser Einstellung werden die Lesezeichen in der Lesezeichen-Symbolleiste durch Ihre synchronisierten Lesezeichen ersetzt.</p><p>OK, um fortzufahren?</p>"
+          }
+        },
+        "Telemetry": {
+          "Label": {
+            "key": "View_Settings_Prefs_Telemetry_Label",
+            "default": "Telemetrie aktivieren"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_Telemetry_Description",
+            "default": "Senden Sie anonyme technische Daten, um xBrowserSync zu verbessern (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>weitere Info</a>)."
           }
         },
         "Title": {
