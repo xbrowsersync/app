@@ -1220,6 +1220,16 @@
             "default": "<p>Aktivering av denna inställning kommer att ersätta de nuvarande bokmärkena i bokmärkesfältet med dina synkroniserade bokmärken.</p><p>OK för att fortsätta?</p>"
           }
         },
+        "Telemetry": {
+          "Label": {
+            "key": "View_Settings_Prefs_Telemetry_Label",
+            "default": "Aktivera telemetri"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_Telemetry_Description",
+            "default": "Skicka anonyma tekniska data för att förbättra xBrowserSync (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>mer info</a>)."
+          }
+        },
         "Title": {
           "key": "View_Settings_Prefs_Title",
           "default": "Inställningar"
