@@ -1220,6 +1220,16 @@
             "default": "<p>Het inschakelen van deze instelling zal de huidige bladwijzers in de bladwijzerwerkbalk vervangen door je gesynchroniseerde bladwijzers.</p><p>OK om door te gaan?</p>"
           }
         },
+        "Telemetry": {
+          "Label": {
+            "key": "View_Settings_Prefs_Telemetry_Label",
+            "default": "Telemetrie inschakelen"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_Telemetry_Description",
+            "default": "Verstuur anonieme technische gegevens om xBrowserSync te verbeteren (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>meer info</a>)."
+          }
+        },
         "Title": {
           "key": "View_Settings_Prefs_Title",
           "default": "Voorkeuren"
