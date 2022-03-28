@@ -1220,6 +1220,16 @@
             "default": "<p>Abilitare questa impostazione sostituirà i segnalibri attualmente presenti nella barra dei segnalibri con i segnalibri sincronizzati.</p><p>OK per procedere?</p>"
           }
         },
+        "Telemetry": {
+          "Label": {
+            "key": "View_Settings_Prefs_Telemetry_Label",
+            "default": "Abilita la telemetria"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_Telemetry_Description",
+            "default": "Invia dati tecnici anonimi per migliorare xBrowserSync (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>ulteriori informazioni</a>)."
+          }
+        },
         "Title": {
           "key": "View_Settings_Prefs_Title",
           "default": "Preferenze"
