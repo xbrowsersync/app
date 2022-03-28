@@ -258,7 +258,7 @@
       },
       "Title": {
         "key": "Error_IncompleteSyncInfo_Title",
-        "default": "Faltan las credenciales"
+        "default": "Faltan credenciales"
       }
     },
     "InvalidCredentials": {
@@ -1218,6 +1218,16 @@
           "Confirmation": {
             "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
             "default": "<p>Habilitar esta configuración reemplazará los marcadores actualmente en la barra de herramientas de marcadores con sus marcadores sincronizados.</p><p>¿Está seguro de continuar?</p>"
+          }
+        },
+        "Telemetry": {
+          "Label": {
+            "key": "View_Settings_Prefs_Telemetry_Label",
+            "default": "Habilitar telemetría"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_Telemetry_Description",
+            "default": "Enviar datos técnicos anónimos para mejorar xBrowserSync (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>más información</a>)."
           }
         },
         "Title": {
