@@ -254,7 +254,7 @@
     "IncompleteSyncInfo": {
       "Message": {
         "key": "Error_IncompleteSyncInfo_Message",
-        "default": "找不到存储的凭据。 重新启用同步，然后重试。"
+        "default": "无法找到存储的凭据。重新启用同步并重试。"
       },
       "Title": {
         "key": "Error_IncompleteSyncInfo_Title",
@@ -1218,6 +1218,16 @@
           "Confirmation": {
             "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
             "default": "<p>启用此设置将用您的同步书签替换当前书签工具栏中的书签。</p><p>确定继续吗？</p>"
+          }
+        },
+        "Telemetry": {
+          "Label": {
+            "key": "View_Settings_Prefs_Telemetry_Label",
+            "default": "启用遥测器"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_Telemetry_Description",
+            "default": "发送匿名技术数据以改进 xBrowserSync (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>更多信息</a>)。"
           }
         },
         "Title": {
