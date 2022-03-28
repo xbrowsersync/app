@@ -1220,6 +1220,16 @@
             "default": "<p>Activando esta preferencia reemprazaranse os marcadores actuais cos marcadores sincronizados.</p><p>Dacordo en continuar?</p>"
           }
         },
+        "Telemetry": {
+          "Label": {
+            "key": "View_Settings_Prefs_Telemetry_Label",
+            "default": "Activa a telemetría"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_Telemetry_Description",
+            "default": "Envía datos técnicos anónimos para mellorar xBrowserSync (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>máis información</a>)."
+          }
+        },
         "Title": {
           "key": "View_Settings_Prefs_Title",
           "default": "Preferencias"
