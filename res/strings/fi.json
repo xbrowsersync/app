@@ -1220,6 +1220,16 @@
             "default": "<p>Tämän asetuksen käyttöönotto korvaa kirjanmerkit, jotka ovat tällä hetkellä kirjanmerkkipalkissasi.</p><p>Jatketaanko?</p>"
           }
         },
+        "Telemetry": {
+          "Label": {
+            "key": "View_Settings_Prefs_Telemetry_Label",
+            "default": "Käytä telemetriaa"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_Telemetry_Description",
+            "default": "Lähetä nimettömiä teknisiä tietoja xBrowserSyncin parantamiseksi (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>lue lisää</a>)."
+          }
+        },
         "Title": {
           "key": "View_Settings_Prefs_Title",
           "default": "Asetukset"
