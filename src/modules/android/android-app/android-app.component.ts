@@ -250,9 +250,6 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
   }
 
   handleDeviceReady(success: () => any, failure: (err: any) => any): ng.IPromise<any> {
-    // Prime cache for faster startup
-    this.$q.all([this.bookmarkHelperSvc.getCachedBookmarks(), this.settingsSvc.all()]).catch(() => {});
-
     // Load i18n strings
     return (
       this.platformSvc

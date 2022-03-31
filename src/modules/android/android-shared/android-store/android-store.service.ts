@@ -9,7 +9,6 @@ import { NativeStorageError, Table, TraceLogColumn } from './android-store.enum'
 @Injectable('StoreService')
 export class AndroidStoreService extends StoreService {
   appRowId = 1;
-  db: any;
   dbName = 'xbs.db';
   idCol = 'id';
   nativeStorageKeys: string[] = [
@@ -34,20 +33,34 @@ export class AndroidStoreService extends StoreService {
 
   static $inject = ['$q'];
 
+  private _db: any;
+  private get db() {
+    if (!this._db) {
+      try {
+        this._db = window.sqlitePlugin.openDatabase({
+          androidDatabaseProvider: 'system',
+          location: 'default',
+          name: this.dbName
+        });
+      } catch (err) {
+        throw new FailedLocalStorageError(err.message);
+      }
+    }
+    return this._db;
+  }
+
   protected addTraceLog(log: TraceLogItem): ng.IPromise<void> {
     return this.$q<void>((resolve, reject) => {
-      this.openDatabase().then((db) => {
-        db.executeSql(
-          `INSERT INTO ${Table.TraceLog} (
-            ${TraceLogColumn.Timestamp},
-            ${TraceLogColumn.Level},
-            ${TraceLogColumn.Message}
-          ) VALUES (?, ?, ?)`,
-          [log.timestamp, log.level, log.message],
-          () => resolve(),
-          reject
-        );
-      });
+      this.db.executeSql(
+        `INSERT INTO ${Table.TraceLog} (
+          ${TraceLogColumn.Timestamp},
+          ${TraceLogColumn.Level},
+          ${TraceLogColumn.Message}
+        ) VALUES (?, ?, ?)`,
+        [log.timestamp, log.level, log.message],
+        () => resolve(),
+        reject
+      );
     }).catch((err) => this.handleSqlError(err));
   }
 
@@ -55,24 +68,20 @@ export class AndroidStoreService extends StoreService {
     return this.$q
       .all([
         this.$q((resolve, reject) => window.NativeStorage.clear(resolve, reject)),
-        this.openDatabase()
-          .then((db) => this.createTables(db))
-          .catch((err) => this.handleSqlError(err))
+        this.createTables().catch((err) => this.handleSqlError(err))
       ])
       .then(() => {});
   }
 
   protected clearTraceLog(): ng.IPromise<void> {
     return this.$q<void>((resolve, reject) => {
-      this.openDatabase().then((db) => {
-        db.executeSql(`DELETE FROM ${Table.TraceLog}`, [], () => resolve(), reject);
-      });
+      this.db.executeSql(`DELETE FROM ${Table.TraceLog}`, [], () => resolve(), reject);
     }).catch((err) => this.handleSqlError(err));
   }
 
-  protected createTables(db: any): ng.IPromise<any> {
+  protected createTables(): ng.IPromise<any> {
     return this.$q((resolve, reject) => {
-      db.transaction(
+      this.db.transaction(
         (tx: any) => {
           tx.executeSql(`DROP TABLE IF EXISTS ${Table.App}`);
           tx.executeSql(`CREATE TABLE ${Table.App} (
@@ -125,26 +134,24 @@ export class AndroidStoreService extends StoreService {
 
   protected getAllTraceLogs(): ng.IPromise<TraceLogItem[]> {
     return this.$q<TraceLogItem[]>((resolve, reject) => {
-      this.openDatabase().then((db) => {
-        db.executeSql(
-          `SELECT * FROM ${Table.TraceLog} ORDER BY ${TraceLogColumn.Timestamp}`,
-          [],
-          (result: any) => {
-            // Convert results to array of TraceLogItem
-            const logItems: TraceLogItem[] = [];
-            for (let x = 0; x < result.rows.length; x += 1) {
-              const logItem: TraceLogItem = {
-                level: result.rows.item(x).level,
-                message: result.rows.item(x).message,
-                timestamp: result.rows.item(x).timestamp
-              };
-              logItems.push(logItem);
-            }
-            resolve(logItems);
-          },
-          reject
-        );
-      });
+      this.db.executeSql(
+        `SELECT * FROM ${Table.TraceLog} ORDER BY ${TraceLogColumn.Timestamp}`,
+        [],
+        (result: any) => {
+          // Convert results to array of TraceLogItem
+          const logItems: TraceLogItem[] = [];
+          for (let x = 0; x < result.rows.length; x += 1) {
+            const logItem: TraceLogItem = {
+              level: result.rows.item(x).level,
+              message: result.rows.item(x).message,
+              timestamp: result.rows.item(x).timestamp
+            };
+            logItems.push(logItem);
+          }
+          resolve(logItems);
+        },
+        reject
+      );
     }).catch((err) => this.handleSqlError(err));
   }
 
@@ -165,6 +172,9 @@ export class AndroidStoreService extends StoreService {
   }
 
   protected getFromSql<T = StoreContent>(keys: string[] = []): ng.IPromise<T[]> {
+    if (keys.length === 0) {
+      return this.$q.resolve([]);
+    }
     const values = new Array(keys.length);
     return this.$q<T[]>((resolve, reject) => {
       // Get non-trace log values
@@ -172,19 +182,17 @@ export class AndroidStoreService extends StoreService {
       if (keysWithoutTraceLog.length === 0) {
         return resolve([]);
       }
-      this.openDatabase().then((db) => {
-        db.executeSql(
-          `SELECT ${keysWithoutTraceLog.join(', ')} FROM ${Table.App} WHERE ${this.idCol} = ?`,
-          [this.appRowId],
-          (result: any) => {
-            keysWithoutTraceLog.forEach((key) => {
-              values[keys.indexOf(key)] = result.rows.item(0)[key as string];
-            });
-            resolve();
-          },
-          reject
-        );
-      });
+      this.db.executeSql(
+        `SELECT ${keysWithoutTraceLog.join(', ')} FROM ${Table.App} WHERE ${this.idCol} = ?`,
+        [this.appRowId],
+        (result: any) => {
+          keysWithoutTraceLog.forEach((key) => {
+            values[keys.indexOf(key)] = result.rows.item(0)[key as string];
+          });
+          resolve();
+        },
+        reject
+      );
     })
       .then(() => {
         // Get trace log if requested
@@ -206,24 +214,6 @@ export class AndroidStoreService extends StoreService {
   protected keys(): ng.IPromise<string[]> {
     return this.$q<string[]>((resolve, reject) => window.NativeStorage.keys(resolve, reject)).then((keys) => {
       return keys.concat(this.sqlKeys);
-    });
-  }
-
-  protected openDatabase(): ng.IPromise<any> {
-    if (!angular.isUndefined(this.db ?? undefined)) {
-      return this.$q.resolve(this.db);
-    }
-    return this.$q((resolve, reject) => {
-      try {
-        this.db = window.sqlitePlugin.openDatabase({
-          androidDatabaseProvider: 'system',
-          location: 'default',
-          name: this.dbName
-        });
-        resolve(this.db);
-      } catch (err) {
-        reject(new FailedLocalStorageError(err.message));
-      }
     });
   }
 
@@ -261,14 +251,12 @@ export class AndroidStoreService extends StoreService {
 
     // For anything else update existing app table row
     return this.$q<void>((resolve, reject) => {
-      this.openDatabase().then((db) => {
-        db.executeSql(
-          `UPDATE ${Table.App} SET ${key} = ? WHERE ${this.idCol} = ?`,
-          [value, this.appRowId],
-          () => resolve(),
-          reject
-        );
-      });
+      this.db.executeSql(
+        `UPDATE ${Table.App} SET ${key} = ? WHERE ${this.idCol} = ?`,
+        [value, this.appRowId],
+        () => resolve(),
+        reject
+      );
     }).catch((err) => this.handleSqlError(err));
   }
 }
