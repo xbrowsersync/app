@@ -386,16 +386,25 @@ export class AndroidPlatformService implements PlatformService {
   }
 
   initI18n(): ng.IPromise<void> {
-    return this.getCurrentLocale()
+    return this.$http
+      .get<I18nObject[]>(`./assets/strings_en.json`)
+      .then((response) => {
+        this.i18nObjects = response.data;
+        return this.getCurrentLocale();
+      })
       .then((currentLocale) => {
         const i18nCode = currentLocale.split('-')[0];
-        return this.$http.get<I18nObject[]>(`./assets/strings_${i18nCode}.json`).then((response) => {
-          this.i18nObjects = response.data;
-        });
+        return this.$http
+          .get<I18nObject[]>(`./assets/strings_${i18nCode}.json`)
+          .then((response) => {
+            this.i18nObjects = response.data;
+          })
+          .catch((err) => {
+            this.logSvc.logWarning(`Failed to load i18n strings for locale ${currentLocale}`);
+          });
       })
       .catch((err) => {
-        this.logSvc.logWarning(`Couldn’t load i18n strings`);
-        throw err;
+        this.logSvc.logWarning(`Failed to load i18n strings: ${err?.message}`);
       });
   }
 
