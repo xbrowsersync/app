@@ -51,7 +51,6 @@ export class AndroidStoreService extends StoreService {
 
   protected addTraceLog(log: TraceLogItem): ng.IPromise<void> {
     return this.$q<void>((resolve, reject) => {
-      throw new Error(`addTraceLog: ${JSON.stringify(log ?? {})}`);
       this.db.executeSql(
         `INSERT INTO ${Table.TraceLog} (
           ${TraceLogColumn.Timestamp},
