@@ -105,38 +105,44 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
 
   checkForInstallOrUpgrade(): ng.IPromise<void> {
     // Get current app version
-    return this.platformSvc.getAppVersion().then((appVersion) => {
-      // Get previous app version by first checking both legacy and old versions
-      const localStorageAppVersion = localStorage.getItem('xBrowserSync-mobileAppVersion');
-      return this.$q<string>((resolve) => {
-        window.NativeStorage.getItem('appVersion', resolve, () => resolve());
-      })
-        .then((nativeStorageAppVersion) => {
-          return nativeStorageAppVersion ?? localStorageAppVersion ?? undefined;
-        })
-        .then((legacyAppVersion) => {
-          // If no last upgrade version or legacy app version this is a new install
-          // otherwise set last upgrade version to be legacy version if not set
-          return this.upgradeSvc
-            .getLastUpgradeVersion()
-            .then((lastUpgradeVersion) => {
-              if (angular.isUndefined(lastUpgradeVersion)) {
-                if (angular.isUndefined(legacyAppVersion)) {
-                  return this.handleInstall(appVersion);
-                }
-                return this.upgradeSvc.setLastUpgradeVersion(legacyAppVersion);
-              }
+    return (
+      this.platformSvc
+        .getAppVersion()
+        .then((appVersion) => {
+          // Get previous app version by first checking both legacy and old versions
+          const localStorageAppVersion = localStorage.getItem('xBrowserSync-mobileAppVersion');
+          return this.$q<string>((resolve) => {
+            window.NativeStorage.getItem('appVersion', resolve, () => resolve());
+          })
+            .then((nativeStorageAppVersion) => {
+              return nativeStorageAppVersion ?? localStorageAppVersion ?? undefined;
             })
-            .then(() => {
-              // Upgrade if required
-              return this.upgradeSvc.checkIfUpgradeRequired(appVersion).then((upgradeRequired) => {
-                if (upgradeRequired) {
-                  return this.handleUpgrade(appVersion);
-                }
-              });
+            .then((legacyAppVersion) => {
+              // If no last upgrade version or legacy app version this is a new install
+              // otherwise set last upgrade version to be legacy version if not set
+              return this.upgradeSvc
+                .getLastUpgradeVersion()
+                .then((lastUpgradeVersion) => {
+                  if (angular.isUndefined(lastUpgradeVersion)) {
+                    if (angular.isUndefined(legacyAppVersion)) {
+                      return this.handleInstall(appVersion);
+                    }
+                    return this.upgradeSvc.setLastUpgradeVersion(legacyAppVersion);
+                  }
+                })
+                .then(() => {
+                  // Upgrade if required
+                  return this.upgradeSvc.checkIfUpgradeRequired(appVersion).then((upgradeRequired) => {
+                    if (upgradeRequired) {
+                      return this.handleUpgrade(appVersion);
+                    }
+                  });
+                });
             });
-        });
-    });
+        })
+        // Load i18n strings
+        .finally(() => this.platformSvc.initI18n())
+    );
   }
 
   checkForNewVersion(): void {
@@ -250,13 +256,9 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
   }
 
   handleDeviceReady(success: () => any, failure: (err: any) => any): ng.IPromise<any> {
-    // Prime cache for faster startup
-    this.$q.all([this.bookmarkHelperSvc.getCachedBookmarks(), this.settingsSvc.all()]).catch(() => {});
-
-    // Load i18n strings
     return (
-      this.platformSvc
-        .initI18n()
+      this.$q
+        .resolve()
         .then(() => {
           // Configure events
           document.addEventListener('backbutton', this.handleBackButton, false);
