@@ -11,18 +11,17 @@ export class SyncEnabledController {
     $timeout: ng.ITimeoutService,
     syncService: SyncService
   ) {
+    $timeout(() => {
+      this.showComponent = true;
+    });
+
     // Check if the current sync has been removed before showing page content
-    // Set a short timeout to avoid potential long delays when switching pages
-    $q.race([syncService.checkSyncExists(), new $q((resolve) => $timeout(() => resolve(true), 150))])
+    $q.race([syncService.checkSyncExists(), new $q((resolve) => $timeout(() => resolve(true), 1e3))])
       .then((syncExists) => {
         if (!syncExists) {
           $location.path(RoutePath.SyncRemoved);
-          return;
         }
-        this.showComponent = true;
       })
-      .catch(() => {
-        this.showComponent = true;
-      });
+      .catch(() => {});
   }
 }
