@@ -138,7 +138,7 @@ app-login {
   }
 
   .selected-service {
-    display: inline-flex;
+    display: flex;
     justify-content: center;
     margin-bottom: 0.75rem;
     width: 100%;
@@ -155,7 +155,6 @@ app-login {
 
     .status-icon {
       margin-left: 0.25rem;
-      top: 0.2rem;
 
       .loading .spinner-border {
         border-color: var(--color-text);
@@ -198,6 +197,11 @@ app-login {
       font-size: 0.9rem;
       line-height: 1.2rem;
     }
+  }
+
+  .service-url-container {
+    align-items: center;
+    display: flex;
   }
 
   .toggle-form {

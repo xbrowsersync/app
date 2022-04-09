@@ -6,6 +6,7 @@ import {
   ApiXbrowsersyncSyncInfo
 } from '../../../../shared/api/api-xbrowsersync/api-xbrowsersync.interface';
 import { ApiXbrowsersyncService } from '../../../../shared/api/api-xbrowsersync/api-xbrowsersync.service';
+import { ServiceOfflineError } from '../../../../shared/errors/errors';
 import { PlatformService } from '../../../../shared/global-shared.interface';
 import { StoreKey } from '../../../../shared/store/store.enum';
 import { StoreService } from '../../../../shared/store/store.service';
@@ -88,15 +89,24 @@ export class ApiXbrowsersyncServiceInfoComponent implements OnInit {
   }
 
   refreshServiceStatus(): ng.IPromise<void> {
-    return this.apiSvc.checkServiceStatus().then((serviceInfoResponse) => {
-      this.serviceInfo = {
-        ...this.serviceInfo,
-        ...this.apiSvc.formatServiceInfo(serviceInfoResponse)
-      };
+    return this.apiSvc
+      .checkServiceStatus()
+      .then((serviceInfoResponse) => {
+        this.serviceInfo = {
+          ...this.serviceInfo,
+          ...this.apiSvc.formatServiceInfo(serviceInfoResponse)
+        };
 
-      // Set service message links to open in new tabs
-      this.appHelperSvc.attachClickEventsToNewTabLinks(document.querySelector('.service-message'));
-    });
+        // Set service message links to open in new tabs
+        this.appHelperSvc.attachClickEventsToNewTabLinks(document.querySelector('.service-message'));
+      })
+      .catch((err) => {
+        const status = err instanceof ServiceOfflineError ? ApiServiceStatus.Offline : ApiServiceStatus.Error;
+        this.serviceInfo = {
+          ...this.serviceInfo,
+          status
+        };
+      });
   }
 
   refreshSyncDataUsage(): ng.IPromise<void> {

@@ -14,6 +14,7 @@ sync-settings {
       }
 
       &.service-url {
+        align-items: center;
         display: flex;
         justify-content: center;
         margin-bottom: 0.5rem;
@@ -25,7 +26,6 @@ sync-settings {
 
         .status-icon {
           margin-left: 0.25rem;
-          top: 0.1rem;
         }
       }
     }

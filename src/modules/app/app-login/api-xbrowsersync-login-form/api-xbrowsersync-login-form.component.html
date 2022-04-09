@@ -6,30 +6,32 @@
        ng-show="(!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) && !vm.updateServicePanelVisible) || 
     (vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) && !vm.updateServicePanelVisible && !vm.getSyncIdPanelVisible)">
     <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Selected) }}</label>
-    <a href="{{ vm.serviceInfo.url }}" class="new-tab" title="{{ vm.serviceInfo.url }}">
-      {{ vm.serviceInfo.url }}
-    </a>
-    <div class="status-icon">
-      <div class="loading animate-fade-in"
-           ng-show="vm.serviceInfo.url !== undefined && vm.serviceInfo.status === undefined"
-           title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Loading) }}">
-        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-      </div>
-      <div class="success animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Online"
-           title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Online) }}">
-        <icon type="'check'" bold="true"></icon>
-      </div>
-      <div class="warning animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.NoNewSyncs"
-           title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.NoNewSyncs) }}">
-        <icon type="'minus'" bold="true"></icon>
-      </div>
-      <div class="danger animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Error"
-           title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Error) }}">
-        <icon type="'x'" bold="true"></icon>
-      </div>
-      <div class="danger animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Offline"
-           title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Offline) }}">
-        <icon type="'x'" bold="true"></icon>
+    <div class="service-url-container">
+      <a href="{{ vm.serviceInfo.url }}" class="new-tab" title="{{ vm.serviceInfo.url }}">
+        {{ vm.serviceInfo.url }}
+      </a>
+      <div class="status-icon">
+        <div class="loading animate-fade-in"
+             ng-show="vm.serviceInfo.url !== undefined && vm.serviceInfo.status === undefined"
+             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Loading) }}">
+          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+        </div>
+        <div class="success animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Online"
+             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Online) }}">
+          <icon type="'check'" bold="true"></icon>
+        </div>
+        <div class="warning animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.NoNewSyncs"
+             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.NoNewSyncs) }}">
+          <icon type="'minus'" bold="true"></icon>
+        </div>
+        <div class="danger animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Error"
+             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Error) }}">
+          <icon type="'x'" bold="true"></icon>
+        </div>
+        <div class="danger animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Offline"
+             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Offline) }}">
+          <icon type="'x'" bold="true"></icon>
+        </div>
       </div>
     </div>
   </div>
