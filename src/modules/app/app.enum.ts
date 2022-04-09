@@ -31,6 +31,7 @@ enum RoutePath {
   Settings = '/settings',
   Support = '/support',
   SyncRemoved = '/sync-removed',
+  TelemetryCheck = '/telemetry-check',
   Updated = '/updated'
 }
 

@@ -12,6 +12,7 @@ export class SyncEnabledController {
     syncService: SyncService
   ) {
     // Check if the current sync has been removed before showing page content
+    // Set a short timeout to avoid potential long delays when switching pages
     $q.race([syncService.checkSyncExists(), new $q((resolve) => $timeout(() => resolve(true), 150))])
       .then((syncExists) => {
         if (!syncExists) {

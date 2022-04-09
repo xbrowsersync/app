@@ -16,6 +16,7 @@ export interface StoreContent {
   displayHelp: boolean;
   displayOtherSyncsWarning: boolean;
   displayPermissions: boolean;
+  displayTelemetryCheck: boolean;
   displayUpdated: boolean;
   defaultToFolderView: boolean;
   installBackup: string;

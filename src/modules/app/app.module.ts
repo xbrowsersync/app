@@ -16,6 +16,7 @@ import { BookmarkTreeComponent } from './app-search/bookmark-tree/bookmark-tree.
 import { AppSettingsModule } from './app-settings/app-settings.module';
 import { AppSupportComponent } from './app-support/app-support.component';
 import { AppSyncRemovedComponent } from './app-sync-removed/app-sync-removed.component';
+import { AppTelemetryComponent } from './app-telemetry/app-telemetry.component';
 import { AppUpdatedComponent } from './app-updated/app-updated.component';
 import { IconComponent } from './shared/icon/icon.component';
 import { IconButtonComponent } from './shared/icon-button/icon-button.component';
@@ -27,6 +28,7 @@ import { IconButtonComponent } from './shared/icon-button/icon-button.component'
     AppPermissionsComponent,
     AppSupportComponent,
     AppSyncRemovedComponent,
+    AppTelemetryComponent,
     AppUpdatedComponent,
     BookmarkComponent,
     BookmarkTreeComponent,

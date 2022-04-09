@@ -1,0 +1,12 @@
+app-telemetry {
+  display: block;
+
+  .buttons button {
+    display: block;
+    margin: 0 auto 1rem;
+
+    &:last-child {
+      margin-right: auto;
+    }
+  }
+}

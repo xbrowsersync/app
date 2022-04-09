@@ -1,0 +1,12 @@
+<div class="view-content">
+  <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.TelemetryCheck.Title) }}</h4>
+  <div ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.TelemetryCheck.Content)"></div>
+  <div class="buttons">
+    <button type="button" class="btn btn-default focused" ng-click="vm.utilitySvc.handleEvent(vm.confirm)">
+      {{ vm.platformSvc.getI18nString(vm.Strings.Button.Confirm) }}
+    </button>
+    <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.deny)">
+      {{ vm.platformSvc.getI18nString(vm.Strings.Button.Deny) }}
+    </button>
+  </div>
+</div>

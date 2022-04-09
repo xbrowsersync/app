@@ -9,6 +9,7 @@ enum StoreKey {
   DisplayHelp = 'displayHelp',
   DisplayOtherSyncsWarning = 'displayOtherSyncsWarning',
   DisplayPermissions = 'displayPermissions',
+  DisplayTelemetryCheck = 'displayTelemetryCheck',
   DisplayUpdated = 'displayUpdated',
   DefaultToFolderView = 'defaultToFolderView',
   InstallBackup = 'installBackup',

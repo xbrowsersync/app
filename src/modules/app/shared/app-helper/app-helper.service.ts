@@ -108,6 +108,7 @@ export abstract class AppHelperService {
               this.storeSvc.get([
                 StoreKey.DisplayHelp,
                 StoreKey.DisplayPermissions,
+                StoreKey.DisplayTelemetryCheck,
                 StoreKey.DisplayUpdated,
                 StoreKey.RemovedSync
               ]),
@@ -118,10 +119,12 @@ export abstract class AppHelperService {
               switch (true) {
                 case storeContent.displayUpdated:
                   return RoutePath.Updated;
-                case storeContent.displayPermissions:
-                  return RoutePath.Permissions;
                 case storeContent.displayHelp:
                   return RoutePath.Help;
+                case storeContent.displayTelemetryCheck:
+                  return RoutePath.TelemetryCheck;
+                case storeContent.displayPermissions:
+                  return RoutePath.Permissions;
                 case !!storeContent.removedSync:
                   return RoutePath.SyncRemoved;
                 case syncEnabled:

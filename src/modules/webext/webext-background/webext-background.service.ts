@@ -252,11 +252,8 @@ export class WebExtBackgroundService {
             const [checkForAppUpdates, telemetryEnabled, telemetry, syncEnabled] = data;
             this.platformSvc.refreshNativeInterface(syncEnabled);
 
-            // Log telemetry and submit if enabled
+            // Log telemetry to console
             this.logSvc.logInfo(telemetry);
-            if (telemetryEnabled) {
-              this.$timeout(() => this.telemetrySvc.submitTelemetry(), 4e3);
-            }
 
             // Check for new app version
             if (checkForAppUpdates) {
@@ -267,7 +264,14 @@ export class WebExtBackgroundService {
             if (!syncEnabled) {
               return;
             }
-            return this.syncSvc.enableSync().then(() => this.$timeout(() => this.checkForSyncUpdatesOnStartup(), 3e3));
+            return this.syncSvc.enableSync().then(() => {
+              this.$timeout(() => this.checkForSyncUpdatesOnStartup(), 3e3);
+
+              // Submit telemetry if enabled
+              if (telemetryEnabled) {
+                this.$timeout(() => this.telemetrySvc.submitTelemetry(), 4e3);
+              }
+            });
           })
       );
   }

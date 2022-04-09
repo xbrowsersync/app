@@ -337,12 +337,10 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
         this.utilitySvc.isSyncEnabled()
       ])
       .then((data) => {
-        // Log telemetry and submit if enabled
         const [checkForAppUpdates, telemetryEnabled, telemetry, syncEnabled] = data;
+
+        // Log telemetry to console
         this.logSvc.logInfo(telemetry);
-        if (telemetryEnabled) {
-          this.$timeout(() => this.telemetrySvc.submitTelemetry(), 5e3);
-        }
 
         // Check for new app version
         if (checkForAppUpdates) {
@@ -352,6 +350,11 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
         // Exit if sync not enabled
         if (!syncEnabled) {
           return;
+        }
+
+        // Submit telemetry if enabled
+        if (telemetryEnabled) {
+          this.$timeout(() => this.telemetrySvc.submitTelemetry(), 5e3);
         }
 
         // Check if a bookmark was shared
