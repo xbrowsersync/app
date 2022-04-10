@@ -1227,7 +1227,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_Telemetry_Description",
-            "default": "Lähetä nimettömiä teknisiä tietoja xBrowserSyncin parantamiseksi (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>lue lisää</a>)."
+            "default": "Lähetä toisinaan nimettömiä teknisiä tietoja xBrowserSyncin parantamiseksi."
           }
         },
         "Title": {
@@ -1344,6 +1344,16 @@
       "Content": {
         "key": "View_SyncRemoved_Content",
         "default": "<p>Synkronointiasi ei löydy ja se on saatettu poistaa käyttämättömänä.</p><p>Sinun on luotava uusi synkronointi. Jos haluat säilyttää tietosi, tallenna varmuuskopio synkronoiduista tiedoistasi klikkaamalla alla olevaa painiketta ja lopuksi palauta varmuuskopio uuteen synkronointiisi.</p>"
+      }
+    },
+    "TelemetryCheck": {
+      "Title": {
+        "key": "View_TelemetryCheck_Title",
+        "default": "Lähetetäänkö anonyymiä telemetriaa?"
+      },
+      "Content": {
+        "key": "View_TelemetryCheck_Content",
+        "default": "<p>xBrowserSync on toisin kuin perinteiset sovellukset, koska se on täysin anonyymi, yksityisyyden etusijalla oleva työkalu. Tällaisen työkalun ylläpito on haastavaa, koska meillä ei ole pääsyä käyttäjätietoihin, jotka auttaisivat määrittämään, kuinka rajalliset resurssit voidaan parhaiten hyödyntää. Siksi pyydämme lupaasi lähettää ajoittain nimettömiä teknisiä tietoja auttaaksemme meitä parantamaan xBrowserSynciä.</p><p>Nämä telemetriatiedot eivät sisällä henkilökohtaisia tai tunnistavia tietoja, eivätkä ne sisällä mitään salattuja synkronointitietojasi, eikä niitä koskaan ole. jaettu kolmansien osapuolten kanssa (voit ottaa käyttöön tai poistaa sen käytöstä milloin tahansa Asetukset-paneelissa).</p>"
       }
     },
     "Updated": {
