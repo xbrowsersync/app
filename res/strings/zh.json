@@ -1227,7 +1227,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_Telemetry_Description",
-            "default": "发送匿名技术数据以改进 xBrowserSync (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>更多信息</a>)。"
+            "default": "偶尔发送匿名技术数据以帮助改进 xBrowserSync。"
           }
         },
         "Title": {
@@ -1344,6 +1344,16 @@
       "Content": {
         "key": "View_SyncRemoved_Content",
         "default": "<p>您的同步未找到可能因为没有活动而被删除。</p><p>您将需要创建一个新的同步, 但首先点击下面的按钮下载您同步数据的备份，然后恢复到新的同步状态。</p>"
+      }
+    },
+    "TelemetryCheck": {
+      "Title": {
+        "key": "View_TelemetryCheck_Title",
+        "default": "发送匿名遥测？"
+      },
+      "Content": {
+        "key": "View_TelemetryCheck_Content",
+        "default": "<p>xBrowserSync 与传统应用程序不同，因为它是一个完全匿名的隐私优先工具。 维护这样一个工具具有挑战性，因为我们无法访问用户数据来帮助确定如何最好地部署我们有限的资源。 因此，我们请求您允许偶尔发送匿名技术数据，以帮助我们改进 xBrowserSync。</p><p>此遥测数据不包括任何个人或识别数据，也不包括您的任何加密同步数据，并且永远不会 与任何第三方共享（您可以随时在“设置”面板中选择加入或退出）。</p>"
       }
     },
     "Updated": {
