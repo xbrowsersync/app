@@ -1,5 +1,8 @@
 import { Injectable } from 'angular-ts-decorators';
+import { ApiServiceType } from '../../../shared/api/api.enum';
+import { ApiXbrowsersyncSyncInfo } from '../../../shared/api/api-xbrowsersync/api-xbrowsersync.interface';
 import { FailedLocalStorageError } from '../../../shared/errors/errors';
+import Globals from '../../../shared/global-shared.constants';
 import { StoreKey } from '../../../shared/store/store.enum';
 import { V160UpgradeProviderService } from '../../../shared/upgrade/v1.6.0-upgrade-provider/v1.6.0-upgrade-provider.service';
 
@@ -54,24 +57,51 @@ export class AndroidV160UpgradeProviderService extends V160UpgradeProviderServic
             return;
           }
 
+          const syncInfo: Partial<ApiXbrowsersyncSyncInfo> = {
+            serviceType: ApiServiceType.xBrowserSync
+          };
+
           // Add settings from previous version to store
-          return this.$q.all(
-            Object.keys(cachedData).map((key) => {
-              // Don't include deprecated settings
-              if (key === 'appVersion' || key === 'traceLog') {
+          return this.$q
+            .all(
+              Object.keys(cachedData).map((key) => {
+                if (key === 'appVersion' || key === 'password' || key === 'traceLog') {
+                  return;
+                }
+
+                // Upgrade sync settings
+                switch (key) {
+                  case 'serviceUrl':
+                    syncInfo.serviceUrl = cachedData[key];
+                    return;
+                  case 'syncId':
+                    syncInfo.id = cachedData[key];
+                    return;
+                  case 'syncVersion':
+                    syncInfo.version = cachedData[key];
+                    return;
+                  default:
+                }
+
+                // Update settings whose key has changed
+                if (key === 'displaySearchBarBeneathResults') {
+                  const keyValue = cachedData[key];
+                  key = StoreKey.AlternateSearchBarPosition;
+                  cachedData[key] = keyValue;
+                }
+
+                return this.storeSvc.set(key, cachedData[key]);
+              })
+            )
+            .then(() => {
+              if (!syncInfo.id) {
                 return;
               }
-
-              // Update settings whose key has changed
-              if (key === 'displaySearchBarBeneathResults') {
-                const keyValue = cachedData[key];
-                key = StoreKey.AlternateSearchBarPosition;
-                cachedData[key] = keyValue;
+              if (!syncInfo.serviceUrl) {
+                syncInfo.serviceUrl = Globals.URL.DefaultServiceUrl;
               }
-
-              return this.storeSvc.set(key, cachedData[key]);
-            })
-          );
+              return this.storeSvc.set(StoreKey.SyncInfo, syncInfo);
+            });
         })
         .then(() => super.upgradeApp());
     });

@@ -1,8 +1,12 @@
 import { Injectable } from 'angular-ts-decorators';
 import browser from 'webextension-polyfill';
+import { ApiServiceType } from '../../../shared/api/api.enum';
+import { ApiXbrowsersyncSyncInfo } from '../../../shared/api/api-xbrowsersync/api-xbrowsersync.interface';
 import { BookmarkService } from '../../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
+import { StoreKey } from '../../../shared/store/store.enum';
 import { StoreService } from '../../../shared/store/store.service';
 import { V160UpgradeProviderService } from '../../../shared/upgrade/v1.6.0-upgrade-provider/v1.6.0-upgrade-provider.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
@@ -43,11 +47,43 @@ export class WebExtV160UpgradeProviderService extends V160UpgradeProviderService
             return;
           }
 
-          return this.$q.all(
-            Object.keys(cachedData).map((key) => {
-              return this.storeSvc.set(key, cachedData[key]);
-            })
-          );
+          const syncInfo: Partial<ApiXbrowsersyncSyncInfo> = {
+            serviceType: ApiServiceType.xBrowserSync
+          };
+
+          return this.$q
+            .all(
+              Object.keys(cachedData).map((key) => {
+                if (key === 'password') {
+                  return;
+                }
+
+                // Upgrade sync settings
+                switch (key) {
+                  case 'serviceUrl':
+                    syncInfo.serviceUrl = cachedData[key];
+                    return;
+                  case 'syncId':
+                    syncInfo.id = cachedData[key];
+                    return;
+                  case 'syncVersion':
+                    syncInfo.version = cachedData[key];
+                    return;
+                  default:
+                }
+
+                return this.storeSvc.set(key, cachedData[key]);
+              })
+            )
+            .then(() => {
+              if (!syncInfo.id) {
+                return;
+              }
+              if (!syncInfo.serviceUrl) {
+                syncInfo.serviceUrl = Globals.URL.DefaultServiceUrl;
+              }
+              return this.storeSvc.set(StoreKey.SyncInfo, syncInfo);
+            });
         })
         .then(() => browser.storage.local.clear())
         .then(() => super.upgradeApp())
