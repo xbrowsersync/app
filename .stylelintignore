@@ -1,8 +1,0 @@
-build/
-coverage/
-dist/
-node_modules/
-res/
-**/*.html
-**/*.md
-**/*.ts

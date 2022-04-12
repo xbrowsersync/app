@@ -123,5 +123,119 @@
     "webpack-cli": "^4.9.1",
     "xml2js": "^0.4.23",
     "zip-dir": "^2.0.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "jest": true
+    },
+    "extends": [
+      "airbnb-base",
+      "airbnb-typescript/base",
+      "plugin:prettier/recommended"
+    ],
+    "globals": {
+      "Atomics": "readonly",
+      "ng": "readonly",
+      "SharedArrayBuffer": "readonly"
+    },
+    "ignorePatterns": ["build/", "dist/"],
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "project": "./tsconfig.eslint.json",
+      "sourceType": "module"
+    },
+    "plugins": [
+      "simple-import-sort",
+      "unused-imports"
+    ],
+    "root": true,
+    "rules": {
+      "@typescript-eslint/comma-dangle": "off",
+      "@typescript-eslint/indent": "off",
+      "@typescript-eslint/lines-between-class-members": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/semi": "warn",
+      "class-methods-use-this": "off",
+      "consistent-return": "off",
+      "default-param-last": "off",
+      "func-style": "warn",
+      "global-require": "off",
+      "import/no-dynamic-require": "off",
+      "import/no-extraneous-dependencies": ["error", {
+        "devDependencies": true
+      }],
+      "import/order": "off",
+      "import/prefer-default-export": "off",
+      "no-bitwise": "off",
+      "no-empty": "off",
+      "no-nested-ternary": "off",
+      "no-param-reassign": "off",
+      "no-undef": "error",
+      "no-underscore-dangle": "off",
+      "no-unreachable": "warn",
+      "prefer-destructuring": "off",
+      "prettier/prettier": "warn",
+      "simple-import-sort/imports": [
+        "warn",
+        {
+          "groups": [
+            ["^\\u0000", "^@?\\w", "^[^.]", "^\\."]
+          ]
+        }
+      ],
+      "simple-import-sort/exports": "warn",
+      "sort-imports": "off",
+      "spaced-comment": "off",
+      "unused-imports/no-unused-imports-ts": "warn"
+    }
+  },
+  "stylelint": {
+    "extends": [
+      "stylelint-config-standard-scss",
+      "stylelint-prettier/recommended"
+    ],
+    "rules": {
+      "alpha-value-notation": "number",
+      "color-function-notation": "legacy",
+      "declaration-block-no-duplicate-properties": null,
+      "font-family-no-missing-generic-family-keyword": null,
+      "max-nesting-depth": 20,
+      "no-descending-specificity": null,
+      "no-invalid-position-at-import-rule": null,
+      "no-irregular-whitespace": null,
+      "prettier/prettier": [true, {
+        "severity": "warning"
+      }],
+      "scss/at-extend-no-missing-placeholder": null,
+      "scss/selector-no-redundant-nesting-selector": null,
+      "selector-id-pattern": null,
+      "selector-max-compound-selectors": null,
+      "selector-max-id": null,
+      "selector-no-qualifying-type": null,
+      "selector-type-no-unknown": null
+    }
+  },
+  "prettier": {
+    "bracketSpacing": true,
+    "overrides": [{
+      "files": ["*.html"],
+      "options": {
+        "htmlWhitespaceSensitivity": "ignore",
+        "jsxBracketSameLine": true
+      }
+    }],
+    "printWidth": 120,
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "none",
+    "useTabs": false
+  },
+  "jest": {
+    "collectCoverageFrom": ["<rootDir>/src/modules/**/*.ts"],
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "testMatch": ["<rootDir>/src/modules/**/*.spec.ts"]
   }
 }

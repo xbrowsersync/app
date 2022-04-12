@@ -1,8 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
-module.exports = function (ctx) {
-  let source, destination;
+module.exports = (ctx) => {
+  let source;
+  let destination;
 
   // Copy build-extras.gradle
   source = path.join(ctx.opts.projectRoot, 'build-extras.gradle');
@@ -12,9 +13,7 @@ module.exports = function (ctx) {
   // Copy gradle.properties
   if (ctx.opts.options.release) {
     source = path.join(ctx.opts.projectRoot, 'gradle.release.properties');
-
-  }
-  else {
+  } else {
     source = path.join(ctx.opts.projectRoot, 'gradle.dev.properties');
   }
   destination = path.join(ctx.opts.projectRoot, 'platforms/android/app/gradle.properties');
