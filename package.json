@@ -218,6 +218,7 @@
   },
   "prettier": {
     "bracketSpacing": true,
+    "endOfLine": "auto",
     "overrides": [{
       "files": ["*.html"],
       "options": {
