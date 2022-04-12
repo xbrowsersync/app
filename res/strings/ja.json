@@ -1227,7 +1227,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_Telemetry_Description",
-            "default": "xBrowserSync (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>詳細情報</a> ) を改善するために匿名の技術データを送信します。"
+            "default": "xBrowserSyncの改善に役立てるために、匿名の技術データを送信することがあります。"
           }
         },
         "Title": {
@@ -1344,6 +1344,16 @@
       "Content": {
         "key": "View_SyncRemoved_Content",
         "default": "<p>あなたの同期が見つかりませんでした。最近使用されていないために削除された可能性があります。</p><p>新しい同期を作成する必要がありますが、まず下のボタンをクリックして同期データのバックアップをダウンロードし、新しい同期に復元してください。"
+      }
+    },
+    "TelemetryCheck": {
+      "Title": {
+        "key": "View_TelemetryCheck_Title",
+        "default": "匿名のテレメトリを送信しますか？"
+      },
+      "Content": {
+        "key": "View_TelemetryCheck_Content",
+        "default": "<p> xBrowserSyncは、完全に匿名のプライバシー第一のツールであるため、従来のアプリとは異なります。 限られたリソースを最適に展開する方法を決定するのに役立つユーザーデータにアクセスできないため、このようなツールを維持することは困難です。 したがって、xBrowserSyncの改善に役立てるために、匿名の技術データをときどき送信する許可をお願いします。</ p> <p>このテレメトリデータには、個人データや識別データは含まれていません。また、暗号化された同期データも含まれていません。 サードパーティと共有します（[設定]パネルでいつでもオプトインまたはオプトアウトできます）。</ p>"
       }
     },
     "Updated": {

@@ -1227,7 +1227,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_Telemetry_Description",
-            "default": "Verstuur anonieme technische gegevens om xBrowserSync te verbeteren (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>meer info</a>)."
+            "default": "Stuur af en toe anonieme technische gegevens om xBrowserSync te helpen verbeteren."
           }
         },
         "Title": {
@@ -1344,6 +1344,16 @@
       "Content": {
         "key": "View_SyncRemoved_Content",
         "default": "<p>Je synchronisatie kon niet worden gevonden en is mogelijk verwijderd door inactiviteit.</p><p>Je moet een nieuwe synchronisatie aanmaken, maar klik eerst op de knop hieronder om een back-up van je gesynchroniseerde gegevens te downloaden die je vervolgens kunt terugzetten naar je nieuwe synchronisatie.</p>"
+      }
+    },
+    "TelemetryCheck": {
+      "Title": {
+        "key": "View_TelemetryCheck_Title",
+        "default": "Anonieme telemetrie versturen?"
+      },
+      "Content": {
+        "key": "View_TelemetryCheck_Content",
+        "default": "<p>xBrowserSync is anders dan traditionele apps, omdat het een volledig anonieme, privacy-first tool is. Het onderhouden van een dergelijke tool is een uitdaging omdat we geen toegang hebben tot gebruikersgegevens om te helpen bepalen hoe we onze beperkte middelen het beste kunnen inzetten. Daarom vragen we uw toestemming om af en toe anonieme technische gegevens te verzenden om ons te helpen xBrowserSync te verbeteren.</p><p>Deze telemetriegegevens bevatten geen persoonlijke of identificerende gegevens, noch uw versleutelde synchronisatiegegevens en zijn nooit gedeeld met derden (u kunt zich op elk moment aan- of afmelden in het instellingenpaneel).</p>"
       }
     },
     "Updated": {

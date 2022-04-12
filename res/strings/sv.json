@@ -1227,7 +1227,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_Telemetry_Description",
-            "default": "Skicka anonyma tekniska data för att förbättra xBrowserSync (<a href='https://link.xbrowsersync.org/telemetry' class='new-tab'>mer info</a>)."
+            "default": "Skicka anonym teknisk data då och då för att förbättra xBrowserSync."
           }
         },
         "Title": {
@@ -1344,6 +1344,16 @@
       "Content": {
         "key": "View_SyncRemoved_Content",
         "default": "<p>Din synkronisering kunde inte hittas och kan ha tagits bort på grund av inaktivitet.</p><p>Du måste skapa en ny synkronisering, men klicka först på knappen nedan för att ladda ned en säkerhetskopia av dina synkroniserade data som du sedan kan återställa till din nya synkronisering.</p>"
+      }
+    },
+    "TelemetryCheck": {
+      "Title": {
+        "key": "View_TelemetryCheck_Title",
+        "default": "Skicka anonym telemetri?"
+      },
+      "Content": {
+        "key": "View_TelemetryCheck_Content",
+        "default": "<p>xBrowserSync skiljer sig från traditionella appar eftersom det är ett helt anonymt verktyg som prioriterar integriteten. Att underhålla ett sådant verktyg är utmanande eftersom vi inte har tillgång till användardata för att hjälpa oss att avgöra hur vi bäst kan distribuera våra begränsade resurser. Därför ber vi om ditt tillåtelse att då och då skicka anonyma tekniska data för att hjälpa oss att förbättra xBrowserSync.</p><p>Denna telemetridata inkluderar inga personliga eller identifierande data, inte heller några av dina krypterade synkroniseringsdata och är aldrig delas med tredje part (du kan när som helst välja att in- eller avstå från inställningspanelen).</p>"
       }
     },
     "Updated": {

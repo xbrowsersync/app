@@ -1,0 +1,1384 @@
+{
+  "Alert": {
+    "AppUpdateAvailable": {
+      "Title": {
+        "key": "Alert_AppUpdateAvailable_Title",
+        "default": "Pembaruan xBrowserSync tersedia"
+      },
+      "Message": {
+        "key": "Alert_AppUpdateAvailable_Message",
+        "default": "{version} tersedia untuk diunduh. Klik untuk informasi lebih lanjut.",
+        "android": "xBrowserSync {version} tersedia untuk diunduh."
+      }
+    },
+    "AppUpdated": {
+      "Title": {
+        "key": "Alert_AppUpdated_Title",
+        "default": "Diperbarui ke"
+      },
+      "Message": {
+        "key": "Alert_AppUpdated_Message",
+        "default": "xBrowserSync telah diperbarui. Sinkronisasi telah dimatikan, aktifkan kembali sinkronisasi untuk menyelesaikan proses peningkatan."
+      }
+    },
+    "BookmarkCreated": {
+      "key": "Alert_BookmarkCreated",
+      "default": "Markah dibuat"
+    },
+    "BookmarkDeleted": {
+      "key": "Alert_BookmarkDeleted",
+      "default": "Markah dihapus"
+    },
+    "BookmarkUpdated": {
+      "key": "Alert_BookmarkUpdated",
+      "default": "Markah diperbarui"
+    },
+    "GetMetadata": {
+      "Message": {
+        "key": "Alert_GetMetadata_Message",
+        "default": "Mengambil properti markah, sentuh untuk membatalkan."
+      },
+      "Success": {
+        "key": "Alert_GetMetadata_Success",
+        "default": "Properti markah diperbarui."
+      }
+    },
+    "Go": {
+      "key": "Alert_Go",
+      "default": "Pergi"
+    }
+  },
+  "App": {
+    "Description": {
+      "key": "App_Description",
+      "default": "Sinkronisasi peramban sebagaimana mestinya: aman, awanama, dan bebas dan gratis! Sinkronisasi markah antar peramban dan perangkat Anda, pendaftaran tidak diperlukan."
+    },
+    "Title": {
+      "key": "App_Title",
+      "default": "xBrowserSync"
+    }
+  },
+  "Bookmarks": {
+    "Container": {
+      "Menu": {
+        "key": "Bookmarks_Container_Menu",
+        "default": "Menu markah"
+      },
+      "Other": {
+        "key": "Bookmarks_Container_Other",
+        "default": "Markah lain-lain"
+      },
+      "Toolbar": {
+        "key": "Bookmarks_Container_Toolbar",
+        "default": "Markah bilah alat"
+      }
+    }
+  },
+  "Button": {
+    "AddBookmark": {
+      "key": "Button_AddBookmark",
+      "default": "Tambahkan markah"
+    },
+    "Back": {
+      "key": "Button_Back",
+      "default": "Kembali"
+    },
+    "Cancel": {
+      "key": "Button_Cancel",
+      "default": "Batal"
+    },
+    "Close": {
+      "key": "Button_Close",
+      "default": "Tutup"
+    },
+    "Confirm": {
+      "key": "Button_Confirm",
+      "default": "Ya"
+    },
+    "Continue": {
+      "key": "Button_Continue",
+      "default": "Lanjut"
+    },
+    "DeleteBookmark": {
+      "key": "Button_DeleteBookmark",
+      "default": "Hapus markah"
+    },
+    "Deny": {
+      "key": "Button_Deny",
+      "default": "Tidak"
+    },
+    "Done": {
+      "key": "Button_Done",
+      "default": "Selesai"
+    },
+    "DownloadBackup": {
+      "key": "Button_DownloadBackup",
+      "default": "Unduh cadangan"
+    },
+    "EditBookmark": {
+      "key": "Button_EditBookmark",
+      "default": "Sunting markah"
+    },
+    "Help": {
+      "key": "Button_Help",
+      "default": "Lihat panduan pembantu"
+    },
+    "Next": {
+      "key": "Button_Next",
+      "default": "Berikutnya"
+    },
+    "OK": {
+      "key": "Button_OK",
+      "default": "OK"
+    },
+    "ReleaseNotes": {
+      "key": "Button_ReleaseNotes",
+      "default": "Lihat catatan rilis"
+    },
+    "Saving": {
+      "key": "Button_Saving",
+      "default": "Menyimpan"
+    },
+    "Settings": {
+      "key": "Button_Settings",
+      "default": "Pengaturan"
+    },
+    "ShareBookmark": {
+      "key": "Button_ShareBookmark",
+      "default": "Bagikan markah"
+    },
+    "Undo": {
+      "key": "Button_Undo",
+      "default": "Urungkan"
+    },
+    "Update": {
+      "key": "Button_Update",
+      "default": "Pembaruan"
+    },
+    "View": {
+      "key": "Button_View",
+      "default": "Lihat"
+    }
+  },
+  "Error": {
+    "ContainerChanged": {
+      "Message": {
+        "key": "Error_ContainerChanged_Message",
+        "default": "Mohon menghindari mengubah folder [xbs] karena bisa mengakibatkan masalah sinkronisasi."
+      },
+      "Title": {
+        "key": "Error_ContainerChanged_Title",
+        "default": "Folder xBrowserSync diubah"
+      }
+    },
+    "DailyNewSyncLimitReached": {
+      "Message": {
+        "key": "Error_DailyNewSyncLimitReached_Message",
+        "default": "Sinkronisasi ke ID Sinkronisasi yang telah ada, beralih ke layanan yang berbeda, atau coba kembali esok hari."
+      },
+      "Title": {
+        "key": "Error_DailyNewSyncLimitReached_Title",
+        "default": "Batas harian sinkronisasi baru tercapai"
+      }
+    },
+    "Default": {
+      "Message": {
+        "key": "Error_Default_Message",
+        "default": "Jika masalah terus terjadi, mohon untuk <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>melaporkan isu tersebut</a>."
+      },
+      "Title": {
+        "key": "Error_Default_Title",
+        "default": "Terjadi galat"
+      }
+    },
+    "FailedDownloadFile": {
+      "Title": {
+        "key": "Error_FailedDownloadFile_Title",
+        "default": "Pencadangan gagal"
+      }
+    },
+    "FailedGetDataToRestore": {
+      "Title": {
+        "key": "Error_FailedGetDataToRestore_Title",
+        "default": "Gagal menjelajahi berkas"
+      }
+    },
+    "FailedGetPageMetadata": {
+      "Message": {
+        "key": "Error_FailedGetPageMetadata_Message",
+        "default": "URL tidak valid atau data situs tidak dapat didapatkan."
+      },
+      "Title": {
+        "key": "Error_FailedGetPageMetadata_Title",
+        "default": "Tidak dapat mengambil properti markah"
+      }
+    },
+    "FailedRefreshBookmarks": {
+      "Title": {
+        "key": "Error_FailedRefreshBookmarks_Title",
+        "default": "Tidak bisa mendapatkan pembaruan"
+      }
+    },
+    "FailedRestoreData": {
+      "Message": {
+        "key": "Error_FailedRestoreData_Message",
+        "default": "Data cadangan yang diberikan tidak dalam format yang diharapkan."
+      },
+      "Title": {
+        "key": "Error_FailedRestoreData_Title",
+        "default": "Tidak dapat memulihkan data"
+      }
+    },
+    "FailedShareUrlNotSynced": {
+      "Title": {
+        "key": "Error_FailedShareUrlNotSynced_Title",
+        "default": "Anda harus tersinkronisasi untuk menambahkan markah"
+      }
+    },
+    "FailedShareUrl": {
+      "Title": {
+        "key": "Error_FailedShareUrl_Title",
+        "default": "Tidak dapat mengambil URL markah yang dibagikan"
+      }
+    },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "Periksa koneksi jaringan Anda dan coba lagi. Jika isu ini terus terjadi, mungkin ada masalah dengan layanan xBrowserSync."
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "Sinkronisasi gagal"
+      }
+    },
+    "IncompleteSyncInfo": {
+      "Message": {
+        "key": "Error_IncompleteSyncInfo_Message",
+        "default": "Tidak dapat mencari kredensial tersimpan. Nyalakan kembali sinkronisasi dan coba lagi."
+      },
+      "Title": {
+        "key": "Error_IncompleteSyncInfo_Title",
+        "default": "Kredensial tidak ada"
+      }
+    },
+    "InvalidCredentials": {
+      "Message": {
+        "key": "Error_InvalidCredentials_Message",
+        "default": "Periksa ID Sinkronisasi, kata sandi, dan URL layanan Anda sudah dimasukkan dengan benar."
+      },
+      "Title": {
+        "key": "Error_InvalidCredentials_Title",
+        "default": "Kredensial tidak valid"
+      }
+    },
+    "InvalidService": {
+      "Message": {
+        "key": "Error_InvalidService_Message",
+        "default": "URL layanan ini bukan layanan xBrowserSync yang valid."
+      },
+      "Title": {
+        "key": "Error_InvalidService_Title",
+        "default": "Bukan layanan xBrowserSync yang valid"
+      }
+    },
+    "LocalContainerNotFound": {
+      "Message": {
+        "key": "Error_LocalContainerNotFound_Message",
+        "default": "Kemungkinan profil peramban rusak, coba buat profil baru karena kemungkinan itu bisa menyelesaikan isunya."
+      },
+      "Title": {
+        "key": "Error_LocalContainerNotFound_Title",
+        "default": "Struktur markah tidak terduga"
+      }
+    },
+    "LocalSyncError": {
+      "Message": {
+        "key": "Error_LocalSyncError_Message",
+        "default": "Data peramban lokal telah dimuat ulang, silakan masukkan kembali perubahan terakhir."
+      },
+      "Title": {
+        "key": "Error_LocalSyncError_Title",
+        "default": "Gagal menyinkronkan"
+      }
+    },
+    "NetworkConnection": {
+      "Message": {
+        "key": "Error_NetworkConnection_Message",
+        "default": "Periksa koneksi internet Anda dan coba lagi."
+      },
+      "Title": {
+        "key": "Error_NetworkConnection_Title",
+        "default": "Koneksi terputus"
+      }
+    },
+    "NoDataToRestore": {
+      "Message": {
+        "key": "Error_NoDataToRestore_Message",
+        "default": "Pastikan Anda sudah memberikan cadangan xBrowserSync yang valid sebelum memulihkan."
+      },
+      "Title": {
+        "key": "Error_NoDataToRestore_Title",
+        "default": "Tidak ada data untuk dipulihkan"
+      }
+    },
+    "NotAcceptingNewSyncs": {
+      "Message": {
+        "key": "Error_NotAcceptingNewSyncs_Message",
+        "default": "Beralih ke layanan yang berbeda atau coba lagi nanti."
+      },
+      "Title": {
+        "key": "Error_NotAcceptingNewSyncs_Title",
+        "default": "Layanan ini tidak menerima sinkronisasi baru"
+      }
+    },
+    "OutOfSync": {
+      "Message": {
+        "key": "Error_OutOfSync_Message",
+        "default": "Data lokal tidak tersinkronisasi dan sekarang telah dimuat ulang. Silakan masukkan kembali perubahan terakhir."
+      },
+      "Title": {
+        "key": "Error_OutOfSync_Title",
+        "default": "Konflik sinkronisasi terdeteksi"
+      }
+    },
+    "RequestEntityTooLarge": {
+      "Message": {
+        "key": "Error_RequestEntityTooLarge_Message",
+        "default": "Hapus beberapa markah dan coba lagi atau beralih ke layanan dengan batas sinkronisasi lebih besar."
+      },
+      "Title": {
+        "key": "Error_RequestEntityTooLarge_Title",
+        "default": "Batas data sinkronisasi terlampaui"
+      }
+    },
+    "ScanFailed": {
+      "Message": {
+        "key": "Error_ScanFailed_Message",
+        "default": "Periksa izin telah diberikan dan coba lagi."
+      },
+      "Title": {
+        "key": "Error_ScanFailed_Title",
+        "default": "Gagal memindai"
+      }
+    },
+    "ServiceOffline": {
+      "Message": {
+        "key": "Error_ServiceOffline_Message",
+        "default": "Layanan xBrowserSync ini sedang luring, coba lagi nanti."
+      },
+      "Title": {
+        "key": "Error_ServiceOffline_Title",
+        "default": "Layanan sedang luring"
+      }
+    },
+    "ShareFailed": {
+      "Title": {
+        "key": "Error_ShareFailed_Title",
+        "default": "Gagal membagikan"
+      }
+    },
+    "SyncRemoved": {
+      "Message": {
+        "key": "Error_SyncRemoved_Message",
+        "default": "Sinkronisasi yang diminta tidak ada, mungkin sudah dihapus karena ketidakaktifan."
+      },
+      "Title": {
+        "key": "Error_SyncRemoved_Title",
+        "default": "Sinkronisasi tidak ditemukan"
+      }
+    },
+    "SyncVersionNotSupported": {
+      "Restore": {
+        "Message": {
+          "key": "Error_SyncVersionNotSupported_Restore_Message",
+          "default": "Data cadangan tidak bisa dipulihkan dengan xBrowserSync versi ini karena cadangan tersebut dibuat oleh versi terdahulu."
+        }
+      },
+      "Message": {
+        "key": "Error_SyncVersionNotSupported_Message",
+        "default": "ID ini tidak bisa disinkronisasikan dengan xBrowserSync versi ini karena sinkronisasi sudah ditingkatkan ke versi yang lebih baru."
+      },
+      "Title": {
+        "key": "Error_SyncVersionNotSupported_Title",
+        "default": "Versi sinkronisasi tidak didukung"
+      }
+    },
+    "TooManyRequests": {
+      "Message": {
+        "key": "Error_TooManyRequests_Message",
+        "default": "Sinkronisasi telah dimatikan, aktifkan kembali sinkronisasi untuk melanjutkan penyinkronan."
+      },
+      "Title": {
+        "key": "Error_TooManyRequests_Title",
+        "default": "Batas permintaan layanan tercapai"
+      }
+    },
+    "UncommittedSyncs": {
+      "Message": {
+        "key": "Error_UncommittedSyncs_Message",
+        "default": "Perubahan akan disinkronisasi ketika sambungan terpulihkan."
+      },
+      "Title": {
+        "key": "Error_UncommittedSyncs_Title",
+        "default": "Koneksi terputus"
+      }
+    },
+    "UnsupportedServiceApiVersion": {
+      "Message": {
+        "key": "Error_UnsupportedServiceApiVersion_Message",
+        "default": "Layanan ini menjalankan versi API yang tidak didukung."
+      },
+      "Title": {
+        "key": "Error_UnsupportedServiceApiVersion_Title",
+        "default": "Layanan tidak didukung"
+      }
+    },
+    "UpgradeFailed": {
+      "Message": {
+        "key": "Error_UpgradeFailed_Message",
+        "android": "Peningkatan akan diulangi ketika memulai ulang aplikasi. Jika masalah ini terus terjadi, mohon untuk memasang ulang xBrowserSync.",
+        "default": "Mulai ulang peramban Anda untuk mengulangi peningkatan, jika masalah ini terus terjadi, mohon untuk memasang ulang xBrowserSync."
+      },
+      "Title": {
+        "key": "Error_UpgradeFailed_Title",
+        "default": "Peningkatan gagal"
+      }
+    }
+  },
+  "Service": {
+    "Status": {
+      "Error": {
+        "key": "Service_Status_Error",
+        "default": "Koneksi gagal"
+      },
+      "Loading": {
+        "key": "Service_Status_Loading",
+        "default": "Memeriksa"
+      },
+      "NoNewSyncs": {
+        "key": "Service_Status_NoNewSyncs",
+        "default": "Tidak menerima sinkronisasi baru"
+      },
+      "Offline": {
+        "key": "Service_Status_Offline",
+        "default": "Luring"
+      },
+      "Online": {
+        "key": "Service_Status_Online",
+        "default": "Daring"
+      }
+    }
+  },
+  "Tooltip": {
+    "NotSynced": {
+      "key": "Tooltip_NotSynced",
+      "default": "tidak disinkronkan"
+    },
+    "Synced": {
+      "key": "Tooltip_Synced",
+      "default": "tersinkronisasi"
+    },
+    "Syncing": {
+      "key": "Tooltip_Syncing",
+      "default": "menyinkronkan"
+    }
+  },
+  "View": {
+    "Bookmark": {
+      "Add": {
+        "key": "View_Bookmark_Add",
+        "default": "Tambahkan markah"
+      },
+      "Edit": {
+        "key": "View_Bookmark_Edit",
+        "default": "Sunting markah"
+      },
+      "Form": {
+        "Title": {
+          "key": "View_Bookmark_Form_Title",
+          "default": "Judul"
+        },
+        "Url": {
+          "Exists": {
+            "key": "View_Bookmark_Form_Url_Exists",
+            "default": "URL sudah dimarkahkan"
+          },
+          "Invalid": {
+            "key": "View_Bookmark_Form_Url_Invalid",
+            "default": "URL tidak valid"
+          },
+          "Label": {
+            "key": "View_Bookmark_Form_Url_Label",
+            "default": "URL"
+          },
+          "Required": {
+            "key": "View_Bookmark_Form_Url_Required",
+            "default": "URL diperlukan"
+          }
+        },
+        "Description": {
+          "key": "View_Bookmark_Form_Description",
+          "default": "Deskripsi"
+        },
+        "Tags": {
+          "Label": {
+            "key": "View_Bookmark_Form_Tags_Label",
+            "default": "Tanda"
+          },
+          "Placeholder": {
+            "key": "View_Bookmark_Form_Tags_Placeholder",
+            "default": "tanda 1, tanda 2, tanda 3, dst."
+          },
+          "Clear": {
+            "key": "View_Bookmark_Form_Tags_Clear",
+            "default": "Bersihkan tanda"
+          },
+          "Remove": {
+            "key": "View_Bookmark_Form_Tags_Remove",
+            "default": "Hapus tanda"
+          }
+        },
+        "Delete": {
+          "key": "View_Bookmark_Form_Delete",
+          "default": "Hapus"
+        },
+        "Share": {
+          "key": "View_Bookmark_Form_Share",
+          "default": "Bagikan"
+        },
+        "UpdateProperties": {
+          "key": "View_Bookmark_Form_UpdateProperties",
+          "default": "Perbarui properti markah"
+        }
+      },
+      "InvalidUrlShared": {
+        "key": "View_Bookmark_InvalidUrlShared",
+        "default": "Yang dibagikan tidak memiliki URL yang valid."
+      }
+    },
+    "Help": {
+      "AddingBookmarks": {
+        "key": "View_Help_AddingBookmarks",
+        "default": "<h4>Menambahkan sebuah markah</h4><p>Markahi halaman saat ini dengan mengklik ikon markah di panel Pencarian. Properti markah akan diisi untuk Anda secara otomatis, atau tidak, tambahkan deskripsi dan beberapa tanda untuk menjamin hasil pencarian yang lebih baik.</p><p>Atau cukup klik tombol \"Markahi laman ini\" di peramban seperti biasanya dan xBrowserSync akan secara otomatis mengisi properti markah (izin opsional harus diberikan untuk ini bisa bekerja, perikas panel Pengaturan).</p>",
+        "android": "<h4>Menambahkan sebuah markah</h4><p>Tambahkan markah dengan mudah dengan membagikan ke xBrowserSync dari aplikasi yang membagikan URL seperti peramban, YouTube, Spotify, dan banyak lainnya.</p><p>Properti markah akan diambil untuk Anda, atau tidak tambahkan deskripsi dan beberapa tanda untuk menjamin hasil pencarian yang lebih baik.</p>"
+      },
+      "BackingUp": {
+        "key": "View_Help_BackingUp",
+        "default": "<h4>Ingat untuk mencadangkan</h4><p>Ketika Anda menggunakan xBrowserSync, data Anda merupakan tanggung jawab Anda, jadilah pintar dan pastikan untuk membuat cadangan.</p><p>Pergi ke panel Pengaturan dan cadangkan data tak terenkripsi Anda ke berkas lokal yang akan bisa digunakan untuk memulihkan data Anda jika anda perlu.</p><p>Jika data peramban lokal Anda jadi rusak dan Anda tidak punya cadangan apa pun, Anda bisa kapan pun mengatur ulang data Anda ke kondisi awal ketika xBrowserSync dipasang.</p>",
+        "android": "<h4>Ingat untuk mencadangkan</h4><p>Ketika Anda menggunakan xBrowserSync, data Anda merupakan tanggung jawab Anda, jadilah pintar dan pastikan untuk membuat cadangan.</p><p>Pergi ke panel Pengaturan dan cadangkan data tak terenkripsi Anda ke berkas lokal yang akan bisa digunakan untuk memulihkan data Anda jika anda perlu.</p>"
+      },
+      "BeforeYouBegin": {
+        "key": "View_Help_BeforeYouBegin",
+        "default": "<h4>Sebelum Anda memulai</h4><p>xBrowserSync memodifikasi data peramban lokal, jadi merupakan ide yang bagus untuk mencadangkan markah dan data peramban Anda lainnya, dan jika Anda menggunakan layanan atau alat sinkronisasi peramban lainnya (seperti <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>), mohon untuk matikan mereka untuk menghidari konflik.</p>",
+        "brave": "<h4>Sebelum Anda memulai</h4><p>xBrowserSync memodifikasi data peramban lokal, jadi merupakan ide yang bagus untuk mencadangkan markah dan data peramban Anda lainnya, dan jika Anda menggunakan layanan atau alat sinkronisasi peramban lainnya (seperti <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>), mohon untuk matikan mereka untuk menghidari konflik.</p>",
+        "edge": "<h4>Sebelum Anda memulai</h4><p>xBrowserSync memodifikasi data peramban lokal, jadi merupakan ide yang bagus untuk mencadangkan markah dan data peramban Anda lainnya, dan jika Anda menggunakan layanan atau alat sinkronisasi peramban lainnya (seperti <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>), mohon untuk matikan mereka untuk menghidari konflik.</p>",
+        "firefox": "<h4>Sebelum Anda memulai</h4><p>xBrowserSync memodifikasi data peramban lokal, jadi merupakan ide yang bagus untuk mencadangkan markah dan data peramban Anda lainnya, dan jika Anda menggunakan layanan atau alat sinkronisasi peramban lainnya (seperti <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>), mohon untuk matikan mereka untuk menghidari konflik.</p>"
+      },
+      "ExistingId": {
+        "key": "View_Help_ExistingId",
+        "default": "<h4>Sinkronisasi dengan ID yang telah ada</h4><p>Klik pada \"Sudah punya ID sinkronisasi?\" untuk memasukkan ID sinkronisasi yang ada dan kata sandi. Jika ID sinkronisasi Anda dibuat dengan layanan yang berbeda dengan apa yang ditampilkan, maka ganti ke layanan tersebut sebelum mencoba untuk menyinkronkan.</p><p>xBrowserSync akan mengambil dan mendekripsikan data terenkripsi Anda menggunakan kata sandi lokal tersimpan Anda, kemudian bersihkan markah lokal Anda sebelum mengisi kembali mereka dari data terdekripsi.</p><p>Ketika menyinkronkan, xBrowserSync memeriksa di latar belakang setiap lima belas menit untuk memperbarui data tersinkron Anda dan akan secara otomatis memperbarui markah lokal Anda jika diperlukan. Anda juga bisa secara manual menyinkron pembaruan yang tersedia ke data tersinkron Anda di panel Pengaturan.</p>",
+        "android": "<h4>Sinkronisasi dengan ID yang telah ada</h4><p>Mulai dengan memindai kode QR ID sinkronisasi di panel Pengaturan dari ekstensi xBrowserSync peramban komputer (klik pada ID sinkronisasi Anda untuk mengungkapnya). Pastikan Anda memasukkan kata sandi enkripsi yang sama dengan ketika membuat sinkronisasi, kalau tidak xBrowserSync tidak akan bisa mendekripsi data Anda.</p><p>Juga, ketika Anda sedang tersinkron ke layanan xBrowserSync yang berbeda, pastikan bahwa itu merupakan layanan aktif yang terkonfigurasi di panel Pengaturan.</p>"
+      },
+      "FirstSync": {
+        "key": "View_Help_FirstSync",
+        "default": "<h4>Sinkronisasi untuk pertama kali</h4><p>Sebelum xBrowserSync bisa menyinkronkan data peramban Anda, Anda harus memberikannya kata sandi terenkripsi. Pastikan untuk membuatnya kuat tapi juga gampang diingat, tidak ada setel ulang atau pengingat, jadi ketika Anda lupa itu Anda tidak dapat mengakses data tersinkron Anda.</p><p>Data peramban Anda akan dienkripsi menggunakan kata sandi Anda dan disimpan ke layanan xBrowserSync aktif yang terkonfigurasi di panel Pengaturan.</p><p>Setelah disinkronkan, perubahan apa pun yang Anda buat ke markah lokal Anda akan disinkronisasi secara otomatis oleh xBrowserSync.</p>",
+        "android": "<h4>Sinkronisasi untuk pertama kali</h4><p>xBrowserSync secara aktif menyinkronkan data peramban Anda antara peramban komputer Anda (menyinkronkan ke peramban ponsel tidak didukung untuk saat ini), Anda bisa menggunakan aplikasi ini untuk mengakses data tersinkron Anda di perangkat ponsel Android Anda.</p><p>Jika Anda belum membuat ID sinkronisasi, pergilah ke peramban komputer Anda dan <a href='https://link.xbrowsersync.org/download' class='new-tab'>unduh</a> ekstensi xBrowserSync. Setelah Anda membuat sebuah sinkronisasi, Anda bisa menggunakan ID sinkronisasi baru Anda dalam aplikasi ini untuk mengakses data Anda.</p>"
+      },
+      "FurtherSupport": {
+        "key": "View_Help_FurtherSupport",
+        "default": "<h4>Dukungan lebih lanjut</h4><p>Anda bisa mencari jawaban untuk pertanyaan yang sering ditanyakan di<a href='https://link.xbrowsersync.org/faqs' class='new-tab'>SSD (FAQ)</a>, juga periksa <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>isu yang diketahui</a> saat ini untuk melihat apakah isu Anda sudah ada di sana.</p><p>Anda juga bisa menggunakan <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>pelacak isu</a> untuk melaporkan sebuah isu atau permintaan fitur baru.</p>"
+      },
+      "Mobile": {
+        "key": "View_Help_Mobile",
+        "default": "<h4>Mobilitas</h4><p>Akses markah tersinkron Anda dalam perjalanan dengan aplikasi xBrowserSync Android, tersedia di<a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play Store</a>, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a>, atau <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>unduhan langsung</a>.</p>"
+      },
+      "NativeFeatures": {
+        "key": "View_Help_NativeFeatures",
+        "default": "<h4>Fitur baku didukung</h4><p>Jangan ragu untuk terus menggunakan fitur pemarkahan baku peramban Anda seperti bilah markah dan pengelola markah, perubahan apa pun yang Anda buat akan disinkronkan otomatis di latar belakang.</p><p>Jika Anda telah mengorganisir markah telah ada Anda ke folder, jangan khawatir, xBrowserSync akan menghormati dan memelihara hierarki markah telah ada Anda.</p>",
+        "firefox": "<h4>Fitur baku didukung</h4><p>Jangan ragu untuk terus menggunakan fitur pemarkahan baku peramban Anda seperti bilah alat markah dan pustaka markah, perubahan apa pun yang Anda buat akan disinkronkan otomatis di latar belakang.</p><p>Jika Anda telah mengorganisir markah telah ada Anda ke folder, jangan khawatir, xBrowserSync akan menghormati dan memelihara hierarki markah telah ada Anda.</p><p>Namun tolong dicatat, karena API markah Firefox belum mendukung mengakses tanda markah baku, tanda yang telah ada akan hilang ketika menyinkronkan dan tanda yang ditambahkan lewat xBrowserSync tidak akan disimpan sebagai tanda baku.</p>"
+      },
+      "Previous": {
+        "key": "View_Help_Previous",
+        "default": "Sebelumnya"
+      },
+      "Searching": {
+        "key": "View_Help_Searching",
+        "default": "<h4>Mencari markah Anda</h4><p>Setelah tersinkron, hanya tekan Enter untuk memperlihatkan markah baru-baru ini Anda atau ketik beberapa kata kunci atau sebuah URL untuk mencari markah Anda.</p><p>Alih antara hasil pencarian dan folder markah untuk menjelajahi seluruh hierarki.</p><p>Untuk menyunting atau menghapus sebuah markah, arahkan kursor ke markah dan klik pada ikon sunting yang baru terlihat di sebelah judul markah.</p>",
+        "android": "<h4>Mencari markah Anda</h4><p>Setelah tersinkron, markah Anda akan ditampilkan dalam urutan kronologis ketika Anda membuka xBrowserSync. Ketik beberapa kata kunci atau sebuah URL di kotak pencarian untuk mencari markah Anda.</p><p>Alih antara hasil pencarian dan folder markah untuk menjelajagi seluruh hierarki.</p><p>Pencet panjang pada sebuah markah yang akan mengizinkan Anda untuk membagikan, modifikasi, atau menghapus markahnya secara langsung.</p>"
+      },
+      "Service": {
+        "key": "View_Help_Service",
+        "default": "<h4>Sinkronisasi ke layanan berbeda</h4><p>Secara baku, data Anda disinkronkan ke <a href='https://link.xbrowsersync.org/api' class='new-tab'>layanan resmi xBrowserSync</a>, namun jika Anda ingin menyinkronkan data Anda ke layanan xBrowserSync lainnya, Anda bisa mengganti layanan aktif sebelum menyinkronkan.</p><p>Periksa daftar <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>layanan xBrowserSync publik</a> yang tersedia atau <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>jalankan layanan Anda sendiri</a>, entah untuk penggunaan pribadi untuk keamanan dan privasi tertinggi atau untuk penggunaan publik agar makin banyak orang bisa menikmati xBrowserSync.</p><p><strong>Penting:</strong> layanan xBrowserSync dijalankan secara mandiri oleh sukarelawan. Administrator layanan tidak bertanggung jawab atas data Anda, jadi harap ingat untuk membuat cadangan secara teratur.</p>"
+      },
+      "Shortcuts": {
+        "key": "View_Help_Shortcuts",
+        "default": "<h4>Gunakan pintasan!</h4><p>Untuk mencari markah Anda secara cepat, gunakan pintasan papan tik baku (Ctrl+Spasi) untuk mengaktifkan ekstensi, kemudian hanya pencet Enter untuk melihat markah baru-baru ini atau mulai mengetik untuk mencari.</p><p>Untuk mengganti pintasan, jelajahi chrome://extensions/shortcuts dan perbarui pintasan yang ada di bawah xBrowserSync.</p>",
+        "brave": "<h4>Gunakan pintasan!</h4><p>Untuk mencari markah Anda secara cepat, gunakan pintasan papan tik baku (Ctrl+Spasi) untuk mengaktifkan ekstensi, kemudian hanya pencet Enter untuk melihat markah baru-baru ini atau mulai mengetik untuk mencari.</p><p>Untuk mengganti pintasan, jelajahi brave://extensions/shortcuts dan perbarui pintasan yang ada di bawah xBrowserSync.</p>",
+        "edge": "<h4>Gunakan pintasan!</h4><p>Untuk mencari markah Anda secara cepat, gunakan pintasan papan tik baku (Ctrl+Spasi) untuk mengaktifkan ekstensi, kemudian hanya pencet Enter untuk melihat markah baru-baru ini atau mulai mengetik untuk mencari.</p><p>Untuk mengganti pintasan, jelajahi edge://extensions/shortcuts dan perbarui pintasan yang ada di bawah xBrowserSync.</p>",
+        "firefox": "<h4>Gunakan pintasan!</h4><p>Untuk mencari markah Anda secara cepat, gunakan pintasan papan tik baku (Ctrl+Spasi) untuk mengaktifkan ekstensi, kemudian hanya pencet Enter untuk melihat markah baru-baru ini atau mulai mengetik untuk mencari.</p><p>Untuk mengganti pintasan, jelajahi about:addons, klik pada \"Kelola Pintasan Ekstensi\" di menu Pengaturan dan perbarui pintasan yang ada di bawah xBrowserSync.</p>"
+      },
+      "SyncId": {
+        "key": "View_Help_SyncId",
+        "default": "<h4>ID sinkronisasi Anda</h4><p>xBrowserSync menjamin privasi Anda karena tidak ada data pribadi yang dikumpulkan selamanya dan data peramban Anda dienkripsi sebelum disinkronisasi. Untuk mengidentifikasi data tersinkron yang Anda berikan dengan ID sinkronisasi awanama yang bisa digunakan dengan kata sandi Anda untuk menyinkronikan data Anda di peramban dan perangkat lainnya.</p><p>Perlu diingat bahwa ID sinkronisasi Anda hanya akan bekerja pada layanan xBrowserSync dimana ia dibuat, jika Anda ganti ke layanan xBrowserSync yang berbeda, Anda harus membuat sebuah sinkronisasi baru atau gunakan ID sinkronisasi yang telah dibuat ketika sebelumnya sinkronisasi dengan layanan tersebut.</p><p>Kapan pun Anda tersinkron, Anda bisa melihat ID sinkronisasi Anda di panel Pengaturan, klik panel tersebut untuk mengungkap sebuah kode QR untuk dipindai ketika tersinkron di perangkat ponsel.</p>"
+      },
+      "Welcome": {
+        "key": "View_Help_Welcome",
+        "default": "<h4>Selamat datang ke xBrowserSync!</h4><p>xBrowserSync merupakan alternatif yang bebas dan gratis dan sumber terbuka untuk layanan sinkronisasi peramban yang ditawarkan oleh Google, Mozilla, Opera, dan lainnya, yang menghormati privasi Anda dan memberikan Anda awanama yang penuh (periksa <a href='https://link.xbrowsersync.org/www' class='new-tab'>situs web</a> untuk informasi lebih lanjut).</p><p>Luangkan waktu sejenak untuk membaca panduan bantuan ini untuk membiasakan diri Anda dengan xBrowserSync, gunakan tautan halaman di bawah atau tombol panah untuk berpindah antar halaman.</p><p>Mohon dicatat: xBrowserSync saat ini hanya menyinkronkan markah. Sinkronisasi data peramban tambahan akan ditambahkan pada versi yang akan datang, periksa <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>peta rencana</a> pengembangan untuk melihat apa yang direncanakan.</p>",
+        "android": "<h4>Selamat datang ke xBrowserSync!</h4><p>xBrowserSync merupakan alternatif yang bebas dan gratis dan sumber terbuka untuk layanan sinkronisasi peramban yang ditawarkan oleh Google, Mozilla, Opera, dan lainnya, yang menghormati privasi Anda dan memberikan Anda awanama yang penuh (periksa <a href='https://link.xbrowsersync.org/www' class='new-tab'>situs web</a> untuk informasi lebih lanjut).</p><p>Luangkan waktu sejenak untuk membaca panduan bantuan ini untuk membiasakan diri Anda dengan xBrowserSync, gunakan tautan halaman di bawah atau geser untuk berpindah antar halaman.</p><p>Mohon dicatat: xBrowserSync saat ini hanya menyinkronkan markah. Sinkronisasi data peramban tambahan akan ditambahkan pada versi yang akan datang, periksa <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>peta rencana</a> pengembangan untuk melihat apa yang direncanakan.</p>"
+      }
+    },
+    "Login": {
+      "GetSyncId": {
+        "Title": {
+          "key": "View_Login_GetSyncId_Title",
+          "default": "Memerlukan ID Sinkronisasi?"
+        },
+        "Content": {
+          "key": "View_Login_GetSyncId_Content",
+          "default": "Unduh ekstensi xBrowserSync di peramban komputer dan buat sinkronisasi baru untuk mengakses markah Anda di sini."
+        }
+      },
+      "Password": {
+        "Confirm": {
+          "key": "View_Login_Password_Confirm",
+          "default": "Konfirmasi kata sandi"
+        },
+        "Existing": {
+          "key": "View_Login_Password_Existing",
+          "default": "Kata sandi enkripsi Anda"
+        },
+        "Label": {
+          "key": "View_Login_Password_Label",
+          "default": "Kata sandi enkripsi"
+        },
+        "New": {
+          "key": "View_Login_Password_New",
+          "default": "Masukkan sebuah kata sandi enkripsi"
+        },
+        "Show": {
+          "key": "View_Login_Password_Show",
+          "default": "Ungkap kata sandi"
+        }
+      },
+      "Scan": {
+        "Title": {
+          "key": "View_Login_Scan_Title",
+          "default": "Hubungkan ke sinkronisasi Anda"
+        },
+        "Content": {
+          "key": "View_Login_Scan_Content",
+          "default": "Buka xBrowserSync di peramban komputer Anda, pergi ke panel Pengaturan dan klik di ID Sinkronisasi Anda untuk menamplikan Kode QR yang mana Anda pindai."
+        },
+        "ScanCode": {
+          "key": "View_Login_Scan_ScanCode",
+          "default": "Pindai kode"
+        },
+        "ManualEntry": {
+          "key": "View_Login_Scan_ManualEntry",
+          "default": "Masukkan detail sinkronisasi secara manual"
+        }
+      },
+      "Service": {
+        "ApiVersion": {
+          "key": "View_Login_Service_ApiVersion",
+          "default": "Versi API"
+        },
+        "Confirm": {
+          "key": "View_Login_Service_Confirm",
+          "default": "Sinkronkan ke layanan ini?"
+        },
+        "Location": {
+          "key": "View_Login_Service_Location",
+          "default": "Lokasi"
+        },
+        "MaxSyncSize": {
+          "key": "View_Login_Service_MaxSyncSize",
+          "default": "Ukuran maksimal sinkronisasi"
+        },
+        "Selected": {
+          "key": "View_Login_Service_Selected",
+          "default": "Menyinkronkan ke"
+        },
+        "Status": {
+          "key": "View_Login_Service_Status",
+          "default": "Status"
+        },
+        "Update": {
+          "Label": {
+            "key": "View_Login_Service_Update_Label",
+            "default": "URL layanan xBrowserSync"
+          },
+          "Description": {
+            "key": "View_Login_Service_Update_Description",
+            "default": "Masukkan URL dari layanan alternatif xBrowserSync. Browse the list of public xBrowserSync servicesJelajahi daftar layanan publik xBrowserSync <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>disini</a>."
+          },
+          "Button": {
+            "key": "View_Login_Service_Update_Button",
+            "default": "Pindah layanan"
+          },
+          "Required": {
+            "key": "View_Login_Service_Update_Required",
+            "default": "URL diperlukan"
+          },
+          "InvalidService": {
+            "key": "View_Login_Service_Update_InvalidService",
+            "default": "Bukan layanan xBrowserSync yang valid"
+          },
+          "InvalidUrl": {
+            "key": "View_Login_Service_Update_InvalidUrl",
+            "default": "Bukan URL yang valid"
+          },
+          "Failed": {
+            "key": "View_Login_Service_Update_Failed",
+            "default": "Tidak dapat terhubung ke layanan"
+          },
+          "NotSupported": {
+            "key": "View_Login_Service_Update_Failed_NotSupported",
+            "default": "Layanan ini menjalankan versi API yang tidak didukung"
+          }
+        },
+        "Warning": {
+          "key": "View_Login_Service_Warning",
+          "default": "<strong>Penting:</strong> layanan xBrowserSync dijalankan secara mandiri oleh sukarelawan. Administrator layanan tidak bertanggung jawab atas data Anda, jadi harap ingat untuk membuat cadangan secara teratur."
+        }
+      },
+      "Sync": {
+        "Confirm": {
+          "Title": {
+            "key": "View_Login_Sync_Confirm_Title",
+            "default": "Apakah Anda yakin?"
+          },
+          "Content": {
+            "key": "View_Login_Sync_Confirm_Content",
+            "default": "xBrowserSync akan menghapus seluruh data markah lokal sebelum memulihkan markah yang tersinkronisasi. OK untuk lanjut?"
+          }
+        },
+        "DisableOthers": {
+          "Title": {
+            "key": "View_Login_Sync_DisableOthers_Title",
+            "default": "Matikan alat sinkronisasi markah"
+          },
+          "Content": {
+            "key": "View_Login_Sync_DisableOthers_Content",
+            "default": "Menyinkronkan data peramban Anda dengan xBrowserSync ketika alat penyinkronan markah (seperti <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) aktif bisa menimbulkan duplikasi dan kemungkinan data rusak. Mohon untuk mematikannya sebelum melanjutkan.",
+            "brave": "Menyinkronkan data peramban Anda dengan xBrowserSync ketika alat penyinkronan markah (seperti <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) aktif bisa menimbulkan duplikasi dan kemungkinan data rusak. Mohon untuk mematikannya sebelum melanjutkan.",
+            "edge": "Menyinkronkan data peramban Anda dengan xBrowserSync ketika alat penyinkronan markah (seperti <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) aktif bisa menimbulkan duplikasi dan kemungkinan data rusak. Mohon untuk mematikannya sebelum melanjutkan.",
+            "firefox": "Menyinkronkan data peramban Anda dengan xBrowserSync ketika alat penyinkronan markah (seperti <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) aktif bisa menimbulkan duplikasi dan kemungkinan data rusak. Mohon untuk mematikannya sebelum melanjutkan."
+          }
+        },
+        "Enable": {
+          "key": "View_Login_Sync_Enable",
+          "default": "Sinkronisasi"
+        },
+        "New": {
+          "key": "View_Login_Sync_New",
+          "default": "Buat sinkronisasi baru"
+        },
+        "UpgradeReady": {
+          "Title": {
+            "key": "View_Login_Sync_UpgradeReady_Title",
+            "default": "Siap untuk meningkatkan sinkronisasi?"
+          },
+          "Content": {
+            "key": "View_Login_Sync_UpgradeReady_Content",
+            "default": "<p>Sinkronisasi Anda harus ditingkatkan terlebih dahulu sebelum menyinkronkan dengan xBrowserSync versi ini. Setelah peningkatan, Anda tidak bisa lagi menyinkronkan dengan versi xBrowserSync sebelumnya .</p><p>Pastikan sudah memperbarui xBrowserSync di semua perangkat tersinkron sebelum melanjutkan. Siap untuk melanjutkan?</p>"
+          }
+        },
+        "UpgradeRequired": {
+          "Title": {
+            "key": "View_Login_Sync_UpgradeRequired_Title",
+            "default": "Tingkatkan sinkronisasi"
+          },
+          "Content": {
+            "key": "View_Login_Sync_UpgradeRequired_Content",
+            "default": "<p>Sinkronisasi Anda harus ditingkatkan sebelum sinkronisasi dengan xBrowserSync versi ini.</p><p>Gunakan ekstensi xBrowserSync peramban komputer untuk meningkatkan sinkronisasi Anda, kemudian coba kembali sinkronisasi di sini.</p>"
+          }
+        }
+      },
+      "SyncId": {
+        "Description": {
+          "key": "View_Login_SyncId_Description",
+          "default": "ID sinkronisasi Anda"
+        },
+        "Existing": {
+          "key": "View_Login_SyncId_Existing",
+          "default": "Sudah punya ID sinkronisasi?"
+        },
+        "Invalid": {
+          "key": "View_Login_SyncId_Invalid",
+          "default": "ID sinkronisasi tidak valid"
+        },
+        "Label": {
+          "key": "View_Login_SyncId_Label",
+          "default": "ID"
+        },
+        "New": {
+          "key": "View_Login_SyncId_New",
+          "default": "Dapatkan ID sinkronisasi"
+        }
+      }
+    },
+    "Permissions": {
+      "Title": {
+        "key": "View_Permissions_Title",
+        "default": "Izin opsional"
+      },
+      "Content": {
+        "key": "View_Permissions_Content",
+        "default": "<p>xBrowserSync secara otomatis memperkaya markah yang ditambahkan menggunakan tombol Tambah Markah peramban dengan metadata yang tersedia. Untuk mengaktifkan ini, xBrowserSync <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>memerlukan izin tambahan</a> untuk bisa membaca data situs web yang dikunjungi.</p><p>Mohon tunjukkan jika diminta jika Anda senang untuk memberikan izin tersebut, atau Anda bisa menambah atau menghapus izin kapan saja di panel Pengaturan.</p>"
+      }
+    },
+    "Scan": {
+      "Title": {
+        "key": "View_Scan_Title",
+        "default": "Pindai kode QR ID sinkronisasi Anda"
+      },
+      "ToggleLight": {
+        "key": "View_Scan_ToggleLight",
+        "default": "Alihkan terang"
+      }
+    },
+    "Search": {
+      "BookmarkTree": {
+        "key": "View_Search_BookmarkTree",
+        "default": "Lihat folder markah"
+      },
+      "Clear": {
+        "key": "View_Search_Clear",
+        "default": "Bersihkan"
+      },
+      "FolderEmpty": {
+        "key": "View_Search_FolderEmpty",
+        "default": "Folder kosong"
+      },
+      "NoBookmarks": {
+        "key": "View_Search_NoBookmarks",
+        "default": "Anda tidak mempunyai markah, tambahkan beberapa!"
+      },
+      "NoResults": {
+        "key": "View_Search_NoResults",
+        "default": "Tidak ada markah yang ditemukan"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Tekan Enter atau cari markah",
+        "android": "Cari markah"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": "Tarik ke bawah untuk menyinkronkan"
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": "Lepas untuk menyinkronkan"
+      },
+      "SearchResults": {
+        "key": "View_Search_SearchResults",
+        "default": "Lihat hasil pencarian"
+      }
+    },
+    "Settings": {
+      "BackupRestore": {
+        "Title": {
+          "key": "View_Settings_BackupRestore_Title",
+          "default": "Cadangkan dan Pulihkan"
+        },
+        "AutoBackup": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Title",
+            "default": "Otomatis Cadangkan"
+          },
+          "Description": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Description",
+            "default": "Otomatis mengunduh cadangan sesuai jadwal."
+          },
+          "RunsAt": {
+            "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
+            "default": "Pencadangan berjalan"
+          },
+          "Every": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Every",
+            "default": "setiap"
+          },
+          "Numbers": {
+            "Single": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
+              "default": "satu"
+            },
+            "Two": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
+              "default": "dua"
+            },
+            "Three": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
+              "default": "tiga"
+            },
+            "Four": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
+              "default": "empat"
+            },
+            "Five": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
+              "default": "lima"
+            },
+            "Six": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
+              "default": "enam"
+            },
+            "Seven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
+              "default": "tujuh"
+            },
+            "Eight": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
+              "default": "delapan"
+            },
+            "Nine": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
+              "default": "sembilan"
+            },
+            "Ten": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
+              "default": "sepuluh"
+            },
+            "Eleven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
+              "default": "sebelas"
+            },
+            "Twelve": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
+              "default": "dua belas"
+            }
+          },
+          "Units": {
+            "Day": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
+              "default": "hari"
+            },
+            "Week": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
+              "default": "minggu"
+            },
+            "Month": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
+              "default": "bulan"
+            }
+          },
+          "Confirmation": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
+            "default": "Untuk menghindari dialog \"Simpan Sebagai...\" tampil sebelum mengunduh cadangan, matikan pengaturan peramban \"Tanyakan selalu tempat menyimpan berkas\"."
+          }
+        },
+        "Backup": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_Backup_Title",
+            "default": "Cadangkan"
+          },
+          "Button": {
+            "key": "View_Settings_BackupRestore_Backup_Button",
+            "default": "Unduh cadangan"
+          },
+          "Local": {
+            "key": "View_Settings_BackupRestore_Backup_Local",
+            "default": "Cadangkan data peramban lokal ke sebuah berkas."
+          },
+          "Synced": {
+            "key": "View_Settings_BackupRestore_Backup_Synced",
+            "default": "Cadankan data tersinkron ke sebuah berkas."
+          }
+        },
+        "Restore": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_Restore_Title",
+            "default": "Pulihkan"
+          },
+          "Button": {
+            "key": "View_Settings_BackupRestore_Restore_Button",
+            "default": "Pulihkan dari cadangan"
+          },
+          "Local": {
+            "Description": {
+              "key": "View_Settings_BackupRestore_Restore_Local_Description",
+              "default": "Pulihkan data peramban lokal dari sebuah cadangan."
+            },
+            "Confirm": {
+              "key": "View_Settings_BackupRestore_Restore_Local_Confirm",
+              "default": "<p>Karena saat ini sinkronisasi dimatikan, data yang sedang dipulihkan akan menimpa data peramban lokal.</p><p>OK untuk lanjut?</p>"
+            }
+          },
+          "Synced": {
+            "Description": {
+              "key": "View_Settings_BackupRestore_Restore_Synced_Description",
+              "default": "Pulihkan data tersinkron dari sebuah cadangan."
+            },
+            "Confirm": {
+              "key": "View_Settings_BackupRestore_Restore_Synced_Confirm",
+              "default": "<p>Karena saat ini sinkronisasi sedang diaktifkan, data yang sedang dipulihkan akan menimpa data yang tersinkron Anda.</p><p>Untuk memulihkan data ke peramban lokal saja, matikan sinkronisasi sebelum memulihkan.</p><p>OK untuk lanjut?</p>",
+              "android": "<p>Data yang sedang dipulihkan akan menimpa data tersinkron Anda.</p><p>OK untuk lanjut?</p>"
+            }
+          },
+          "Done": {
+            "key": "View_Settings_BackupRestore_Restore_Done",
+            "default": "Cadangan telah dipulihkan."
+          },
+          "SelectFile": {
+            "Button": {
+              "key": "View_Settings_BackupRestore_Restore_SelectFile_Button",
+              "default": "Pilih berkas"
+            },
+            "Placeholder": {
+              "key": "View_Settings_BackupRestore_Restore_SelectFile_Placeholder",
+              "default": "Pilih sebuah berkas cadangan untuk memulihkan"
+            }
+          },
+          "Copy": {
+            "key": "View_Settings_BackupRestore_Restore_Copy",
+            "default": "Salin konten dari berkas cadangan untuk memulihkan data."
+          },
+          "Paste": {
+            "key": "View_Settings_BackupRestore_Restore_Paste",
+            "default": "Tempel data cadangan"
+          },
+          "RestoreData": {
+            "key": "View_Settings_BackupRestore_Restore_RestoreData",
+            "default": "Pulihkan data"
+          },
+          "Invalid": {
+            "key": "View_Settings_BackupRestore_Restore_Invalid",
+            "default": "Data cadangan xBrowserSync tidak valid"
+          }
+        },
+        "Reset": {
+          "Confirm": {
+            "key": "View_Settings_BackupRestore_Reset_Confirm",
+            "default": "<p>Jika Anda melanjutkan, sinkronisasi akan dimatikan dan data peramban lokal Anda akan diatur ulang ke ketika xBrowserSync dipasang pada {date}.</p><p>OK untuk lanjut?</p>"
+          },
+          "Button": {
+            "key": "View_Settings_BackupRestore_Reset_Button",
+            "default": "Atur ulang data lokal"
+          },
+          "Done": {
+            "key": "View_Settings_BackupRestore_Reset_Done",
+            "default": "Data peramban lokal sudah diatur ulang ke kondisi pemasangan awal."
+          },
+          "Unavailable": {
+            "key": "View_Settings_BackupRestore_Reset_Unavailable",
+            "default": "Data kondisi pemasangan tidak tersedia, tidak bisa untuk mengatur ulang."
+          }
+        }
+      },
+      "Issues": {
+        "Title": {
+          "key": "View_Settings_Issues_Title",
+          "default": "Bantuan dan dukungan"
+        },
+        "Help": {
+          "Title": {
+            "key": "View_Settings_Issues_Help_Title",
+            "default": "Panduan bantuan"
+          },
+          "Description": {
+            "key": "View_Settings_Issues_Help_Description",
+            "default": "Punya pertanyaan atau memiliki isu? Pastikan untuk membaca panduan bantuan, atau jawabannya mungkin ada di SSD (FAQ)."
+          },
+          "ViewFaqs": {
+            "key": "View_Settings_Issues_Help_ViewFaqs",
+            "default": "Lihat SSD (FAQ)"
+          }
+        },
+        "Tracker": {
+          "Title": {
+            "key": "View_Settings_Issues_Tracker_Title",
+            "default": "Dukungan"
+          },
+          "Description": {
+            "key": "View_Settings_Issues_Tracker_Description",
+            "default": "Perlu dukungan? Gunakan pelacak isu untuk melaporkan sebuah galat atau permintaan fitur."
+          },
+          "Report": {
+            "key": "View_Settings_Issues_Tracker_Report",
+            "default": "Lihat pelacak isu"
+          }
+        },
+        "Log": {
+          "Title": {
+            "key": "View_Settings_Issues_Log_Title",
+            "default": "Log aplikasi"
+          },
+          "Description": {
+            "key": "View_Settings_Issues_Log_Description",
+            "default": "Unduh dan ikutkan log aplikasi ketika Anda log sebuah isu."
+          },
+          "Clear": {
+            "key": "View_Settings_Issues_Log_Clear",
+            "default": "Bersihkan log"
+          },
+          "Download": {
+            "key": "View_Settings_Issues_Log_Download",
+            "default": "Unduh log"
+          },
+          "Size": {
+            "key": "View_Settings_Issues_Log_Size",
+            "default": "Ukuran log saat ini"
+          }
+        }
+      },
+      "Permissions": {
+        "Title": {
+          "key": "View_Settings_Permissions_Title",
+          "default": "Izin opsional"
+        },
+        "Add": {
+          "key": "View_Settings_Permissions_Add",
+          "default": "Berikan izin"
+        },
+        "Granted": {
+          "key": "View_Settings_Permissions_Granted",
+          "default": "Diberikan"
+        },
+        "NotGranted": {
+          "key": "View_Settings_Permissions_NotGranted",
+          "default": "Tidak diberikan"
+        },
+        "Read": {
+          "Title": {
+            "key": "View_Settings_Permissions_Read_Title",
+            "default": "Baca data situs web"
+          },
+          "Description": {
+            "key": "View_Settings_Permissions_Read_Description",
+            "default": "Diperlukan untuk secara otomatis menambahkan metadata ke markah ketika menggunakan tombol \"Markahi laman ini\" di peramban (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>info lebih lanjut</a>)."
+          }
+        },
+        "Remove": {
+          "key": "View_Settings_Permissions_Remove",
+          "default": "Hapus izin"
+        }
+      },
+      "Prefs": {
+        "AutoFetchMetadata": {
+          "Label": {
+            "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
+            "default": "Ambil otomatis metadata markah"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
+            "default": "Ambil metadata secara otomatis ketika menambahkan sebuah markah."
+          }
+        },
+        "CheckForAppUpdates": {
+          "Label": {
+            "key": "View_Settings_Prefs_CheckForAppUpdates_Label",
+            "default": "Periksa pembaruan aplikasi"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
+            "default": "Diingatkan ketika versi baru xBrowserSync tersedia."
+          }
+        },
+        "DarkMode": {
+          "Label": {
+            "key": "View_Settings_Prefs_DarkMode_Label",
+            "default": "Aktifkan mode gelap"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_DarkMode_Description",
+            "default": "Ideal untuk penggunaan pada lingkungan kurang cahaya."
+          }
+        },
+        "DefaultToFolderView": {
+          "Label": {
+            "key": "View_Settings_Prefs_DefaultToFolderView_Label",
+            "default": "Perlihatkan folder markah"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_DefaultToFolderView_Description",
+            "default": "Secara baku perlihatkan folder markah."
+          }
+        },
+        "SearchBar": {
+          "Label": {
+            "key": "View_Settings_Prefs_SearchBar_Label",
+            "default": "Pindah posisi bilah pencarian"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_SearchBar_Description",
+            "default": "Perlihatkan bilah pencarian di bawah hasil."
+          }
+        },
+        "SyncToolbar": {
+          "Label": {
+            "key": "View_Settings_Prefs_SyncToolbar_Label",
+            "default": "Sinkronisasi bilah alat markah"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_SyncToolbar_Description",
+            "default": "Mematikan pengaturan ini untuk memperlihatkan bilah alat markah yang berbeda antara peramban yang tersinkron."
+          },
+          "Confirmation": {
+            "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
+            "default": "<p>Mengaktifkan pengaturan ini akan mengganti markah yang saat ini berada di bilah alat pemarkahan dengan markah tersinkron Anda.</p><p>OK untuk lanjut?</p>"
+          }
+        },
+        "Telemetry": {
+          "Label": {
+            "key": "View_Settings_Prefs_Telemetry_Label",
+            "default": "Aktifkan telemetri"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_Telemetry_Description",
+            "default": "Sesekali kirim data teknis anonim untuk membantu meningkatkan xBrowserSync."
+          }
+        },
+        "Title": {
+          "key": "View_Settings_Prefs_Title",
+          "default": "Preferensi"
+        }
+      },
+      "Sync": {
+        "Title": {
+          "key": "View_Settings_Sync_Title",
+          "default": "Sinkronisasi"
+        },
+        "Disable": {
+          "key": "View_Settings_Sync_Disable",
+          "default": "Matikan sinkronisasi"
+        },
+        "Id": {
+          "Label": {
+            "key": "View_Settings_Sync_Id_Label",
+            "default": "ID Sinkronisasi"
+          },
+          "Description": {
+            "key": "View_Settings_Sync_Id_Description",
+            "default": "Gunakan ID Sinkronisasi Anda untuk menghubungkan ke data tersinkronisasi di perangkat lainnya (klik untuk mengungkap Kode QR)."
+          }
+        },
+        "Data": {
+          "Label": {
+            "key": "View_Settings_Sync_Data_Label",
+            "default": "Penggunaan data"
+          },
+          "Description": {
+            "key": "View_Settings_Sync_Data_Description",
+            "default": "Berapa banyak data sinkronisasi yang diperbolehkan oleh layanan yang Anda gunakan."
+          }
+        },
+        "Service": {
+          "key": "View_Settings_Sync_Service",
+          "default": "Layanan"
+        },
+        "UpdatesAvailable": {
+          "False": {
+            "key": "View_Settings_Sync_UpdatesAvailable_False",
+            "default": "Sinkronisasi terakhir {date}"
+          },
+          "True": {
+            "key": "View_Settings_Sync_UpdatesAvailable_True",
+            "default": "Siap untuk disinkronkan (dijadwalkan untuk {date})"
+          },
+          "Sync": {
+            "key": "View_Settings_Sync_UpdatesAvailable_Sync",
+            "default": "Sinkronkan sekarang"
+          }
+        },
+        "Qr": {
+          "Description": {
+            "key": "View_Settings_Sync_Qr_Description",
+            "default": "Pindai Kode QR ini menggunakan aplikasi Android xBrowserSync untuk menghubungkan dengan data tersinkron Anda."
+          },
+          "Show": {
+            "key": "View_Settings_Sync_Qr_Show",
+            "default": "Perlihatkan Kode QR"
+          },
+          "Copy": {
+            "key": "View_Settings_Sync_Qr_Copy",
+            "default": "Salin ID Sinkronisasi ke papan klip"
+          },
+          "Copied": {
+            "key": "View_Settings_Sync_Qr_Copied",
+            "default": "Disalin!"
+          }
+        }
+      },
+      "NotAvailable": {
+        "key": "View_Settings_NotAvailable",
+        "default": "Pengaturan tersedia ketika sinkronisasi diaktifkan."
+      },
+      "FileDownloaded": {
+        "key": "View_Settings_FileDownloaded",
+        "default": "Berkas disimpan ke Unduhan"
+      },
+      "Support": {
+        "key": "View_Settings_Support",
+        "default": "Dukung xBrowserSync"
+      }
+    },
+    "Support": {
+      "Title": {
+        "key": "View_Support_Title",
+        "default": "Dukung xBrowserSync!"
+      },
+      "Content": {
+        "key": "View_Support_Content",
+        "default": "<p>Kami ingin membuat xBrowserSync ala sinkronisasi peramban nomor satu, tapi masih banyak yang harus dilakukan:</p><ul><li>Menambahkan sinkronisasi tab dan riwayat peramban</li><li>Mendukung seluruh peramban komputer umum</li><li>Menerjemahkan ke bahasa lain</li><li>Dan <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>banyak lainnya</a>!</li></ul><p>Hanya dengan dukungan Anda kami bisa melanjutkan pengembangan xBrowserSync dan menjamin akan tetap efektif melindungi privasi daring dan meningkatkan produktivitas.</p>"
+      },
+      "Cryptos": {
+        "key": "View_Support_Cryptos",
+        "default": "Kripto"
+      },
+      "Liberapay": {
+        "key": "View_Support_Liberapay",
+        "default": "Liberapay"
+      },
+      "Patreon": {
+        "key": "View_Support_Patreon",
+        "default": "Patreon"
+      }
+    },
+    "SyncRemoved": {
+      "Title": {
+        "key": "View_SyncRemoved_Title",
+        "default": "Sinkronisasi tidak ditemukan"
+      },
+      "Content": {
+        "key": "View_SyncRemoved_Content",
+        "default": "<p>Sinkronisasi Anda tidak dapat ditemukan dan mungkin sudah dihapus karena ketidakaktifan.</p><p>Anda harus membuat sinkronisasi yang baru, tapi pertama-tama klik tombol di bawah ini untuk mengunduh cadangan data tersinkron Anda yang dimana selanjutnya Anda bisa memulihkannya ke sinkronisasi yang baru.</p>"
+      }
+    },
+    "TelemetryCheck": {
+      "Title": {
+        "key": "View_TelemetryCheck_Title",
+        "default": "Kirim telemetri anonim?"
+      },
+      "Content": {
+        "key": "View_TelemetryCheck_Content",
+        "default": "<p>xBrowserSync tidak seperti aplikasi tradisional karena ini adalah alat yang sepenuhnya anonim dan mengutamakan privasi. Mempertahankan alat semacam itu merupakan tantangan karena kami tidak memiliki akses ke data pengguna untuk membantu menentukan cara terbaik untuk menerapkan sumber daya kami yang terbatas. Oleh karena itu, kami meminta izin Anda untuk sesekali mengirim data teknis anonim untuk membantu kami meningkatkan xBrowserSync.</p><p>Data telemetri ini tidak menyertakan data pribadi atau identitas apa pun, juga tidak menyertakan data sinkronisasi terenkripsi Anda dan tidak pernah dibagikan dengan pihak ketiga mana pun (Anda dapat memilih ikut serta atau keluar kapan saja di panel Pengaturan).</p>"
+      }
+    },
+    "Updated": {
+      "Title": {
+        "key": "View_Updated_Title",
+        "default": "Diperbarui ke"
+      },
+      "Content": {
+        "key": "View_Updated_Content",
+        "default": "<p>xBrowserSync telah diperbarui dengan fitur dan perbaikan terbaru.</p><p>Jika sinkronisasi diaktifkan sebelumnya maka telah dimatikan dan sinkronisasi Anda harus ditingkatkan terlebih dahulu sebelum menyinkronkan dengan xBrowserSync versi ini. Aktifkan kembali sinkronisasi untuk menyelesaikan proses peningkatan.</p><p>Untuk detail lebih lanjut tentang perubahan yang ada di rilis ini, silakan periksa catatan rilis.</p>"
+      }
+    },
+    "Working": {
+      "Restoring": {
+        "key": "View_Working_Restoring",
+        "default": "Memulihkan"
+      },
+      "Resetting": {
+        "key": "View_Working_Resetting",
+        "default": "Atur Ulang"
+      },
+      "Syncing": {
+        "key": "View_Working_Syncing",
+        "default": "Menyinkronkan"
+      }
+    }
+  }
+}
