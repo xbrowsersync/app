@@ -333,14 +333,10 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
       .all([
         this.settingsSvc.checkForAppUpdates(),
         this.settingsSvc.telemetryEnabled(),
-        this.telemetrySvc.getTelemetryPayload(),
         this.utilitySvc.isSyncEnabled()
       ])
       .then((data) => {
-        const [checkForAppUpdates, telemetryEnabled, telemetry, syncEnabled] = data;
-
-        // Log telemetry to console
-        this.logSvc.logInfo(telemetry);
+        const [checkForAppUpdates, telemetryEnabled, syncEnabled] = data;
 
         // Check for new app version
         if (checkForAppUpdates) {

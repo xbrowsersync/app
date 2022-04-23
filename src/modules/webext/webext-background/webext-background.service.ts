@@ -244,16 +244,12 @@ export class WebExtBackgroundService {
           .all([
             this.settingsSvc.checkForAppUpdates(),
             this.settingsSvc.telemetryEnabled(),
-            this.telemetrySvc.getTelemetryPayload(),
             this.utilitySvc.isSyncEnabled()
           ])
           .then((data) => {
             // Update browser action icon
-            const [checkForAppUpdates, telemetryEnabled, telemetry, syncEnabled] = data;
+            const [checkForAppUpdates, telemetryEnabled, syncEnabled] = data;
             this.platformSvc.refreshNativeInterface(syncEnabled);
-
-            // Log telemetry to console
-            this.logSvc.logInfo(telemetry);
 
             // Check for new app version
             if (checkForAppUpdates) {
