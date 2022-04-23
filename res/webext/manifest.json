@@ -36,9 +36,6 @@
     "tabs",
     "unlimitedStorage"
   ],
-  "optional_permissions": [
-    "http://*/",
-    "https://*/"
-  ],
+  "optional_permissions": ["http://*/", "https://*/"],
   "incognito": "not_allowed"
 }

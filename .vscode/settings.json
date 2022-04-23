@@ -7,10 +7,10 @@
     "editor.formatOnSave": false
   },
   "[json]": {
-    "editor.defaultFormatter": "HookyQR.beautify"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "HookyQR.beautify"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -51,12 +51,6 @@
     "node_modules": true
   },
   "stylelint.enable": true,
-  "stylelint.validate": [
-    "css",
-    "html",
-    "markdown",
-    "sass",
-    "scss"
-  ],
+  "stylelint.validate": ["css", "html", "markdown", "sass", "scss"],
   "typescript.tsdk": "./node_modules/typescript/lib"
 }

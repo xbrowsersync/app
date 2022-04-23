@@ -139,7 +139,10 @@
       "ng": "readonly",
       "SharedArrayBuffer": "readonly"
     },
-    "ignorePatterns": ["build/", "dist/"],
+    "ignorePatterns": [
+      "build/",
+      "dist/"
+    ],
     "parserOptions": {
       "ecmaVersion": 2020,
       "project": "./tsconfig.eslint.json",
@@ -162,9 +165,12 @@
       "func-style": "warn",
       "global-require": "off",
       "import/no-dynamic-require": "off",
-      "import/no-extraneous-dependencies": ["error", {
-        "devDependencies": true
-      }],
+      "import/no-extraneous-dependencies": [
+        "error",
+        {
+          "devDependencies": true
+        }
+      ],
       "import/order": "off",
       "import/prefer-default-export": "off",
       "no-bitwise": "off",
@@ -180,7 +186,12 @@
         "warn",
         {
           "groups": [
-            ["^\\u0000", "^@?\\w", "^[^.]", "^\\."]
+            [
+              "^\\u0000",
+              "^@?\\w",
+              "^[^.]",
+              "^\\."
+            ]
           ]
         }
       ],
@@ -204,9 +215,12 @@
       "no-descending-specificity": null,
       "no-invalid-position-at-import-rule": null,
       "no-irregular-whitespace": null,
-      "prettier/prettier": [true, {
-        "severity": "warning"
-      }],
+      "prettier/prettier": [
+        true,
+        {
+          "severity": "warning"
+        }
+      ],
       "scss/at-extend-no-missing-placeholder": null,
       "scss/selector-no-redundant-nesting-selector": null,
       "selector-id-pattern": null,
@@ -219,13 +233,17 @@
   "prettier": {
     "bracketSpacing": true,
     "endOfLine": "auto",
-    "overrides": [{
-      "files": ["*.html"],
-      "options": {
-        "htmlWhitespaceSensitivity": "ignore",
-        "jsxBracketSameLine": true
+    "overrides": [
+      {
+        "files": [
+          "*.html"
+        ],
+        "options": {
+          "htmlWhitespaceSensitivity": "ignore",
+          "jsxBracketSameLine": true
+        }
       }
-    }],
+    ],
     "printWidth": 120,
     "semi": true,
     "singleQuote": true,
@@ -234,9 +252,13 @@
     "useTabs": false
   },
   "jest": {
-    "collectCoverageFrom": ["<rootDir>/src/modules/**/*.ts"],
+    "collectCoverageFrom": [
+      "<rootDir>/src/modules/**/*.ts"
+    ],
     "preset": "ts-jest",
     "testEnvironment": "jsdom",
-    "testMatch": ["<rootDir>/src/modules/**/*.spec.ts"]
+    "testMatch": [
+      "<rootDir>/src/modules/**/*.spec.ts"
+    ]
   }
 }

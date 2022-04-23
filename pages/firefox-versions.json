@@ -1,0 +1,24 @@
+{
+  "addons": {
+    "{019b606a-6f61-4d01-af2a-cea528f606da}": {
+      "updates": [
+        {
+          "version": "1.4.0",
+          "update_link": "https://github.com/xbrowsersync/app/releases/download/v1.4.0/xbrowsersync_1.4.0.xpi"
+        },
+        {
+          "version": "1.5.0",
+          "update_link": "https://github.com/xbrowsersync/app/releases/download/v1.5.0/xbrowsersync_1.5.0_firefox.xpi"
+        },
+        {
+          "version": "1.5.1",
+          "update_link": "https://github.com/xbrowsersync/app/releases/download/v1.5.1/xbrowsersync_1.5.1_firefox.xpi"
+        },
+        {
+          "version": "1.5.2",
+          "update_link": "https://github.com/xbrowsersync/app/releases/download/v1.5.2/xbrowsersync_1.5.2_firefox.xpi"
+        }
+      ]
+    }
+  }
+}
