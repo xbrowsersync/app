@@ -14,6 +14,7 @@ module.exports = (env, argv) => {
     manifest.browser_specific_settings = {
       gecko: {
         id: '{019b606a-6f61-4d01-af2a-cea528f606da}',
+        strict_min_version: '75.0',
         update_url: 'https://xbrowsersync.github.io/app/firefox-versions.json'
       }
     };

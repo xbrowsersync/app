@@ -11,12 +11,6 @@
   "bugs": {
     "url": "https://github.com/xbrowsersync/app/issues"
   },
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "{019b606a-6f61-4d01-af2a-cea528f606da}",
-      "strict_min_version": "75.0"
-    }
-  },
   "scripts": {
     "test": "jest --coverage --passWithNoTests",
     "lint": "echo Checking for lint errors... && eslint ./src --ext .ts && stylelint \"./src/**/*.scss\"",
