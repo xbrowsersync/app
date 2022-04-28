@@ -51,6 +51,6 @@
     "node_modules": true
   },
   "stylelint.enable": true,
-  "stylelint.validate": ["css", "html", "markdown", "sass", "scss"],
+  "stylelint.validate": ["markdown", "scss"],
   "typescript.tsdk": "./node_modules/typescript/lib"
 }

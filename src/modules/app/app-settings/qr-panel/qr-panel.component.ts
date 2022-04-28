@@ -1,8 +1,10 @@
 import { Component, OnInit, Output } from 'angular-ts-decorators';
 import { boundMethod } from 'autobind-decorator';
 import QRCode from 'qrcode-svg';
+import { ApiSyncInfo } from '../../../shared/api/api.interface';
 import { BackupRestoreService } from '../../../shared/backup-restore/backup-restore.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
+import { StoreKey } from '../../../shared/store/store.enum';
 import { StoreService } from '../../../shared/store/store.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { AppHelperService } from '../../shared/app-helper/app-helper.service';
@@ -23,8 +25,6 @@ export class AppQrComponent implements OnInit {
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
-  serviceUrl: string;
-  syncId: string;
   syncIdCopied = false;
 
   @Output() close: () => void;
@@ -55,9 +55,12 @@ export class AppQrComponent implements OnInit {
 
   @boundMethod
   copySyncId(): void {
-    this.appHelperSvc.copyTextToClipboard(this.syncId).then(() => {
-      this.syncIdCopied = true;
-    });
+    this.storeSvc
+      .get<ApiSyncInfo>(StoreKey.SyncInfo)
+      .then((syncInfo) => this.appHelperSvc.copyTextToClipboard(syncInfo.id))
+      .then(() => {
+        this.syncIdCopied = true;
+      });
   }
 
   ngOnInit(): void {

@@ -134,8 +134,9 @@
       "SharedArrayBuffer": "readonly"
     },
     "ignorePatterns": [
-      "build/",
-      "dist/"
+      "**/build/*",
+      "**/dist/*",
+      "**/node_modules/*"
     ],
     "parserOptions": {
       "ecmaVersion": 2020,
