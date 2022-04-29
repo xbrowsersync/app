@@ -47,9 +47,8 @@ export class AndroidV160UpgradeProviderService extends V160UpgradeProviderServic
   }
 
   upgradeApp(upgradingFromVersion?: string): ng.IPromise<void> {
-    // Get current native storage items
+    // Migrate items in native storage to new store
     return this.getAllFromNativeStorage().then((cachedData) => {
-      // Initialise store
       return this.storeSvc
         .init()
         .then(() => {
@@ -60,11 +59,10 @@ export class AndroidV160UpgradeProviderService extends V160UpgradeProviderServic
           const syncInfo: Partial<ApiXbrowsersyncSyncInfo> = {
             serviceType: ApiServiceType.xBrowserSync
           };
-
-          // Add settings from previous version to store
           return this.$q
             .all(
               Object.keys(cachedData).map((key) => {
+                // Ignore items that should not be migrated
                 if (key === 'appVersion' || key === 'password' || key === 'traceLog') {
                   return;
                 }

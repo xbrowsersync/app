@@ -36,57 +36,54 @@ export class WebExtV160UpgradeProviderService extends V160UpgradeProviderService
   }
 
   upgradeApp(upgradingFromVersion?: string): ng.IPromise<void> {
-    // Initialise IndexedDB data storage
-    return (
-      this.storeSvc
-        .init()
-        // Convert local storage items to IndexedDB
-        .then(() => browser.storage.local.get())
-        .then((cachedData) => {
-          if (!cachedData || Object.keys(cachedData).length === 0) {
-            return;
-          }
+    // Migrate items in local storage to new IndexedDB store
+    return this.storeSvc
+      .init()
+      .then(() => browser.storage.local.get())
+      .then((cachedData) => {
+        if (!cachedData || Object.keys(cachedData).length === 0) {
+          return;
+        }
 
-          const syncInfo: Partial<ApiXbrowsersyncSyncInfo> = {
-            serviceType: ApiServiceType.xBrowserSync
-          };
-
-          return this.$q
-            .all(
-              Object.keys(cachedData).map((key) => {
-                if (key === 'password') {
-                  return;
-                }
-
-                // Upgrade sync settings
-                switch (key) {
-                  case 'serviceUrl':
-                    syncInfo.serviceUrl = cachedData[key];
-                    return;
-                  case 'syncId':
-                    syncInfo.id = cachedData[key];
-                    return;
-                  case 'syncVersion':
-                    syncInfo.version = cachedData[key];
-                    return;
-                  default:
-                }
-
-                return this.storeSvc.set(key, cachedData[key]);
-              })
-            )
-            .then(() => {
-              if (!syncInfo.id) {
+        const syncInfo: Partial<ApiXbrowsersyncSyncInfo> = {
+          serviceType: ApiServiceType.xBrowserSync
+        };
+        return this.$q
+          .all(
+            Object.keys(cachedData).map((key) => {
+              // Ignore items that should not be migrated
+              if (key === 'password' || key === 'traceLog') {
                 return;
               }
-              if (!syncInfo.serviceUrl) {
-                syncInfo.serviceUrl = Globals.URL.DefaultServiceUrl;
+
+              // Upgrade sync settings
+              switch (key) {
+                case 'serviceUrl':
+                  syncInfo.serviceUrl = cachedData[key];
+                  return;
+                case 'syncId':
+                  syncInfo.id = cachedData[key];
+                  return;
+                case 'syncVersion':
+                  syncInfo.version = cachedData[key];
+                  return;
+                default:
               }
-              return this.storeSvc.set(StoreKey.SyncInfo, syncInfo);
-            });
-        })
-        .then(() => browser.storage.local.clear())
-        .then(() => super.upgradeApp())
-    );
+
+              return this.storeSvc.set(key, cachedData[key]);
+            })
+          )
+          .then(() => {
+            if (!syncInfo.id) {
+              return;
+            }
+            if (!syncInfo.serviceUrl) {
+              syncInfo.serviceUrl = Globals.URL.DefaultServiceUrl;
+            }
+            return this.storeSvc.set(StoreKey.SyncInfo, syncInfo);
+          });
+      })
+      .then(() => browser.storage.local.clear())
+      .then(() => super.upgradeApp());
   }
 }

@@ -27,6 +27,7 @@
 .header-panel {
   align-items: center;
   display: flex;
+  flex: 0 0 auto;
   font-size: 1.3rem;
   justify-content: space-between;
   margin-bottom: 0.75rem;
@@ -129,6 +130,7 @@
   border-width: 0;
   color: var(--color-well-text);
   margin-bottom: 0.75rem;
+  overflow: hidden;
   padding: 1rem 1.25rem;
 
   a {
