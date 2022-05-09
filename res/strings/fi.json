@@ -1227,7 +1227,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_Telemetry_Description",
-            "default": "Lähetä toisinaan nimettömiä teknisiä tietoja xBrowserSyncin parantamiseksi."
+            "default": "Lähetä ajoittain nimettömiä teknisiä tietoja xBrowserSyncin parantamiseksi."
           }
         },
         "Title": {
@@ -1349,11 +1349,11 @@
     "TelemetryCheck": {
       "Title": {
         "key": "View_TelemetryCheck_Title",
-        "default": "Lähetetäänkö anonyymiä telemetriaa?"
+        "default": "Lähetetäänkö nimettömiä telemetriatietoja?"
       },
       "Content": {
         "key": "View_TelemetryCheck_Content",
-        "default": "<p>xBrowserSync on toisin kuin perinteiset sovellukset, koska se on täysin anonyymi, yksityisyyden etusijalla oleva työkalu. Tällaisen työkalun ylläpito on haastavaa, koska meillä ei ole pääsyä käyttäjätietoihin, jotka auttaisivat määrittämään, kuinka rajalliset resurssit voidaan parhaiten hyödyntää. Siksi pyydämme lupaasi lähettää ajoittain nimettömiä teknisiä tietoja auttaaksemme meitä parantamaan xBrowserSynciä.</p><p>Nämä telemetriatiedot eivät sisällä henkilökohtaisia tai tunnistavia tietoja, eivätkä ne sisällä mitään salattuja synkronointitietojasi, eikä niitä koskaan ole. jaettu kolmansien osapuolten kanssa (voit ottaa käyttöön tai poistaa sen käytöstä milloin tahansa Asetukset-paneelissa).</p>"
+        "default": "<p>Perinteisistä sovelluksista poiketen xBrowserSync on täysin anonyymi työkalu, joka asettaa yksityisyyden etusijalle. Tällaisen työkalun ylläpito on haastavaa, koska emme näe käyttäjätietoja, joiden avulla voisime kohdentaa rajallisia resursseja tehokkaammin. Tämän vuoksi pyydämme lupaasi nimettömien teknisten tietojen ajoittaiseen lähetykseen xBrowserSyncin parantamiseksi.</p><p>Nämä telemetriatiedot eivät sisällä mitään henkilökohtaisia tai tunnistettavia tietoja tai salattuja synkronointitietoja, eikä niitä koskaan jaeta ulkopuolisille tahoille (voit estää tietojen lähetyksen asetuksista koska tahansa).</p>"
       }
     },
     "Updated": {
