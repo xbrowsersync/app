@@ -3,7 +3,7 @@
     "AppUpdateAvailable": {
       "Title": {
         "key": "Alert_AppUpdateAvailable_Title",
-        "default": "Mise à jour xBrowserSync disponible"
+        "default": "Mise à jour de xBrowserSync disponible"
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
