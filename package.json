@@ -96,7 +96,7 @@
     "jest": "^27.3.1",
     "js-beautify": "^1.14.0",
     "mini-css-extract-plugin": "^2.4.4",
-    "postcss": "^8.3.11",
+    "postcss": "^8.4.31",
     "prettier": "^2.4.1",
     "resolve-url-loader": "^5.0.0",
     "rimraf": "^3.0.2",
