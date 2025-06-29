@@ -628,11 +628,11 @@ export class BookmarkHelperService {
         }
       } else {
         // Get match scores for each keyword against bookmark words
-        const bookmarkWords = this.getKeywordsFromBookmark(bookmark, locale);
+        const bookmarkWords = this.getKeywordsFromBookmark(bookmark, locale, false, true);
         const scores = keywords.map((keyword) => {
           let count = 0;
           bookmarkWords.forEach((word) => {
-            if (word?.toLocaleLowerCase(locale).indexOf(keyword.toLocaleLowerCase(locale)) === 0) {
+            if (word?.toLocaleLowerCase(locale).indexOf(keyword.toLocaleLowerCase(locale)) >= 0) {
               count += 1;
             }
           });
