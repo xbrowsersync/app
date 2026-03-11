@@ -53,15 +53,9 @@ jobs:
 
       - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
 
-      - name: Fix android build tools cordova issue
-        run: |
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --uninstall "build-tools;32.0.0"
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --uninstall "build-tools;31.0.0"
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --install "build-tools;30.0.3"
-
       - name: Install cordova
         run: |
-          npm install -g cordova@11.0.0
+          npm install -g cordova@12.0.0
           pushd res/android
           cordova telemetry off
           cordova prepare
