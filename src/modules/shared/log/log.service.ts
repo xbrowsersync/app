@@ -128,7 +128,7 @@ export class LogService {
     let message =
       typeof this.currentLogQueueItem.message === 'object'
         ? JSON.stringify(this.currentLogQueueItem.message)
-        : this.currentLogQueueItem.message ?? '';
+        : (this.currentLogQueueItem.message ?? '');
     if (this.currentLogQueueItem.error) {
       message += this.currentLogQueueItem.error.stack
         ? `${this.currentLogQueueItem.error.stack.replace(/\s+/g, ' ')}`

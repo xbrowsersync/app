@@ -1,5 +1,5 @@
 @use 'sass:color';
-@import '../../../../styles/modules/all';
+@use '../../../../styles/modules/all' as *;
 
 bookmark-tree {
   --color-bookmark-tree-root-bg: rgba(#{hex2rgb($color-text2-default)}, 0.3);

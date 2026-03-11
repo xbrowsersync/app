@@ -1,4 +1,4 @@
-@import '../../../../styles/modules/all';
+@use '../../../../styles/modules/all' as *;
 
 app-alert {
   --color-alert-text: #{$color-text1-default};

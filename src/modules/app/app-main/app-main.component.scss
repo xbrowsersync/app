@@ -1,5 +1,5 @@
 @use 'sass:color';
-@import '../../../styles/modules/all';
+@use '../../../styles/modules/all' as *;
 
 app {
   .disable-transitions {

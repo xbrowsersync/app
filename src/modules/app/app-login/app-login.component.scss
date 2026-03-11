@@ -1,4 +1,4 @@
-@import '../../../styles/modules/all';
+@use '../../../styles/modules/all' as *;
 
 app-login {
   --color-login-link-hover: #{$color-text2-default};

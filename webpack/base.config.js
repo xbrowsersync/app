@@ -31,7 +31,11 @@ module.exports = (env, argv) => {
             {
               loader: 'sass-loader',
               options: {
-                sourceMap: true
+                sourceMap: true,
+                sassOptions: {
+                  silenceDeprecations: ['import'],
+                  quietDeps: true
+                }
               }
             }
           ]

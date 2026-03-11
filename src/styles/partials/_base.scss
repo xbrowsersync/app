@@ -1,6 +1,13 @@
-@import '~angular/angular-csp.css';
-@import 'bootstrap';
-@import '../modules/all';
+@use 'angular/angular-csp.css';
+@use 'bootstrap';
+@use '../modules/all' as *;
+@use 'fonts';
+@use 'typography';
+@use 'layout';
+@use 'forms';
+@use 'buttons';
+@use 'animations';
+@use 'utilities';
 
 * {
   box-shadow: none;
@@ -11,11 +18,3 @@
   color-scheme: light dark;
   font-size: $base-font-size;
 }
-
-@import 'fonts';
-@import 'typography';
-@import 'layout';
-@import 'forms';
-@import 'buttons';
-@import 'animations';
-@import 'utilities';
