@@ -299,7 +299,7 @@ export class ApiXbrowsersyncService implements ApiService {
     }
 
     // Render markdown and add link classes to service message
-    let message = serviceInfoResponse.message ? marked(serviceInfoResponse.message) : '';
+    let message = serviceInfoResponse.message ? (marked.parse(serviceInfoResponse.message) as string) : '';
     if (message) {
       const messageDom = new DOMParser().parseFromString(message, 'text/html');
       messageDom.querySelectorAll('a').forEach((hyperlink) => {
