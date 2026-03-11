@@ -1,4 +1,4 @@
-@import '../../../styles/modules/all';
+@use '../../../styles/modules/all' as *;
 
 app-settings {
   --color-settings-description-text: #{$color-text3-default};

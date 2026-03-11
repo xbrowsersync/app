@@ -59,13 +59,13 @@ export class WebExtV160UpgradeProviderService extends V160UpgradeProviderService
               // Upgrade sync settings
               switch (key) {
                 case 'serviceUrl':
-                  syncInfo.serviceUrl = cachedData[key];
+                  syncInfo.serviceUrl = cachedData[key] as string;
                   return;
                 case 'syncId':
-                  syncInfo.id = cachedData[key];
+                  syncInfo.id = cachedData[key] as string;
                   return;
                 case 'syncVersion':
-                  syncInfo.version = cachedData[key];
+                  syncInfo.version = cachedData[key] as string;
                   return;
                 default:
               }

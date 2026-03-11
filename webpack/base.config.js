@@ -31,7 +31,11 @@ module.exports = (env, argv) => {
             {
               loader: 'sass-loader',
               options: {
-                sourceMap: true
+                sourceMap: true,
+                sassOptions: {
+                  silenceDeprecations: ['import'],
+                  quietDeps: true
+                }
               }
             }
           ]
@@ -62,6 +66,7 @@ module.exports = (env, argv) => {
           minimizer: [
             new TerserPlugin({
               parallel: true,
+              exclude: /node_modules\/which\/bin/,
               terserOptions: {
                 keep_classnames: true
               }

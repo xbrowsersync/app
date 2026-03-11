@@ -1,3 +1,5 @@
+@use '../modules/all' as *;
+
 button {
   &.btn {
     border-width: 0;

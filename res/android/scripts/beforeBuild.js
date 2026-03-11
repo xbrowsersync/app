@@ -10,6 +10,14 @@ module.exports = (ctx) => {
   destination = path.join(ctx.opts.projectRoot, 'platforms/android/app/build-extras.gradle');
   fs.copyFileSync(source, destination);
 
+  // Patch cordova-plugin-qrscanner gradle: replace deprecated compile() with implementation()
+  const qrGradlePath = path.join(ctx.opts.projectRoot, 'platforms/android/cordova-plugin-qrscanner/android-qrscanner.gradle');
+  if (fs.existsSync(qrGradlePath)) {
+    let qrGradle = fs.readFileSync(qrGradlePath, 'utf8');
+    qrGradle = qrGradle.replace(/\bcompile\b/g, 'implementation');
+    fs.writeFileSync(qrGradlePath, qrGradle, 'utf8');
+  }
+
   // Copy gradle.properties
   if (ctx.opts.options.release) {
     source = path.join(ctx.opts.projectRoot, 'gradle.release.properties');

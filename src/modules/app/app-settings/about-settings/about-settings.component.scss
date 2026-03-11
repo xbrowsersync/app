@@ -1,4 +1,4 @@
-@import '../../../../styles/modules/all';
+@use '../../../../styles/modules/all' as *;
 
 about-settings {
   --color-settings-about-link-hover: #{$color-text2-default};
