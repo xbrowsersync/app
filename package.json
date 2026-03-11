@@ -83,7 +83,7 @@
     "autobind-decorator": "^2.4.0",
     "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.0.0",
-    "eslint": "^8.2.0",
+    "eslint": "^9.39.2",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^16.1.0",
     "eslint-config-prettier": "^10.0.0",
