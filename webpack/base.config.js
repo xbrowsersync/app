@@ -66,6 +66,7 @@ module.exports = (env, argv) => {
           minimizer: [
             new TerserPlugin({
               parallel: true,
+              exclude: /node_modules\/which\/bin/,
               terserOptions: {
                 keep_classnames: true
               }
