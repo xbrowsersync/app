@@ -1,0 +1,85 @@
+name: Nightly Build
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  nightly:
+    name: Package nightly builds
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: nightly-build
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '8'
+
+      - uses: android-actions/setup-android@v2
+
+      - name: Fix android build tools cordova issue
+        run: |
+          $ANDROID_SDK_ROOT/tools/bin/sdkmanager --uninstall "build-tools;32.0.0"
+          $ANDROID_SDK_ROOT/tools/bin/sdkmanager --uninstall "build-tools;31.0.0"
+          $ANDROID_SDK_ROOT/tools/bin/sdkmanager --install "build-tools;30.0.3"
+
+      - name: Add android sdk build tools to PATH
+        run: |
+          echo "${{ env.ANDROID_SDK_ROOT }}/build-tools/30.0.3" >> $GITHUB_PATH
+
+      - name: Install cordova
+        run: |
+          npm install -g cordova@11.0.0
+          pushd res/android
+          cordova telemetry off
+          cordova prepare
+          popd
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create Chromium package
+        run: npm run package:chromium
+        env:
+          BETA: true
+
+      - name: Create Firefox package
+        run: npm run package:firefox
+        env:
+          BETA: true
+
+      - name: Create Android package
+        run: npm run package:android
+        env:
+          SIGNING_ALIAS: ${{ secrets.ANDROID_SIGNING_ALIAS }}
+          SIGNING_PASSWORD: ${{ secrets.ANDROID_SIGNING_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.ANDROID_SIGNING_STORE_PASSWORD }}
+          BETA: true
+
+      - name: Set release version env var
+        run: echo "RELEASE_VERSION=$(cat PACKAGE_VERSION)" >> $GITHUB_ENV
+
+      - name: Update nightly release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Nightly Build
+          tag_name: nightly
+          prerelease: true
+          body: |
+            Automated nightly build from the `nightly-build` branch.
+
+            Built on: ${{ github.run_id }} · ${{ github.sha }}
+          files: |
+            dist/xbrowsersync_${{ env.RELEASE_VERSION }}_chromium.zip
+            dist/xbrowsersync_${{ env.RELEASE_VERSION }}_firefox.xpi
+            dist/xbrowsersync_${{ env.RELEASE_VERSION }}_android.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
