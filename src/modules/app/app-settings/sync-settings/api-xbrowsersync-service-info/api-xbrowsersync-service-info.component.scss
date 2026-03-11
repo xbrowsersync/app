@@ -1,4 +1,4 @@
-@import '../../../../../styles/modules/all';
+@use '../../../../../styles/modules/all' as *;
 
 api-xbrowsersync-service-info {
   --color-sync-settings-data-bg: #{$color-text2-default};

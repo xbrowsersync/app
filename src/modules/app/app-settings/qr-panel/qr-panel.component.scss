@@ -1,4 +1,4 @@
-@import '../../../../styles/modules/all';
+@use '../../../../styles/modules/all' as *;
 
 qr-panel {
   display: block;

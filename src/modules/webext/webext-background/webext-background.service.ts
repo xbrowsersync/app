@@ -352,18 +352,19 @@ export class WebExtBackgroundService {
   }
 
   @boundMethod
-  onMessage(message: Message): Promise<any> {
+  onMessage(message: unknown): Promise<any> {
     // Use native Promise not $q otherwise browser.runtime.sendMessage will return immediately in Firefox
     return new Promise((resolve, reject) => {
+      const msg = message as Message;
       let action: ng.IPromise<any>;
-      switch (message.command) {
+      switch (msg.command) {
         // Queue bookmarks sync
         case MessageCommand.SyncBookmarks:
-          action = this.runSyncBookmarksCommand(message as SyncBookmarksMessage);
+          action = this.runSyncBookmarksCommand(msg as SyncBookmarksMessage);
           break;
         // Trigger bookmarks restore
         case MessageCommand.RestoreBookmarks:
-          action = this.runRestoreBookmarksCommand(message as SyncBookmarksMessage);
+          action = this.runRestoreBookmarksCommand(msg as SyncBookmarksMessage);
           break;
         // Get current sync in progress
         case MessageCommand.GetCurrentSync:
@@ -379,7 +380,7 @@ export class WebExtBackgroundService {
           break;
         // Download file
         case MessageCommand.DownloadFile:
-          action = this.runDownloadFileCommand(message as DownloadFileMessage);
+          action = this.runDownloadFileCommand(msg as DownloadFileMessage);
           break;
         // Enable event listeners
         case MessageCommand.EnableEventListeners:
@@ -391,7 +392,7 @@ export class WebExtBackgroundService {
           break;
         // Enable auto back up
         case MessageCommand.EnableAutoBackUp:
-          action = this.runEnableAutoBackUpCommand(message as EnableAutoBackUpMessage);
+          action = this.runEnableAutoBackUpCommand(msg as EnableAutoBackUpMessage);
           break;
         // Disable auto back up
         case MessageCommand.DisableAutoBackUp:

@@ -1,3 +1,5 @@
+@use '../modules/all' as *;
+
 .animate-fade-in {
   @include animation-fade-in;
 }

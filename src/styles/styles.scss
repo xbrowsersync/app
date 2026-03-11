@@ -1,4 +1,5 @@
-@import './partials/base';
+@use './modules/all' as *;
+@use './partials/base';
 
 body {
   font-family: $font-stack-regular;

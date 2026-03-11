@@ -1,5 +1,5 @@
 @use 'sass:color';
-@import '../../../styles/modules/all';
+@use '../../../styles/modules/all' as *;
 
 app {
   .disable-transitions {
@@ -60,7 +60,7 @@ app {
     font-style: italic;
     overflow-y: auto;
     padding: 1px;
-    quotes: '\201c''\201d';
+    quotes: '\201c' '\201d';
     text-align: center;
 
     &::before {

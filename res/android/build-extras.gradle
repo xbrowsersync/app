@@ -1,5 +1,6 @@
 android {
-  lintOptions {
+  compileSdkVersion 34
+  lint {
     abortOnError false
     checkAllWarnings false
     checkReleaseBuilds false

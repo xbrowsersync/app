@@ -27,9 +27,9 @@
   },
   "css.validate": false,
   "editor.codeActionsOnSave": {
-    "source.addMissingImports": true,
-    "source.fixAll": false,
-    "source.fixAll.eslint": true
+    "source.addMissingImports": "explicit",
+    "source.fixAll": "never",
+    "source.fixAll.eslint": "explicit"
   },
   "editor.detectIndentation": false,
   "editor.formatOnSave": true,
