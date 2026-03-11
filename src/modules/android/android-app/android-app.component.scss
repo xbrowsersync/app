@@ -5,47 +5,59 @@
 }
 
 :root {
-  @media (orientation: portrait) and (min-width: 321px) {
+  @media (orientation: portrait) and (width >= 321px) {
     font-size: 16px;
   }
-  @media (orientation: portrait) and (min-width: 411px) {
+
+  @media (orientation: portrait) and (width >= 411px) {
     font-size: 18px;
   }
-  @media (orientation: portrait) and (min-width: 480px) {
+
+  @media (orientation: portrait) and (width >= 480px) {
     font-size: 20px;
   }
-  @media (orientation: portrait) and (min-width: 600px) {
+
+  @media (orientation: portrait) and (width >= 600px) {
     font-size: 22px;
   }
-  @media (orientation: portrait) and (min-width: 760px) {
+
+  @media (orientation: portrait) and (width >= 760px) {
     font-size: 26px;
   }
-  @media (orientation: portrait) and (min-width: 800px) {
+
+  @media (orientation: portrait) and (width >= 800px) {
     font-size: 30px;
   }
-  @media (orientation: portrait) and (min-width: 900px) {
+
+  @media (orientation: portrait) and (width >= 900px) {
     font-size: 32px;
   }
 
-  @media (orientation: landscape) and (min-width: 720px) and (min-height: 361px) {
+  @media (orientation: landscape) and (width >= 720px) and (height >= 361px) {
     font-size: 16px;
   }
-  @media (orientation: landscape) and (min-width: 813px) {
+
+  @media (orientation: landscape) and (width >= 813px) {
     font-size: 18px;
   }
-  @media (orientation: landscape) and (min-width: 900px) {
+
+  @media (orientation: landscape) and (width >= 900px) {
     font-size: 20px;
   }
-  @media (orientation: landscape) and (min-width: 960px) {
+
+  @media (orientation: landscape) and (width >= 960px) {
     font-size: 22px;
   }
-  @media (orientation: landscape) and (min-width: 980px) {
+
+  @media (orientation: landscape) and (width >= 980px) {
     font-size: 24px;
   }
-  @media (orientation: landscape) and (min-width: 1200px) {
+
+  @media (orientation: landscape) and (width >= 1200px) {
     font-size: 28px;
   }
-  @media (orientation: landscape) and (min-width: 1280px) {
+
+  @media (orientation: landscape) and (width >= 1280px) {
     font-size: 32px;
   }
 }

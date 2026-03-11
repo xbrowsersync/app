@@ -1,8 +1,10 @@
 @use 'sass:color';
+@use 'sass:string';
 
 @function hex2rgb($hexcolor) {
   $red: color.red($hexcolor);
   $green: color.green($hexcolor);
   $blue: color.blue($hexcolor);
-  @return unquote('#{$red}, #{$green}, #{$blue}');
+
+  @return string.unquote('#{$red}, #{$green}, #{$blue}');
 }
