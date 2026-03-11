@@ -1,4 +1,5 @@
 android {
+  compileSdkVersion 34
   lint {
     abortOnError false
     checkAllWarnings false
