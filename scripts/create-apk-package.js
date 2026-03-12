@@ -47,7 +47,7 @@ const runCommand = (command, cwd, callback) => {
 };
 
 runCommand(
-  `cordova build android --release -- --keystore=${pathToKeyStore} --storePassword=${signingStorePassword} --alias=${signingAlias} --password=${signingPassword}`,
+  `cordova build android --release -- --packageType=apk --keystore=${pathToKeyStore} --storePassword=${signingStorePassword} --alias=${signingAlias} --password=${signingPassword}`,
   './build/android',
   () => {
     if (!fs.existsSync(outputDir)) {
