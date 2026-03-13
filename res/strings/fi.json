@@ -1353,7 +1353,7 @@
       },
       "Content": {
         "key": "View_TelemetryCheck_Content",
-        "default": "<p>Perinteisistä sovelluksista poiketen xBrowserSync on täysin anonyymi työkalu, joka asettaa yksityisyyden etusijalle. Tällaisen työkalun ylläpito on haastavaa, koska emme näe käyttäjätietoja, joiden avulla voisime kohdentaa rajallisia resursseja tehokkaammin. Tämän vuoksi pyydämme lupaasi nimettömien teknisten tietojen ajoittaiseen lähetykseen xBrowserSyncin parantamiseksi.</p><p>Nämä telemetriatiedot eivät sisällä mitään henkilökohtaisia tai tunnistettavia tietoja tai salattuja synkronointitietoja, eikä niitä koskaan jaeta ulkopuolisille tahoille (voit estää tietojen lähetyksen asetuksista koska tahansa).</p>"
+        "default": "<p>Perinteisistä sovelluksista poiketen xBrowserSync on täysin anonyymi työkalu, joka asettaa yksityisyyden etusijalle. Tällaisen työkalun ylläpito on haastavaa, koska emme näe käyttäjätietoja, joiden avulla voisimme kohdentaa rajallisia resursseja tehokkaammin. Tämän vuoksi pyydämme lupaasi nimettömien teknisten tietojen ajoittaiseen lähetykseen xBrowserSyncin parantamiseksi.</p><p>Nämä telemetriatiedot eivät sisällä mitään henkilökohtaisia tai tunnistettavia tietoja tai salattuja synkronointitietoja, eikä niitä koskaan jaeta ulkopuolisille tahoille (voit estää tietojen lähetyksen asetuksista koska tahansa).</p>"
       }
     },
     "Updated": {
