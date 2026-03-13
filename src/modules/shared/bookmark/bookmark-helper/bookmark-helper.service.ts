@@ -628,7 +628,7 @@ export class BookmarkHelperService {
         }
       } else {
         // Get match scores for each keyword against bookmark words
-        const bookmarkWords = this.getKeywordsFromBookmark(bookmark, locale, false, true);
+        const bookmarkWords = this.getCachedKeywordsFromBookmark(bookmark, locale, false, true);
         const scores = keywords.map((keyword) => {
           let count = 0;
           bookmarkWords.forEach((word) => {
@@ -651,6 +651,36 @@ export class BookmarkHelperService {
           results.push(result);
         }
       }
+
+      // Cache for bookmark keyword extraction to avoid repeated URL parsing in tight search loops
+      private bookmarkKeywordCache: Map<string, string[]> = new Map<string, string[]>();
+
+      /**
+       * Returns keyword list for a bookmark, caching results per (bookmark.id, locale, includeTags, includeUrl).
+       * This avoids repeatedly parsing URLs when search is invoked frequently.
+       */
+      private getCachedKeywordsFromBookmark(
+        bookmark: Bookmark,
+        locale: string,
+        includeTags: boolean,
+        includeUrl: boolean
+      ): string[] {
+        // Use bookmark.id when available; fall back to URL to reduce cache misses for stable bookmarks
+        const idPart = (bookmark as any).id ?? bookmark.url ?? '';
+        const cacheKey = `${idPart}|${locale}|${includeTags ? '1' : '0'}|${includeUrl ? '1' : '0'}`;
+
+        const cached = this.bookmarkKeywordCache.get(cacheKey);
+        if (cached) {
+          return cached;
+        }
+
+        const keywords = this.getKeywordsFromBookmark(bookmark, locale, includeTags, includeUrl);
+        this.bookmarkKeywordCache.set(cacheKey, keywords);
+
+        return keywords;
+      }
+
+      // end BookmarkHelperService
     });
 
     return results;
