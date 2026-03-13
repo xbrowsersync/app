@@ -72,7 +72,7 @@ jobs:
           BETA: true
 
       - name: Set release version env var
-        run: echo "RELEASE_VERSION=$(cat PACKAGE_VERSION)-$(date +%Y%m%d)" >> $GITHUB_ENV
+        run: echo "RELEASE_VERSION=$(cat PACKAGE_VERSION)" >> $GITHUB_ENV
 
       - name: Update nightly release
         uses: softprops/action-gh-release@v1
