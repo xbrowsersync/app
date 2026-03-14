@@ -1,37 +1,40 @@
-import angular from 'angular';
-import { NgModule } from 'angular-ts-decorators';
+/**
+ * Firefox background entry point for MV3 background scripts.
+ * Replaces the AngularJS bootstrap with a manual DI container.
+ */
+
 import browser from 'webextension-polyfill';
-import { WebExtBackgroundModule } from '../../webext-background/webext-background.module';
+import { WebExtV160UpgradeProviderService } from '../../shared/webext-upgrade/webext-v1.6.0-upgrade-provider.service';
+import { setupAngularShim } from '../../webext-background/angular-shims';
+import { createBackgroundContainer } from '../../webext-background/background-container';
 import { FirefoxBookmarkService } from '../shared/firefox-bookmark/firefox-bookmark.service';
 import { FirefoxPlatformService } from '../shared/firefox-platform/firefox-platform.service';
 
-@NgModule({
-  id: 'FirefoxBackgroundModule',
-  imports: [WebExtBackgroundModule],
-  providers: [FirefoxBookmarkService, FirefoxPlatformService]
-})
-class FirefoxBackgroundModule {}
+// Set up angular shim before any service code runs
+setupAngularShim();
 
-(FirefoxBackgroundModule as NgModule).module.config([
-  '$compileProvider',
-  '$httpProvider',
-  ($compileProvider: ng.ICompileProvider, $httpProvider: ng.IHttpProvider) => {
-    $compileProvider.debugInfoEnabled(false);
-    $httpProvider.interceptors.push('ApiRequestInterceptorFactory');
-  }
-]);
+// Mark this as the background context
+// eslint-disable-next-line no-undef, no-restricted-globals
+(self as any).__xbs_isBackground = true;
 
-angular.element(document).ready(() => {
-  angular.bootstrap(document, [(FirefoxBackgroundModule as NgModule).module.name]);
+// Create the DI container with Firefox-specific services
+const { backgroundSvc } = createBackgroundContainer({
+  BookmarkServiceClass: FirefoxBookmarkService,
+  PlatformServiceClass: FirefoxPlatformService,
+  UpgradeProviderServiceClass: WebExtV160UpgradeProviderService
 });
 
-// Set synchronous event handlers
+// Register event handlers synchronously (required for MV3 background scripts)
+let startupInitiated = false;
+
 browser.runtime.onInstalled.addListener((details) => {
-  // Store event details as element data
-  const element = document.querySelector('#install');
-  angular.element(element).data('details', details);
-  (document.querySelector('#install') as HTMLButtonElement).click();
+  if (startupInitiated) return;
+  startupInitiated = true;
+  backgroundSvc.onInstall(details.reason);
 });
+
 browser.runtime.onStartup.addListener(() => {
-  (document.querySelector('#startup') as HTMLButtonElement).click();
+  if (startupInitiated) return;
+  startupInitiated = true;
+  backgroundSvc.init();
 });
