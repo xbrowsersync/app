@@ -1,4 +1,3 @@
-import angular from 'angular';
 import { boundMethod } from 'autobind-decorator';
 import * as detectBrowser from 'detect-browser';
 import browser, { Tabs } from 'webextension-polyfill';
@@ -87,7 +86,7 @@ export abstract class WebExtPlatformService implements PlatformService {
   platformName = '';
 
   get backgroundSvc(): WebExtBackgroundService {
-    if (angular.isUndefined(this._backgroundSvc)) {
+    if (this._backgroundSvc === undefined) {
       this._backgroundSvc = this.$injector.get('WebExtBackgroundService');
     }
     return this._backgroundSvc as WebExtBackgroundService;
@@ -165,7 +164,7 @@ export abstract class WebExtPlatformService implements PlatformService {
       i18nStr = browser.i18n.getMessage(`${i18nObj.key}_Default`);
     }
 
-    if (angular.isUndefined(i18nStr ?? undefined)) {
+    if ((i18nStr ?? undefined) === undefined) {
       throw new I18nError('I18n string has no value');
     }
 
@@ -308,7 +307,7 @@ export abstract class WebExtPlatformService implements PlatformService {
       const iconUpdated = this.$q.defer<void>();
       const titleUpdated = this.$q.defer<void>();
 
-      browser.browserAction.getTitle({}).then((currentTitle) => {
+      (browser.action || browser.browserAction).getTitle({}).then((currentTitle) => {
         // Don't do anything if browser action title hasn't changed
         if (newTitle === currentTitle) {
           return resolve();
@@ -317,14 +316,14 @@ export abstract class WebExtPlatformService implements PlatformService {
         // Set a delay if finished syncing to prevent flickering when executing many syncs
         if (currentTitle.indexOf(syncingTitle) > 0 && newTitle.indexOf(syncedTitle)) {
           this.refreshInterfaceTimeout = this.$timeout(() => {
-            browser.browserAction.setIcon({ path: iconPath });
-            browser.browserAction.setTitle({ title: newTitle });
+            (browser.action || browser.browserAction).setIcon({ path: iconPath });
+            (browser.action || browser.browserAction).setTitle({ title: newTitle });
           }, 350);
           iconUpdated.resolve();
           titleUpdated.resolve();
         } else {
-          browser.browserAction.setIcon({ path: iconPath }).then(iconUpdated.resolve);
-          browser.browserAction.setTitle({ title: newTitle }).then(titleUpdated.resolve);
+          (browser.action || browser.browserAction).setIcon({ path: iconPath }).then(iconUpdated.resolve);
+          (browser.action || browser.browserAction).setTitle({ title: newTitle }).then(titleUpdated.resolve);
         }
 
         this.$q.all([iconUpdated, titleUpdated]).then(resolve).catch(reject);
@@ -333,17 +332,13 @@ export abstract class WebExtPlatformService implements PlatformService {
   }
 
   sendMessage(message: Message): ng.IPromise<any> {
-    // If background module loaded use browser API to send the message
-    let module: ng.IModule | undefined;
-    try {
-      module = angular.module('WebExtBackgroundModule');
-    } catch (err) {}
-
+    // If running in background context, call service directly; otherwise use browser messaging API
     let promise: ng.IPromise<any>;
-    if (angular.isUndefined(module)) {
-      promise = browser.runtime.sendMessage(message);
-    } else {
+    // eslint-disable-next-line no-undef, no-restricted-globals
+    if ((self as any).__xbs_isBackground) {
       promise = this.backgroundSvc.onMessage(message);
+    } else {
+      promise = browser.runtime.sendMessage(message);
     }
 
     return promise.catch((err: Error) => {

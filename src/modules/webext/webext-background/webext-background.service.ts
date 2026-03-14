@@ -1,4 +1,3 @@
-import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import { boundMethod } from 'autobind-decorator';
 import browser, { Alarms, Downloads, Notifications } from 'webextension-polyfill';
@@ -25,8 +24,8 @@ import { SyncService } from '../../shared/sync/sync.service';
 import { TelemetryService } from '../../shared/telemetry/telemetry.service';
 import { UpgradeService } from '../../shared/upgrade/upgrade.service';
 import { UtilityService } from '../../shared/utility/utility.service';
-import { ChromiumBookmarkService } from '../chromium/shared/chromium-bookmark/chromium-bookmark.service';
 import { BookmarkIdMapperService } from '../shared/bookmark-id-mapper/bookmark-id-mapper.service';
+import { WebExtBookmarkService } from '../shared/webext-bookmark/webext-bookmark.service';
 import {
   DownloadFileMessage,
   EnableAutoBackUpMessage,
@@ -46,7 +45,7 @@ export class WebExtBackgroundService {
   backupRestoreSvc: BackupRestoreService;
   bookmarkIdMapperSvc: BookmarkIdMapperService;
   bookmarkHelperSvc: BookmarkHelperService;
-  bookmarkSvc: ChromiumBookmarkService;
+  bookmarkSvc: WebExtBookmarkService;
   logSvc: LogService;
   networkSvc: NetworkService;
   platformSvc: PlatformService;
@@ -86,7 +85,7 @@ export class WebExtBackgroundService {
     BackupRestoreSvc: BackupRestoreService,
     BookmarkHelperSvc: BookmarkHelperService,
     BookmarkIdMapperSvc: BookmarkIdMapperService,
-    BookmarkSvc: ChromiumBookmarkService,
+    BookmarkSvc: WebExtBookmarkService,
     LogSvc: LogService,
     NetworkSvc: NetworkService,
     PlatformSvc: PlatformService,
@@ -322,10 +321,9 @@ export class WebExtBackgroundService {
     }
   }
 
-  onInstall(event: InputEvent): void {
+  onInstall(reason?: string): void {
     // Check if fresh install needed
-    const details = angular.element(event.currentTarget as Element).data('details');
-    (details?.reason === 'install' ? this.installExtension() : this.$q.resolve()).then(() => this.init());
+    (reason === 'install' ? this.installExtension() : this.$q.resolve()).then(() => this.init());
   }
 
   @boundMethod
@@ -531,7 +529,7 @@ export class WebExtBackgroundService {
   runSyncBookmarksCommand(message: SyncBookmarksMessage): ng.IPromise<void> {
     const { sync, runSync } = message;
     // If no sync has been provided, process current sync queue and check for updates
-    if (angular.isUndefined(sync)) {
+    if (sync === undefined) {
       return this.syncSvc.executeSync();
     }
     return this.syncSvc.queueSync(sync, runSync);

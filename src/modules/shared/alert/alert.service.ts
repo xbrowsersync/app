@@ -4,6 +4,7 @@ import { Alert } from './alert.interface';
 @Injectable('AlertService')
 export class AlertService {
   private _currentAlert: Alert | undefined;
+  onAlertChanged?: (alert: Alert) => void;
 
   get currentAlert(): Alert | undefined {
     return this._currentAlert;
@@ -11,6 +12,7 @@ export class AlertService {
 
   set currentAlert(value: Alert) {
     this._currentAlert = value;
+    this.onAlertChanged?.(value);
   }
 
   clearCurrentAlert(): void {
