@@ -77,8 +77,73 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
         return this.$q.all([clearOthers, clearToolbar]).then(() => {});
       })
       .catch((err) => {
+        // If container IDs can't be found, try fallback recovery method
+        if (err instanceof ContainerNotFoundError) {
+          this.logSvc.logWarning('Container IDs not found, attempting fallback recovery to clear bookmarks');
+          return this.clearNativeBookmarksFallback();
+        }
         throw new FailedRemoveNativeBookmarksError(undefined, err);
       });
+  }
+
+  private clearNativeBookmarksFallback(): ng.IPromise<void> {
+    // Fallback method: directly traverse the bookmark tree to find and clear xBrowserSync containers
+    return browser.bookmarks.getTree().then((tree) => {
+      const [root] = tree;
+      if (!root || !root.children) {
+        this.logSvc.logWarning('Unable to access bookmark tree for fallback recovery');
+        return;
+      }
+
+      const clearPromises: ng.IPromise<void>[] = [];
+
+      // Search for xBrowserSync containers by title and clear their children
+      const findAndClearXbsContainers = (nodes: NativeBookmarks.BookmarkTreeNode[]): void => {
+        nodes.forEach((node) => {
+          // Check if this node is an xBrowserSync container
+          if (
+            node.title === BookmarkContainer.Other ||
+            node.title === BookmarkContainer.Toolbar ||
+            node.title === BookmarkContainer.Menu
+          ) {
+            // Clear all children of this xBrowserSync container
+            if (node.children && node.children.length > 0) {
+              node.children.forEach((child) => {
+                clearPromises.push(
+                  this.removeNativeBookmarks(child.id).catch((err) => {
+                    this.logSvc.logWarning(
+                      `Failed to remove bookmark ${child.id} from ${node.title} during fallback recovery`
+                    );
+                    // Continue with other bookmarks even if one fails
+                    return this.$q.resolve();
+                  })
+                );
+              });
+            }
+          }
+          // Recursively search children
+          if (node.children && node.children.length > 0) {
+            findAndClearXbsContainers(node.children);
+          }
+        });
+      };
+
+      // Search through all root children and their descendants
+      root.children.forEach((child) => {
+        if (child.children && child.children.length > 0) {
+          findAndClearXbsContainers(child.children);
+        }
+      });
+
+      if (clearPromises.length === 0) {
+        this.logSvc.logInfo('Fallback recovery: no xBrowserSync containers found to clear');
+        return;
+      }
+
+      return this.$q.all(clearPromises).then(() => {
+        this.logSvc.logInfo(`Fallback recovery completed, cleared ${clearPromises.length} bookmark items`);
+      });
+    });
   }
 
   convertNativeBookmarkToSeparator(
@@ -444,14 +509,28 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
         return browser.bookmarks.getTree().then((tree) => {
           // Get the root child nodes
           const [root] = tree;
-          const otherBookmarksNode = root.children.find((x) => {
+          let otherBookmarksNode = root.children.find((x) => {
             return x.id === this.otherBookmarksNodeId;
           });
-          const toolbarBookmarksNode = root.children.find((x) => {
+          let toolbarBookmarksNode = root.children.find((x) => {
             return x.id === this.toolbarBookmarksNodeId;
           });
 
-          // Throw an error if a native container node is not found
+          // Fallback: try to find containers by position if hardcoded IDs don't match
+          // In Chromium browsers, root typically has exactly 2 children: toolbar (index 0) and other (index 1)
+          if ((!otherBookmarksNode || !toolbarBookmarksNode) && root.children && root.children.length === 2) {
+            // Try to identify by position - typically toolbar is first, other is second
+            if (!toolbarBookmarksNode && root.children[0]) {
+              toolbarBookmarksNode = root.children[0];
+              this.logSvc.logInfo(`Found toolbar bookmarks by position: ${toolbarBookmarksNode.id}`);
+            }
+            if (!otherBookmarksNode && root.children[1]) {
+              otherBookmarksNode = root.children[1];
+              this.logSvc.logInfo(`Found other bookmarks by position: ${otherBookmarksNode.id}`);
+            }
+          }
+
+          // Throw an error if a native container node is still not found
           if (!otherBookmarksNode || !toolbarBookmarksNode) {
             if (!otherBookmarksNode) {
               this.logSvc.logWarning('Missing container: other bookmarks');
