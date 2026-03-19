@@ -12,7 +12,10 @@ describe('BookmarkIdMapperService', () => {
     idMapperSvc = new BookmarkIdMapperService($q, mockStoreSvc);
   });
 
-  afterEach(() => jest.restoreAllMocks());
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
 
   test('createMapping: Creates mapping object with syncedId and nativeId', () => {
     const mapping = idMapperSvc.createMapping(42, 'native-123');

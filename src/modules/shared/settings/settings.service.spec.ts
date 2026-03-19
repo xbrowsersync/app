@@ -11,7 +11,10 @@ describe('SettingsService', () => {
     settingsSvc = new SettingsService(mockLogSvc, mockStoreSvc);
   });
 
-  afterEach(() => jest.restoreAllMocks());
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
 
   test('all: Returns all settings from store', async () => {
     const testSettings = {

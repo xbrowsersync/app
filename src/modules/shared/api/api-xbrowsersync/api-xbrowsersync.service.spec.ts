@@ -42,7 +42,10 @@ describe('ApiXbrowsersyncService', () => {
     apiSvc = new ApiXbrowsersyncService(mock$injector, mock$http, $q, mockNetworkSvc, mockStoreSvc, mockUtilitySvc);
   });
 
-  afterEach(() => jest.restoreAllMocks());
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
 
   test('apiRequestSucceeded: Returns resolved promise with response', async () => {
     const testResponse = { data: 'test' };

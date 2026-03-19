@@ -32,7 +32,10 @@ describe('BackupRestoreService', () => {
     );
   });
 
-  afterEach(() => jest.restoreAllMocks());
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
 
   test('createBackupData: Creates backup object with correct structure', () => {
     const bookmarks = [{ id: 1, title: 'Test', url: 'https://test.com' }];

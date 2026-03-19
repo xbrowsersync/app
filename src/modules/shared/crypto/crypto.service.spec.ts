@@ -41,7 +41,10 @@ describe('CryptoService', () => {
     cryptoSvc = new CryptoService($q, mockLogSvc, mockStoreSvc, mockUtilitySvc);
   });
 
-  afterEach(() => jest.restoreAllMocks());
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
 
   test('concatUint8Arrays: Concatenates two arrays', () => {
     const first = new Uint8Array([1, 2, 3]);
@@ -148,6 +151,7 @@ describe('CryptoService', () => {
     const mockEncrypted = new ArrayBuffer(32);
     const mockImportKey = jest.fn().mockResolvedValue('key');
     const mockEncrypt = jest.fn().mockResolvedValue(mockEncrypted);
+    const originalCryptoDescriptor = Object.getOwnPropertyDescriptor(global, 'crypto');
     Object.defineProperty(global, 'crypto', {
       value: {
         subtle: {
@@ -172,12 +176,19 @@ describe('CryptoService', () => {
       expect.anything()
     );
     expect(typeof result).toBe('string');
+
+    if (originalCryptoDescriptor) {
+      Object.defineProperty(global, 'crypto', originalCryptoDescriptor);
+    } else {
+      delete (global as any).crypto;
+    }
   });
 
   test('decryptData: Calls crypto.subtle.decrypt with correct algorithm', async () => {
     const mockDecrypted = new TextEncoder().encode('decrypted data').buffer;
     const mockImportKey = jest.fn().mockResolvedValue('key');
     const mockDecrypt = jest.fn().mockResolvedValue(mockDecrypted);
+    const originalCryptoDescriptor = Object.getOwnPropertyDescriptor(global, 'crypto');
     Object.defineProperty(global, 'crypto', {
       value: {
         subtle: {
@@ -211,5 +222,11 @@ describe('CryptoService', () => {
       expect.any(ArrayBuffer)
     );
     expect(result).toBe('decrypted data');
+
+    if (originalCryptoDescriptor) {
+      Object.defineProperty(global, 'crypto', originalCryptoDescriptor);
+    } else {
+      delete (global as any).crypto;
+    }
   });
 });

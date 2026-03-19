@@ -31,7 +31,10 @@ describe('BookmarkHelperService', () => {
     bookmarkHelperSvc = new BookmarkHelperService(mock$injector, $q, mockCryptoSvc, mockStoreSvc, mockUtilitySvc);
   });
 
-  afterEach(() => jest.restoreAllMocks());
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
 
   // cleanBookmark tests
   test('cleanBookmark: Removes invalid keys from bookmark', () => {

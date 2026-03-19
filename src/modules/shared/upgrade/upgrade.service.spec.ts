@@ -29,7 +29,10 @@ describe('UpgradeService', () => {
     );
   });
 
-  afterEach(() => jest.restoreAllMocks());
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
 
   test('constructor: Initializes upgrade map with v1.6.0 provider', () => {
     expect(upgradeSvc.upgradeMap.has('1.6.0')).toBe(true);

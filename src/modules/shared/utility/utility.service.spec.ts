@@ -2,7 +2,7 @@ import '../../../test/mock-angular';
 
 jest.mock('xregexp', () => {
   return {
-    default: (pattern: string, flags: string) => new RegExp('[^\\w]', flags),
+    default: (pattern: string, flags: string) => new RegExp(pattern, flags),
     __esModule: true
   };
 });
@@ -43,7 +43,10 @@ describe('UtilityService', () => {
     );
   });
 
-  afterEach(() => jest.restoreAllMocks());
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
 
   test('filterFalsyValues: Removes falsy values from string array', () => {
     const result = utilitySvc.filterFalsyValues(['hello', '', 'world', '', 'test']);
@@ -211,7 +214,7 @@ describe('UtilityService', () => {
   });
 
   test('splitTextIntoWords: Removes quotes and splits into words', () => {
-    const result = utilitySvc.splitTextIntoWords("hello world test", 'en');
+    const result = utilitySvc.splitTextIntoWords('"hello" \'world\' "test"', 'en');
 
     expect(result).toStrictEqual(['hello', 'world', 'test']);
   });
