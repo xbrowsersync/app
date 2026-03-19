@@ -2,7 +2,7 @@ import '../../../test/mock-angular';
 
 jest.mock('xregexp', () => {
   return {
-    default: (pattern: string, flags: string) => new RegExp(pattern, flags),
+    default: (pattern: string, flags: string) => new RegExp(pattern, flags + 'u'),
     __esModule: true
   };
 });
