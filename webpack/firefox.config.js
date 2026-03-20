@@ -87,7 +87,7 @@ module.exports = (env, argv) => {
     }
   };
 
-  // Background config: service worker entry point with angular shims (no DOM)
+  // Background config: background script entry point with angular shims (no DOM)
   const backgroundConfig = {
     ...webExtConfig,
     name: 'firefox-background',

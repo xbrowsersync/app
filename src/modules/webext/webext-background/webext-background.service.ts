@@ -193,11 +193,15 @@ export class WebExtBackgroundService {
     // Strip html tags from message
     const urlRegex = new RegExp(Globals.URL.ValidUrlRegex, 'i');
     const urlInAlert = alert.message.match(urlRegex)?.find(Boolean);
+    // Strip HTML tags from message for notification display
     let messageToDisplay = alert.message;
-    if (urlInAlert && typeof DOMParser !== 'undefined') {
+    if (typeof DOMParser !== 'undefined') {
       messageToDisplay =
         new DOMParser().parseFromString(`<span>${alert.message}</span>`, 'text/xml').firstElementChild.textContent ??
         alert.message;
+    } else {
+      // Fallback for service worker context: strip tags with regex
+      messageToDisplay = alert.message.replace(/<[^>]*>/g, '');
     }
     const options: Notifications.CreateNotificationOptions = {
       iconUrl: `${Globals.PathToAssets}/notification.svg`,
