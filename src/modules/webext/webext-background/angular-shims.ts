@@ -58,18 +58,24 @@ const $qFactory = (): ng.IQService => {
 const $timeoutFactory = (): ng.ITimeoutService => {
   const $timeout: any = (fn: () => any, delay = 0): Promise<any> => {
     let timeoutId: ReturnType<typeof setTimeout>;
-    const promise: any = new Promise((resolve) => {
+    let rejectFn: (reason?: any) => void;
+    const promise: any = new Promise((resolve, reject) => {
+      rejectFn = reject;
       timeoutId = setTimeout(() => {
         resolve(fn());
       }, delay);
     });
     promise.$$timeoutId = timeoutId;
+    promise.$$reject = rejectFn;
     return promise;
   };
 
   $timeout.cancel = (promise: any): boolean => {
     if (promise && promise.$$timeoutId != null) {
       clearTimeout(promise.$$timeoutId);
+      if (promise.$$reject) {
+        promise.$$reject(new Error('$timeout cancelled'));
+      }
       return true;
     }
     return false;
@@ -228,11 +234,10 @@ const $injectorFactory = (): ng.auto.IInjectorService => {
 
   const injector: any = {
     get: (name: string): any => {
-      const svc = services.get(name);
-      if (!svc) {
+      if (!services.has(name)) {
         throw new Error(`Service '${name}' not registered in background injector`);
       }
-      return svc;
+      return services.get(name);
     },
     has: (name: string): boolean => services.has(name),
     register: (name: string, instance: any): void => {

@@ -1,8 +1,11 @@
-import { TextEncoder as NodeTextEncoder, TextDecoder as NodeTextDecoder } from 'util';
+import '../../../test/mock-angular';
+import { TextDecoder as NodeTextDecoder, TextEncoder as NodeTextEncoder } from 'util';
+import { $q } from '../../../test/mock-services';
+import { ArgumentError, InvalidCredentialsError } from '../errors/errors';
+import { CryptoService } from './crypto.service';
+
 (global as any).TextEncoder = (global as any).TextEncoder || NodeTextEncoder;
 (global as any).TextDecoder = (global as any).TextDecoder || NodeTextDecoder;
-
-import '../../../test/mock-angular';
 
 jest.mock('lzutf8', () => {
   const impl = {
@@ -23,10 +26,6 @@ jest.mock('base64-js', () => {
     __esModule: true
   };
 });
-
-import { $q } from '../../../test/mock-services';
-import { ArgumentError, InvalidCredentialsError } from '../errors/errors';
-import { CryptoService } from './crypto.service';
 
 describe('CryptoService', () => {
   let cryptoSvc: CryptoService;
@@ -170,11 +169,7 @@ describe('CryptoService', () => {
     const result = await cryptoSvc.encryptData('test data');
 
     expect(mockImportKey).toBeCalled();
-    expect(mockEncrypt).toBeCalledWith(
-      expect.objectContaining({ name: 'AES-GCM' }),
-      'key',
-      expect.anything()
-    );
+    expect(mockEncrypt).toBeCalledWith(expect.objectContaining({ name: 'AES-GCM' }), 'key', expect.anything());
     expect(typeof result).toBe('string');
 
     if (originalCryptoDescriptor) {
@@ -216,11 +211,7 @@ describe('CryptoService', () => {
     const result = await cryptoSvc.decryptData(encodedData);
 
     expect(mockImportKey).toBeCalled();
-    expect(mockDecrypt).toBeCalledWith(
-      expect.objectContaining({ name: 'AES-GCM' }),
-      'key',
-      expect.any(ArrayBuffer)
-    );
+    expect(mockDecrypt).toBeCalledWith(expect.objectContaining({ name: 'AES-GCM' }), 'key', expect.any(ArrayBuffer));
     expect(result).toBe('decrypted data');
 
     if (originalCryptoDescriptor) {

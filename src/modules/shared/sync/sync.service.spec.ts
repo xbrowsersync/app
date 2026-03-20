@@ -199,7 +199,10 @@ describe('SyncService', () => {
     const mockApiSvc = { getBookmarksLastUpdated: jest.fn().mockRejectedValue(new SyncNotFoundError()) };
     mockUtilitySvc.getApiService.mockResolvedValue(mockApiSvc);
     mockBookmarkHelperSvc.getCachedBookmarks.mockResolvedValue([]);
-    mockStoreSvc.get.mockResolvedValue({ lastUpdated: '2023-01-01', syncInfo: { id: 'test', password: 'pass', version: '1.5.0' } });
+    mockStoreSvc.get.mockResolvedValue({
+      lastUpdated: '2023-01-01',
+      syncInfo: { id: 'test', password: 'pass', version: '1.5.0' }
+    });
 
     const result = await syncSvc.checkSyncExists();
 

@@ -150,9 +150,6 @@ describe('BookmarkIdMapperService', () => {
 
     await idMapperSvc.remove(null as any, 'a');
 
-    expect(mockStoreSvc.set).toBeCalledWith(
-      StoreKey.BookmarkIdMappings,
-      [{ syncedId: 2, nativeId: 'b' }]
-    );
+    expect(mockStoreSvc.set).toBeCalledWith(StoreKey.BookmarkIdMappings, [{ syncedId: 2, nativeId: 'b' }]);
   });
 });

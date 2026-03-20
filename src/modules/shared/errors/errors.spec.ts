@@ -1,12 +1,12 @@
 import {
-  BaseError,
   ArgumentError,
+  BaseError,
   BookmarkNotFoundError,
+  FailedRestoreDataError,
   HttpRequestFailedError,
   InvalidCredentialsError,
   NetworkConnectionError,
-  SyncFailedError,
-  FailedRestoreDataError
+  SyncFailedError
 } from './errors';
 
 describe('Errors', () => {

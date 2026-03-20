@@ -29,9 +29,17 @@ module.exports = (env, argv) => {
       extension_pages: manifest.content_security_policy
     };
 
-    // Move host patterns from optional_permissions to optional_host_permissions
-    manifest.optional_host_permissions = manifest.optional_permissions;
-    delete manifest.optional_permissions;
+    // Split optional_permissions: host patterns go to optional_host_permissions (MV3)
+    if (manifest.optional_permissions) {
+      const hostPatterns = manifest.optional_permissions.filter((p) => /^https?:/.test(p));
+      const nonHostPerms = manifest.optional_permissions.filter((p) => !/^https?:/.test(p));
+      manifest.optional_host_permissions = hostPatterns;
+      if (nonHostPerms.length > 0) {
+        manifest.optional_permissions = nonHostPerms;
+      } else {
+        delete manifest.optional_permissions;
+      }
+    }
 
     // _execute_browser_action -> _execute_action
     if (manifest.commands && manifest.commands._execute_browser_action) {
@@ -57,16 +65,51 @@ module.exports = (env, argv) => {
     copyPlugin.patterns.splice(bgHtmlIdx, 1);
   }
 
-  return {
+  const outputPath = Path.resolve(__dirname, '../build/firefox/assets');
+
+  // App config: UI entry point with real AngularJS
+  const appConfig = {
     ...webExtConfig,
+    name: 'firefox-app',
     entry: {
       ...webExtConfig.entry,
-      app: './src/modules/webext/firefox/firefox-app/firefox-app.module.ts',
+      app: './src/modules/webext/firefox/firefox-app/firefox-app.module.ts'
+    },
+    output: {
+      ...webExtConfig.output,
+      path: outputPath
+    }
+  };
+
+  // Background config: service worker entry point with angular shims (no DOM)
+  const backgroundConfig = {
+    ...webExtConfig,
+    name: 'firefox-background',
+    entry: {
       background: './src/modules/webext/firefox/firefox-background/firefox-background.module.ts'
     },
     output: {
       ...webExtConfig.output,
-      path: Path.resolve(__dirname, '../build/firefox/assets')
+      path: outputPath,
+      clean: false
+    },
+    plugins: webExtConfig.plugins.filter((p) => p.constructor.name !== 'CopyPlugin'),
+    resolve: {
+      ...webExtConfig.resolve,
+      alias: {
+        ...(webExtConfig.resolve && webExtConfig.resolve.alias),
+        angular$: Path.resolve(__dirname, '../src/modules/webext/webext-background/angular-module-shim.ts'),
+        'angular-ts-decorators$': Path.resolve(
+          __dirname,
+          '../src/modules/webext/webext-background/angular-ts-decorators-shim.ts'
+        )
+      }
+    },
+    optimization: {
+      ...(webExtConfig.optimization || {}),
+      splitChunks: false
     }
   };
+
+  return [appConfig, backgroundConfig];
 };
