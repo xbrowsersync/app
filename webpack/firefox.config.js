@@ -41,6 +41,11 @@ module.exports = (env, argv) => {
       }
     }
 
+    // Add scripting permission (MV3 replacement for tabs.executeScript)
+    if (!manifest.permissions.includes('scripting')) {
+      manifest.permissions.push('scripting');
+    }
+
     // _execute_browser_action -> _execute_action
     if (manifest.commands && manifest.commands._execute_browser_action) {
       manifest.commands._execute_action = manifest.commands._execute_browser_action;
