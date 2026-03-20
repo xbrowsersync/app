@@ -1,8 +1,11 @@
 import '../../../test/mock-angular';
+import { $q } from '../../../test/mock-services';
+import { StoreKey } from '../store/store.enum';
+import { UtilityService } from './utility.service';
 
 jest.mock('xregexp', () => {
   return {
-    default: (pattern: string, flags: string) => new RegExp(pattern, flags + 'u'),
+    default: (pattern: string, flags: string) => new RegExp(pattern, `${flags}u`),
     __esModule: true
   };
 });
@@ -11,18 +14,20 @@ jest.mock('detect-browser', () => ({
   detect: () => ({ name: 'chrome', version: '100.0' })
 }));
 
-import { $q } from '../../../test/mock-services';
-import { StoreKey } from '../store/store.enum';
-import { StoreService } from '../store/store.service';
-import { LogService } from '../log/log.service';
-import { NetworkService } from '../network/network.service';
-import { UtilityService } from './utility.service';
-
 describe('UtilityService', () => {
   let utilitySvc: UtilityService;
   const mock$exceptionHandler = jest.fn();
   const mock$http = { get: jest.fn() } as any;
-  const mock$injector = { get: jest.fn(), annotate: jest.fn(), has: jest.fn(), instantiate: jest.fn(), invoke: jest.fn(), loadNewModules: jest.fn(), modules: {}, strictDi: false } as any;
+  const mock$injector = {
+    get: jest.fn(),
+    annotate: jest.fn(),
+    has: jest.fn(),
+    instantiate: jest.fn(),
+    invoke: jest.fn(),
+    loadNewModules: jest.fn(),
+    modules: {},
+    strictDi: false
+  } as any;
   const mock$location = { path: jest.fn() } as any;
   const mock$rootScope = { $broadcast: jest.fn() } as any;
   const mockLogSvc = { logInfo: jest.fn(), logWarning: jest.fn() } as any;

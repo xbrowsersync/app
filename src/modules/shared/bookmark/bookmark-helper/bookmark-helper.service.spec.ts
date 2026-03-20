@@ -106,9 +106,7 @@ describe('BookmarkHelperService', () => {
     const bookmarks: any[] = [
       {
         title: 'Folder',
-        children: [
-          { title: 'Child', url: 'https://example.com', invalidKey: 'removed' }
-        ],
+        children: [{ title: 'Child', url: 'https://example.com', invalidKey: 'removed' }],
         invalidKey: 'removed'
       }
     ];
@@ -188,9 +186,7 @@ describe('BookmarkHelperService', () => {
       {
         id: 1,
         title: 'Folder',
-        children: [
-          { id: 2, title: 'Child', url: 'https://child.com' }
-        ]
+        children: [{ id: 2, title: 'Child', url: 'https://child.com' }]
       }
     ];
 
@@ -201,9 +197,7 @@ describe('BookmarkHelperService', () => {
   });
 
   test('findBookmarkById: Returns undefined when id not found', () => {
-    const bookmarks: Bookmark[] = [
-      { id: 1, title: 'First', url: 'https://first.com' }
-    ];
+    const bookmarks: Bookmark[] = [{ id: 1, title: 'First', url: 'https://first.com' }];
 
     const result = bookmarkHelperSvc.findBookmarkById(999, bookmarks);
 
@@ -276,9 +270,7 @@ describe('BookmarkHelperService', () => {
   });
 
   test('getContainer: Returns undefined when container not found', () => {
-    const bookmarks: Bookmark[] = [
-      { title: BookmarkContainer.Menu, children: [] }
-    ];
+    const bookmarks: Bookmark[] = [{ title: BookmarkContainer.Menu, children: [] }];
 
     const result = bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarks);
 
@@ -286,9 +278,7 @@ describe('BookmarkHelperService', () => {
   });
 
   test('getContainer: Creates container when not found and createIfNotPresent is true', () => {
-    const bookmarks: Bookmark[] = [
-      { title: BookmarkContainer.Menu, children: [] }
-    ];
+    const bookmarks: Bookmark[] = [{ title: BookmarkContainer.Menu, children: [] }];
 
     const result = bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarks, true);
 
@@ -310,9 +300,7 @@ describe('BookmarkHelperService', () => {
   });
 
   test('getNewBookmarkId: Considers taken ids', () => {
-    const bookmarks: Bookmark[] = [
-      { id: 1, title: 'First', url: 'https://first.com' }
-    ];
+    const bookmarks: Bookmark[] = [{ id: 1, title: 'First', url: 'https://first.com' }];
 
     const result = bookmarkHelperSvc.getNewBookmarkId(bookmarks, [0, 10]);
 
@@ -343,9 +331,7 @@ describe('BookmarkHelperService', () => {
   });
 
   test('newBookmark: Generates id when bookmarks provided', () => {
-    const existingBookmarks: Bookmark[] = [
-      { id: 5, title: 'Existing', url: 'https://existing.com' }
-    ];
+    const existingBookmarks: Bookmark[] = [{ id: 5, title: 'Existing', url: 'https://existing.com' }];
 
     const result = bookmarkHelperSvc.newBookmark('New', 'https://new.com', undefined, undefined, existingBookmarks);
 
@@ -396,9 +382,7 @@ describe('BookmarkHelperService', () => {
       {
         id: 1,
         title: BookmarkContainer.Menu,
-        children: [
-          { id: 10, title: 'Child', url: 'https://child.com' }
-        ]
+        children: [{ id: 10, title: 'Child', url: 'https://child.com' }]
       },
       { id: 2, title: BookmarkContainer.Other, children: [] }
     ];
@@ -423,9 +407,7 @@ describe('BookmarkHelperService', () => {
   });
 
   test('searchBookmarksByKeywords: Returns empty array when no matches', () => {
-    const bookmarks: Bookmark[] = [
-      { id: 1, title: 'JavaScript Tutorial', url: 'https://js.com' }
-    ];
+    const bookmarks: Bookmark[] = [{ id: 1, title: 'JavaScript Tutorial', url: 'https://js.com' }];
 
     const results = bookmarkHelperSvc.searchBookmarksByKeywords(bookmarks, 'en', ['ruby']);
 
@@ -436,9 +418,7 @@ describe('BookmarkHelperService', () => {
     const bookmarks: Bookmark[] = [
       {
         title: 'Dev Folder',
-        children: [
-          { id: 1, title: 'JavaScript Tutorial', url: 'https://js.com', tags: ['javascript'] }
-        ]
+        children: [{ id: 1, title: 'JavaScript Tutorial', url: 'https://js.com', tags: ['javascript'] }]
       }
     ];
 
@@ -475,9 +455,7 @@ describe('BookmarkHelperService', () => {
     const bookmarks: Bookmark[] = [
       {
         title: 'Folder',
-        children: [
-          { id: 1, title: 'Deep', url: 'https://example.com/deep' }
-        ]
+        children: [{ id: 1, title: 'Deep', url: 'https://example.com/deep' }]
       }
     ];
 
@@ -521,9 +499,7 @@ describe('BookmarkHelperService', () => {
   test('modifyBookmarkById: Throws BookmarkNotFoundError when bookmark not found', () => {
     const bookmarks: Bookmark[] = [{ id: 1, title: 'Test', url: 'https://test.com' }];
 
-    expect(() =>
-      bookmarkHelperSvc.modifyBookmarkById(999, { title: 'Updated' }, bookmarks)
-    ).toThrow();
+    expect(() => bookmarkHelperSvc.modifyBookmarkById(999, { title: 'Updated' }, bookmarks)).toThrow();
   });
 
   test('modifyBookmarkById: Updates bookmark metadata', async () => {
@@ -531,9 +507,7 @@ describe('BookmarkHelperService', () => {
       {
         id: 1,
         title: BookmarkContainer.Menu,
-        children: [
-          { id: 2, title: 'Old Title', url: 'https://old.com' }
-        ]
+        children: [{ id: 2, title: 'Old Title', url: 'https://old.com' }]
       }
     ];
 

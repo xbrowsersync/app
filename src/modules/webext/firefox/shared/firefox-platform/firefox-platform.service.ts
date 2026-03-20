@@ -16,7 +16,11 @@ export class FirefoxPlatformService extends WebExtPlatformService {
   openUrl(url: string): void {
     // If url is native config page, open new tab intead
     if (this.urlIsNativeConfigPage(url)) {
-      browser.tabs.create({}).then(window.close);
+      browser.tabs.create({}).then(() => {
+        if (typeof window !== 'undefined') {
+          window.close();
+        }
+      });
       return;
     }
     super.openUrl(url);
