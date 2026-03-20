@@ -193,9 +193,12 @@ export class WebExtBackgroundService {
     // Strip html tags from message
     const urlRegex = new RegExp(Globals.URL.ValidUrlRegex, 'i');
     const urlInAlert = alert.message.match(urlRegex)?.find(Boolean);
-    const messageToDisplay = urlInAlert
-      ? new DOMParser().parseFromString(`<span>${alert.message}</span>`, 'text/xml').firstElementChild.textContent
-      : alert.message;
+    let messageToDisplay = alert.message;
+    if (urlInAlert && typeof DOMParser !== 'undefined') {
+      messageToDisplay =
+        new DOMParser().parseFromString(`<span>${alert.message}</span>`, 'text/xml').firstElementChild.textContent ??
+        alert.message;
+    }
     const options: Notifications.CreateNotificationOptions = {
       iconUrl: `${Globals.PathToAssets}/notification.svg`,
       message: messageToDisplay,

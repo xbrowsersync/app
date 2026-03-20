@@ -68,7 +68,8 @@ module.exports = (env, argv) => {
     },
     output: {
       ...webExtConfig.output,
-      path: outputPath
+      path: outputPath,
+      clean: false
     }
   };
 
